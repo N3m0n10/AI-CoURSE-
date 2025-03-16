@@ -1,21 +1,18 @@
 ##NEMO RAMOS LOPES NETO
-import struct
 import numpy as np
 import matplotlib.pyplot as plt
-import copy
 import os
 from datetime import datetime
-
+import struct
 
 start_tme = os.times()
-population_size = 75
+population_size = 150
 mutation_rate = 0.01
 pc = 0.9 ##crossover rate
 L = 32
-iters = 150
-version = 0.2
+iters = 700
+version = "0.4 - TOURNAMENT - PURE"
 stats = f"population: {population_size}, mutation rate: {mutation_rate}, crossover rate: {pc}"
-#TODO: make own conversion functions
 
 ##create population
 def create_population(size):
@@ -63,14 +60,22 @@ def get_fitness(population):
     return fitness_list
 
 # do the selection and crossover
-def selection(population):   ##roulette wheel selection
-    fitness_values = get_fitness(population)
+def selection(_population):   ##tournament
+    fitness_values = get_fitness(_population)
     total_fitness = sum(fitness_values)
+    global population_size
     global average_fitness
-    average_fitness = total_fitness/len(population)
-    probabilities = [f/total_fitness for f in fitness_values]
-    couple = np.random.choice(len(population), size=2, p=probabilities)
-    return population[couple[0]], population[couple[1]]
+    average_fitness = total_fitness/len(_population)
+    couple = []
+    for i in range(2):
+        indexes = [np.random.choice(population_size - 1),np.random.choice(population_size -1)]
+        if fitness_values[indexes[0]] > \
+           fitness_values[indexes[1]]:
+            selected = 0 
+        else:
+            selected = 1
+        couple.append(_population[indexes[selected]])
+    return couple[0], couple[1]
 
 def crossover(crom1, crom2): 
     global pc
@@ -85,22 +90,6 @@ def crossover(crom1, crom2):
     child1 = mutation(child1)
     child2 = mutation(child2)
 
-    fit_crom1 = fitness_function(get_float(crom1))
-    fit_crom2 = fitness_function(get_float(crom2))
-    fit_child1 = fitness_function(get_float(child1))
-    fit_child2 = fitness_function(get_float(child2))
-    
-    # Get the worse parent (minimum fitness)
-    parent_min = min(fit_crom1, fit_crom2)
-    # Determine which parent has the minimum fitness
-    best_parent = crom1 if fit_crom2 < fit_crom1 else crom2
-    
-    # Replace child with worse fitness if it's worse than the worst parent
-    if fit_child1 < parent_min:
-        child1 = best_parent
-    if fit_child2 < parent_min:
-        child2 = best_parent
-        
     return child1, child2
 
 def mutation(crom1):   
@@ -118,7 +107,7 @@ appt_list = []
 best_fitness = []  
 for q in range(iters):
     try:
-        population = copy.deepcopy(new_population)
+        population = new_population.copy()
     except:
         pass
     all_fitness = get_fitness(population)
@@ -183,7 +172,7 @@ fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(12, 10))
 
 # First subplot (top-left) - Average Fitness Evolution
 ax1.plot(appt_list,label = f"final Average fitness: {average_fitness:.3f}")
-ax1.set_title('Average Fitness Evolution')
+ax1.set_title(f'Average Fitness Evolution  - {version}')
 ax1.set_xlabel('Generation')
 ax1.set_ylabel('Fitness')
 ax1.legend()

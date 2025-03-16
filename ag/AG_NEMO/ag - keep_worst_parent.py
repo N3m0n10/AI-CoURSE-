@@ -2,16 +2,18 @@
 import struct
 import numpy as np
 import matplotlib.pyplot as plt
-import copy
 import os
+from datetime import datetime
 
 start_tme = os.times()
-population_size = 100
+population_size = 75
 mutation_rate = 0.01
 pc = 0.9 ##crossover rate
 L = 32
-iters = 1000
-#TODO: make own conversion functions
+iters = 300 
+version = "0.3 - RW - WP"
+stats = f"population: {population_size}, mutation rate: {mutation_rate}, crossover rate: {pc}"
+#TODO: make own conversion functions --> from 0 to pi
 
 ##create population
 def create_population(size):
@@ -51,15 +53,15 @@ def fitness_function(_chromosome):  #must be a float (pre conditionated)
     else:
         return 0
 
-##get the fitness of the population
+# get the fitness of the population
 def get_fitness(population):  
     fitness_list = []
     for i in range(len(population)):
         fitness_list.append(fitness_function(population[i]))
     return fitness_list
 
-##do the selection and crossover
-def selection(population):   ## range == population size/2  TODO
+# do the selection and crossover
+def selection(population):   ##roulette wheel selection
     fitness_values = get_fitness(population)
     total_fitness = sum(fitness_values)
     global average_fitness
@@ -68,7 +70,7 @@ def selection(population):   ## range == population size/2  TODO
     couple = np.random.choice(len(population), size=2, p=probabilities)
     return population[couple[0]], population[couple[1]]
 
-def crossover(crom1, crom2):  ### TODO
+def crossover(crom1, crom2): 
     global pc
     global mutation_rate
     if np.random.rand() < pc:
@@ -77,26 +79,44 @@ def crossover(crom1, crom2):  ### TODO
         child2 = crom2[:locus] + crom1[locus:]
     else:
         child1, child2 = crom1, crom2
+
     child1 = mutation(child1)
     child2 = mutation(child2)
+
+    fit_crom1 = fitness_function(get_float(crom1))
+    fit_crom2 = fitness_function(get_float(crom2))
+    fit_child1 = fitness_function(get_float(child1))
+    fit_child2 = fitness_function(get_float(child2))
+    
+    # Get the worse parent (minimum fitness)
+    parent_min = min(fit_crom1, fit_crom2)
+    # Determine which parent has the minimum fitness
+    worst_parent = crom2 if fit_crom2 < fit_crom1 else crom1
+    
+    # Replace child with best fitness father if it's worse than the worst parent
+    if fit_child1 < parent_min:
+        child1 = worst_parent
+    if fit_child2 < parent_min:
+        child2 = worst_parent
+        
     return child1, child2
 
-def mutation(crom1):    ### TODO
+def mutation(crom1):   
     for i in range(L):
         if np.random.rand() < mutation_rate:
             crom1 = crom1[:i] + str(1 - int(crom1[i])) + crom1[i+1:]
     return crom1
-##roulette wheel selection
 
-##mutation
+
 average_fitness = 0
 population = create_population(population_size)
-plot_points = [] ##plt
+plot_points = [] 
 plot_points.append(population.copy())
 appt_list = []
+best_fitness = []  
 for q in range(iters):
     try:
-        population = copy.deepcopy(new_population)
+        population = new_population.copy()
     except:
         pass
     all_fitness = get_fitness(population)
@@ -106,13 +126,51 @@ for q in range(iters):
         crom1, crom2 = selection(population)
         crom1_bits, crom2_bits = get_bits(crom1), get_bits(crom2)
         child1, child2 = crossover(crom1_bits, crom2_bits)
-        new_population.append(get_float(child1))
-        new_population.append(get_float(child2))
+        float_child_1 , float_child_2 = get_float(child1), get_float(child2)
+        new_population.append(float_child_1)
+        new_population.append(float_child_2)
     if q == iters//2 - 1:
         plot_points.append(new_population.copy())  ##plt
-print("time in seconds:",os.times()[4]-start_tme[4])  ##time for finish ag
+    ####STRICT CONVERGION
+    current_best = max(get_fitness(population))
+    best_fitness.append(current_best)
+    try:
+        converged_at
+    except:
+        if len(best_fitness) > 50 and len(set(best_fitness[-50:])) == 1:  ##set exlude equals
+            converged_at = f"Converged at generation {q}"
+
+finish_time = os.times()[4]-start_tme[4]
+print("time in seconds:{:.2f}".format(finish_time))  ##time for finish ag f"{os.times()[4]-start_tme[4]):.2f}
 plot_points.append(new_population.copy())
 fitness_of_points = []
+
+# LOG
+try:
+    converged_at
+except:
+    converged_at = "Nan"
+with open("ag/log.txt",'a+') as log:
+    log.seek(0)  # Go to start of file
+    old = log.read()  # Read existing content
+    log.seek(0)  # Go back to start
+    log.truncate()  # Clear the file
+    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+    
+    # Format the new entry with proper indentation
+    new_entry = (
+        "====================================\n"
+        f"TIMESTAMP: {timestamp}\n"
+        f"VERSION: {version}\n"
+        f"Converged at generation: {converged_at}\n"
+        f"Finish time: {finish_time:.2f} s\n"
+        f"Stats: {stats}\n"
+        "====================================\n"
+    )
+    
+    # Write new entry followed by old content
+    log.write(new_entry + old)
+
 
 # Plotting section
 x = np.linspace(0, np.pi, 500)
@@ -122,10 +180,11 @@ y = [fitness_function(xi) for xi in x]
 fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(12, 10))
 
 # First subplot (top-left) - Average Fitness Evolution
-ax1.plot(appt_list)
-ax1.set_title('Average Fitness Evolution')
+ax1.plot(appt_list,label = f"final Average fitness: {average_fitness:.3f}")
+ax1.set_title(f'Average Fitness Evolution  - {version}')
 ax1.set_xlabel('Generation')
 ax1.set_ylabel('Fitness')
+ax1.legend()
 ax1.grid(True)
 
 labels = ["Initial Population", "Middle Population", "Final Population"]

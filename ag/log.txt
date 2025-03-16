@@ -1,4 +1,557 @@
 ====================================
+TIMESTAMP: 15/03/2025 22:25
+VERSION: 0.21
+Converged at generation: Converged at generation 149
+Finish time: 1.98 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 22:23
+VERSION: 0.2
+Converged at generation: Converged at generation 103
+Finish time: 2.54 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 22:23
+VERSION: 0.2
+Converged at generation: Converged at generation 87
+Finish time: 2.54 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 22:22
+VERSION: 0.4 - TOURNAMENT - PURE
+Converged at generation: Converged at generation 74
+Finish time: 25.04 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 22:21
+VERSION: 0.4 - TOURNAMENT - PURE
+Converged at generation: Converged at generation 96
+Finish time: 23.09 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 22:04
+VERSION: 0.5 - RANK - CONVERTED
+Converged at generation: Nan
+Finish time: 10.65 s
+Stats: population: 130, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 22:02
+VERSION: 0.42 - TOURNAMENT - CONVERTED
+Converged at generation: Converged at generation 97
+Finish time: 21.67 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 22:00
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 40.99 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:36
+VERSION: 0.2 - RW - BEST PARENT
+Converged at generation: Converged at generation 141
+Finish time: 2.66 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:35
+VERSION: 0.2 - RW - BEST PARENT
+Converged at generation: Nan
+Finish time: 2.16 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:34
+VERSION: 0.42 - TOURNAMENT - CONVERTED
+Converged at generation: Converged at generation 94
+Finish time: 22.92 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:33
+VERSION: 0.42 - TOURNAMENT - CONVERTED
+Converged at generation: Converged at generation 98
+Finish time: 22.33 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:32
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 10.96 s
+Stats: population: 130, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:32
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 10.01 s
+Stats: population: 100, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:31
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 16.82 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:30
+VERSION: 0.42 - TOURNAMENT - CONVERTED
+Converged at generation: Converged at generation 90
+Finish time: 21.65 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:29
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 45.75 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:28
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 26.91 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 19:22
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 16.78 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:48
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 23.95 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:41
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 25.46 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:40
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 18.87 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:31
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 93.28 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:23
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 94.22 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:20
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 31.33 s
+Stats: population: 50, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:16
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 7.61 s
+Stats: population: 50, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:15
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 7.11 s
+Stats: population: 50, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 17:12
+VERSION: 0.5 - RANK
+Converged at generation: Nan
+Finish time: 30.07 s
+Stats: population: 200, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:44
+VERSION: 0.2 - RW - BEST PARENT
+Converged at generation: Converged at generation 132
+Finish time: 2.79 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:21
+VERSION: 0.41 - TOURNAMENT - bad child replacement
+Converged at generation: Converged at generation 89
+Finish time: 19.09 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:21
+VERSION: 0.4 - TOURNAMENT
+Converged at generation: Converged at generation 111
+Finish time: 23.69 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:19
+VERSION: 0.4 - TOURNAMENT
+Converged at generation: Converged at generation 71
+Finish time: 24.33 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:17
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 32.31 s
+Stats: population: 200, mutation rate: 0.01, crossover rate: 0.96
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:13
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 20.24 s
+Stats: population: 155, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:12
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 14.05 s
+Stats: population: 155, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:07
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 14.31 s
+Stats: population: 155, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:05
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 14.54 s
+Stats: population: 155, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:01
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 13.86 s
+Stats: population: 155, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 15:01
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 10.54 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:59
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 10.36 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:58
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 10.37 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:57
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 10.27 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:55
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 10.20 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:54
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 9.81 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:54
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Nan
+Finish time: 10.03 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:51
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Converged at generation 50
+Finish time: 10.48 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:50
+VERSION: 0.42 - TOURNAMENT - force average +
+Converged at generation: Converged at generation 50
+Finish time: 10.21 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:49
+VERSION: 0.42 - TOURNAMENT - force averge +
+Converged at generation: Converged at generation 75
+Finish time: 10.81 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:41
+VERSION: 0.4 - TOURNAMENT
+Converged at generation: Converged at generation 144
+Finish time: 17.74 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:39
+VERSION: 0.41 - TOURNAMENT - bad child rplc
+Converged at generation: Converged at generation 82
+Finish time: 11.22 s
+Stats: population: 100, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:38
+VERSION: 0.41 - TOURNAMENT - bad child replacement
+Converged at generation: Converged at generation 125
+Finish time: 11.49 s
+Stats: population: 100, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:38
+VERSION: 0.41 - TOURNAMENT - bad child replacement
+Converged at generation: Converged at generation 60
+Finish time: 7.56 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:37
+VERSION: 0.41 - TOURNAMENT - bad child replacement
+Converged at generation: Converged at generation 94
+Finish time: 7.56 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:36
+VERSION: 0.41 - TOURNAMENT - bad child replacement
+Converged at generation: Converged at generation 109
+Finish time: 7.54 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:34
+VERSION: 0.4 - TOURNAMENT
+Converged at generation: Converged at generation 92
+Finish time: 5.93 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:32
+VERSION: 0.2 - TOURNAMENT
+Converged at generation: Converged at generation 97
+Finish time: 7.57 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:29
+VERSION: 0.2 - TOURNAMENT
+Converged at generation: Converged at generation 83
+Finish time: 7.88 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:28
+VERSION: 0.2 - TOURNAMENT
+Converged at generation: Converged at generation 120
+Finish time: 6.38 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:28
+VERSION: 0.2 - TOURNAMENT
+Converged at generation: Converged at generation 84
+Finish time: 3.86 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:27
+VERSION: 0.2 - TOURNAMENT
+Converged at generation: Converged at generation 90
+Finish time: 1.89 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:26
+VERSION: 0.2 - RW - BEST PARENT
+Converged at generation: Converged at generation 69
+Finish time: 2.43 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:26
+VERSION: 0.2 - RW - BEST PARENT
+Converged at generation: Converged at generation 85
+Finish time: 2.35 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:00
+VERSION: 0.2 - RW - BEST PARENT
+Converged at generation: Converged at generation 120
+Finish time: 2.62 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 14:00
+VERSION: 0.2 - RW - BEST PARENT
+Converged at generation: Converged at generation 86
+Finish time: 2.63 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 15/03/2025 12:42
+VERSION: 0.1 ROULLET WHEEL PURE
+Converged at generation: Nan
+Finish time: 126.16 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:49
+VERSION: 0.3
+Converged at generation: Nan
+Finish time: 5.64 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:48
+VERSION: 0.3
+Converged at generation: Nan
+Finish time: 5.42 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:36
+VERSION: 0.1
+Converged at generation: Nan
+Finish time: 124.75 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:33
+VERSION: 0.1
+Converged at generation: Nan
+Finish time: 41.89 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:24
+VERSION: 0.1
+Converged at generation: Nan
+Finish time: 41.30 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:21
+VERSION: 0.1
+Converged at generation: Nan
+Finish time: 22.55 s
+Stats: population: 100, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:18
+VERSION: 0.3
+Converged at generation: Nan
+Finish time: 5.27 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:17
+VERSION: 0.3
+Converged at generation: Nan
+Finish time: 5.67 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:17
+VERSION: 0.3
+Converged at generation: Nan
+Finish time: 5.80 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:16
+VERSION: 0.3
+Converged at generation: Nan
+Finish time: 2.84 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:13
+VERSION: 0.1
+Converged at generation: Nan
+Finish time: 22.85 s
+Stats: population: 100, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:11
+VERSION: 0.2
+Converged at generation: Converged at generation 113
+Finish time: 2.61 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:11
+VERSION: 0.2
+Converged at generation: Converged at generation 137
+Finish time: 2.76 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 14/03/2025 23:07
+VERSION: 0.2
+Converged at generation: Converged at generation 111
+Finish time: 2.40 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
 TIMESTAMP: 13/03/2025 18:39
 VERSION: 0.2
 Converged at generation: Converged at generation 95
