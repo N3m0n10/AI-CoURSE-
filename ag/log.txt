@@ -1,4 +1,11 @@
 ====================================
+TIMESTAMP: 19/03/2025 18:40
+VERSION: 0.2 - roullet - keep best
+Converged at generation: Converged at generation 98
+Finish time: 2.71 s
+Stats: population: 75, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
 TIMESTAMP: 15/03/2025 22:25
 VERSION: 0.21
 Converged at generation: Converged at generation 149
