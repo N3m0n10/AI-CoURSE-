@@ -2,7 +2,6 @@ print("NEMO RAMOS LOPES NETO")
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import os 
 
 def f_true ( x0 , x1 , x2 ) :
     return 2 + 0.8 * x1 + 0.7 * x2
@@ -16,8 +15,8 @@ ys = np . array ( [ f_true ( x0 ,x1 , x2) + np . random . randn () *0.5 for x0,x
 
 
 tht = np.array([np.random.random() for o in range(variables + 1)]) # initial theta
-a = 0.01 # learning rate
-epochs = 5000 # iterations 
+a = 0.001 # learning rate
+epochs = 3000 # iterations 
 m = len(ys) # len(data)
 factor = a/m
 
@@ -74,14 +73,12 @@ def print_modelo ( theta , xs , ys ,cost) :
     ax2.set_xlabel('X1')
     ax2.set_ylabel('X2')
     ax2.set_zlabel('Y')
-    ax2.set_title(f'True vs Predicted Surface a={a}')
+    ax2.set_title('True vs Predicted Surface')
     ax2.legend()
-
     
     plt.tight_layout()
     plt.show()
 
-start_time = os.times()[4]
 loss_list = []
 for _ in range(epochs):
     grad_sum = np.zeros(variables + 1)
@@ -99,8 +96,6 @@ for _ in range(epochs):
     
     loss_list.append(loss)
     ## append values for plot - > loss func for epoch 
-
-finish_time = (os.times()[4] - start_time)
-print(f"{finish_time:.2f} seconds")
+print(tht)
 
 print_modelo(tht,xs,ys,loss_list)   

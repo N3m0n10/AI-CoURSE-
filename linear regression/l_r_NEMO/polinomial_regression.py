@@ -1,7 +1,6 @@
 print("NEMO RAMOS LOPES NETO")
 import numpy as np
 import matplotlib.pyplot as plt
-import os
 
 
 def f_true ( x) :
@@ -58,12 +57,11 @@ def print_modelo ( theta , xs , ys ,cost) :
     ax2.plot(xs, y_pred, 'r-', label='Model')  # Plot model line
     ax2.plot(xs, y_true, 'g--', label='True function')  # Plot true function
     ax2.legend()
-    ax2.set_title(f"Polinomial Regression a={a}")
+    ax2.set_title("Linear Regression")
     
     plt.tight_layout()
     plt.show()
 
-start_time = os.times()[4]
 loss_list = []
 for _ in range(epochs):
     loss = 0
@@ -82,8 +80,5 @@ for _ in range(epochs):
     ## append values for plot - > loss func for epoch 
 print(tht)
 print(loss)
-
-finish_time = (os.times()[4] - start_time)
-print(f"{finish_time:.2f} seconds")
 
 print_modelo(tht,xs,ys,loss_list)   

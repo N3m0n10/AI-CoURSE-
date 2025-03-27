@@ -1,7 +1,6 @@
 print("NEMO RAMOS LOPES NETO")
 import numpy as np
 import matplotlib.pyplot as plt
-import os
 
 def f_true ( x ) :
     return 2 + 0.8 * x
@@ -11,8 +10,8 @@ xs = np . linspace ( -3 , 3 , 100)
 ys = np . array ( [ f_true ( x ) + np . random . randn () *0.5 for x in xs ] )
 
 tht = np.array([np.random.randint(20),np.random.randint(20)]) #or random
-a = 0.01 # learning rate
-epochs = 5000 # iterations 
+a = 0.9 # learning rate
+epochs = 10000 # iterations 
 m = len(ys) # len(data)
 factor = a/m 
 
@@ -51,7 +50,7 @@ def print_modelo ( theta , xs , ys ,cost) :
     plt.tight_layout()
     plt.show()
 
-start_time = os.times()[4]
+
 loss_list = []
 for _ in range(epochs):
     grad_sum = np.zeros(2)
@@ -68,8 +67,5 @@ for _ in range(epochs):
     ## check loss function
     loss_list.append(loss)
     ## append values for plot - > loss func for epoch 
-
-finish_time = (os.times()[4] - start_time)
-print(f"{finish_time:.2f} seconds")
 
 print_modelo(tht,xs,ys,loss_list)                           
