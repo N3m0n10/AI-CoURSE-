@@ -15,7 +15,7 @@ m = 200
 x1s = np . random . randn ( m //2) * std1 + mean1
 x0s = np . random . randn ( m //2) * std0 + mean0
 
-#would rather adjust with the listed arguments, outp: array([[1, 4],...
+
 
 
 xs = np . hstack (( x1s , x0s ) )
@@ -29,8 +29,8 @@ def sigmoid ( z ) :   #.expit
     return 1 / (1 + np.e**-z)
 
 
-def h (x , theta ) :
-    return sigmoid ( np.array([theta @ x[: m //2], theta @ x[ m //2:]] ))
+def h (x , _theta ) :
+    return sigmoid ( _theta [0] + _theta [1] * x )
     #return sigmoid ( theta.T @ x)
 
 def cost (h , y ) :
@@ -38,13 +38,10 @@ def cost (h , y ) :
 
 def J ( theta , xs , ys ) :
     pass
-print(x1s)
-print("xos",x0s)
-print(xs)
-print(xs[0])
-def gradient (i , theta , xs , ys ) :
-    dif = h(xs,theta) - ys[i]
-    return np.array([dif*xs[: m //2 + i], dif*xs[ m //2:]])
+
+def gradient (i , theta , _xs , _ys ) :
+    dif = h(_xs[i],theta) - _ys[i]
+    return np.array([dif, dif*_xs[i]])
 
 def plot_fronteira ( theta ) :
 # use vlines () para plotar uma reta vertical
@@ -59,14 +56,23 @@ def accuracy ( ys , predictions ) :
 
 alpha = 0.1 
 epochs = 5000
-theta = np.array([10 for i in range(100)]) 
+theta = np.array([1 ,5.0]) 
 
 for k in range ( epochs ) : # 10000
     sum_g = 0
     for train_points in range(m):
-        sum_g += gradient(m,theta,xs,ys)
+        sum_g += gradient(train_points,theta,xs,ys)
     theta -= alpha*sum_g
+print("theta:",theta)
 
+predictions = []
+for p in range(m):
+    predictions.append(h(xs[p],theta))
 
+print(predictions)
+predictions = np.array(predictions)  # Convert list to numpy array
+predictions = (predictions >= 0.5).astype(int)  # Convert to binary values
+
+#plot sigmoid
 # show classication performance
-#print ( " Acuracia : " , accuracy ( ys , predictions ) )
+print ( " Acuracia : " , accuracy ( ys , predictions ) )
