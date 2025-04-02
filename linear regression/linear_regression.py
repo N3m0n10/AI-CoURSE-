@@ -1,6 +1,7 @@
 print("NEMO RAMOS LOPES NETO")
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 import os
 
 def f_true ( x ) :
@@ -33,7 +34,7 @@ def gradient (i , theta , xs , ys ) :
     - a reta original ( true function )
     - e os dados com ruido ( xs , ys )'''
 
-def print_modelo ( theta , xs , ys ,cost) :
+def print_modelo ( theta , xs , ys ,cost,thetas) :
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
     ax1.plot(cost, 'b-')
     ax1.set_title("Loss funtion per iteration")
@@ -51,8 +52,27 @@ def print_modelo ( theta , xs , ys ,cost) :
     plt.tight_layout()
     plt.show()
 
+    # Set up the figure and axis
+    fig, ax = plt.subplots()
+    x = np.linspace(-3,3, 100)
+    line, = ax.plot(x, h(x,theta))
+
+    # Animation update function
+    def update(frame):
+        line.set_ydata(h(x,thetas[frame]))  # Update the data
+        return line,
+
+    # Create animation
+    ani = FuncAnimation(fig, update, frames=2000, interval=50, blit=True)
+
+    plt.plot(xs, y_true, 'g--', label='True function')  #comment to see initial states!!
+    plt.title("the evolution of aproach function")
+    plt.show()
+
+
 start_time = os.times()[4]
 loss_list = []
+thetas = [tht]
 for _ in range(epochs):
     grad_sum = np.zeros(2)
     loss = 0
@@ -65,6 +85,7 @@ for _ in range(epochs):
     loss = J(loss)
     ## calculate new theta
     tht = tht - factor*grad_sum
+    thetas.append(tht)
     ## check loss function
     loss_list.append(loss)
     ## append values for plot - > loss func for epoch 
@@ -72,4 +93,4 @@ for _ in range(epochs):
 finish_time = (os.times()[4] - start_time)
 print(f"{finish_time:.2f} seconds")
 
-print_modelo(tht,xs,ys,loss_list)                           
+print_modelo(tht,xs,ys,loss_list,thetas)                           
