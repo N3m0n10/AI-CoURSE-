@@ -16,8 +16,6 @@ x1s = np . random . randn ( m //2) * std1 + mean1
 x0s = np . random . randn ( m //2) * std0 + mean0
 
 
-
-
 xs = np . hstack (( x1s , x0s ) )
 ys = np . hstack (( np . ones ( m //2) , np . zeros ( m //2) ) )
 
