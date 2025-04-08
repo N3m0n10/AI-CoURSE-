@@ -1,6 +1,7 @@
 import numpy as np
 
-# TODO: MAKE THIS A CLASS
+# TODO: MAKE THIS A CLASS 
+# TODO: TEST
 
 def squared_error(y, t):
     return ((y - t)**2)
@@ -8,23 +9,20 @@ def squared_error(y, t):
 def sigmoid ( z ) :   
     return 1 / (1 + np.e**-z)
 
-def forward_prop(X, W1, W2):
-    global h
-    # Calculate the hidden layer activations
-    Z1 = np.dot(X, W1)
-    A1 = sigmoid(Z1)
+def forward_prop(X, W : list, l : int):
+    Z = []
+    A = [X] # activations
 
     # Calculate the output layer activations
-    Z2 = np.dot(A1, W2)
-    A2 = sigmoid(Z2)
+    for i in range(l - 1):
+        Z.append(np.dot(A[i], W[i]))
+        A.append(sigmoid(Z[i]))
 
-    h = A2
+    return Z , A
 
-    return A1, A2 
-
-def J(A, T, W1, W2, lbd=0):
+def J(A, T, W1, W2, lbd=0, error_func=squared_error):
     m = T.shape[0]
-    cost = sum(squared_error(A, T) / (2 * m))
+    cost = sum(error_func(A, T) / (2 * m))
     if lbd > 0:  # regularization
         reg_term = (lbd / (2 * m)) * (np.sum(W1 ** 2) + np.sum(W2 ** 2))
         cost += reg_term
@@ -33,38 +31,44 @@ def J(A, T, W1, W2, lbd=0):
 
 def gradient_descent(X, Y, W1, W2, learning_rate=0.01, epochs=1000, lbd=0):
     m = Y.shape[0]
+    n_layers = len(W) + 1
+    W = [W1, W2]
     for epoch in range(epochs):
         # Forward propagation
-        A1, A2 = forward_prop(X, W1, W2)
+        Z , A = forward_prop(X, W, n_layers)
 
         # Compute cost
-        cost = J(A2, Y, W1, W2)
+        cost = J(A, Y, W1, W2)
         
         # Backward propagation
-        dW1, dW2 = backward_prop(X, Y, A1, A2, W2)
+        dW = backward_prop(X, Y, A, W, n_layers)
 
-        # Ds
-        D1 , D2 = dW1/m + lbd*W1, dW2/m + lbd*W2
-
-        # Update weights
-        W1 -= learning_rate * D1
-        W2 -= learning_rate * D2
+        # Error Derivatives and weights
+        D = []
+        for i in range(n_layers - 1):
+            D.append(dW[i] / m + lbd * W[i])
+            W[i] -= learning_rate * D[i]
 
         if epoch % 100 == 0:
             print(f"Epoch {epoch}, Cost: {cost}")
 
-    return W1, W2
+    return W
 
-def backward_prop(X, Y, A1, A2, W2):
-    # Calculate the gradients for W2
-    dZ2 = A2 - Y
-    dW2 = np.dot(A1.T, dZ2)
+def backward_prop(X, Y, A, W, l ):
+    A.reverse()
+    dz, dw = [], []
+    dz.append(A[0] - Y)
+    dw.append(np.dot(A[0].T, dz[0]))
 
-    # Calculate the gradients for W1
-    dZ1 = np.dot(dZ2, W2.T) * (A1 * (1 - A1))
-    dW1 = np.dot(X.T, dZ1)
-
-    return dW1, dW2
+    if l > 0:
+        for i in range(1, l - 1):  
+            dz.append(np.dot(dz[-1], W[-i].T) * (A[i] * (1 - A[i])))
+            if i == l - 2:
+                dw.append(np.dot(X.T, dz[-1]))
+            else:
+                dw.append(np.dot(A[i +1].T, dz[i]))
+            
+    return dw.reverse()
 
 
 

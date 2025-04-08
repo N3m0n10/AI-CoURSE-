@@ -46,10 +46,10 @@ def J(A, T, W1, W2, lbd=0):
         cost += reg_term
     return cost
 
-def w_derivative(w, a1, node_error, m, lbd, prev_delta=0):
-    delta = prev_delta + a1 * node_error
+def w_derivative(w, a1, node_error, m, lbd):
+    delta = a1 * node_error
     gradient = (1/m * delta) + (lbd * w)
-    return gradient, delta
+    return gradient
     
 
 def layer_error(a, t):
@@ -67,15 +67,15 @@ def w_derivative2(w, a, T, m, lbd):
 ## first run
 y = forward_prop(X, W1, W2)
 j = J(y[1], T, W1, W2)
-gradient, new_delta = w_derivative(W2[1][1], y[0][1], y[1][1] -  T[1], m=T.shape[0], lbd=0)
+gradient = w_derivative(W2[1][1], y[0][1], y[1][1] -  T[1], m=T.shape[0], lbd=0)
 W2[1][1] -= learning_rate * gradient
 print(f"output {h}, Cost: {j}, W2[1][1]: {W2[1][1]} not used in the update")  
 ## second run
 y = forward_prop(X, W1, W2)
 j = J(y[1], T, W1, W2)
 print(f"output {h}, Cost: {j}, W2[1][1]: {W2[1][1]}")
-W2[1][1] -= learning_rate*w_derivative(W2[1][1],y[0][1], y[1][1] - T[1], m =  T.shape[0] \
-                                       , lbd =0.1,prev_delta= new_delta)[0]  
+W2[1][1] -= learning_rate*w_derivative(W2[1][1],y[0][1], y[1][1] - T[1], 
+                                       m =  T.shape[0] , lbd =0.1)
 print("Wkl - regularized: ", W2[1][1])
 
 # the weight [Wkl] is slight decreased due to regularization
