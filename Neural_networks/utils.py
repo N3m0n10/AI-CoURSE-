@@ -68,8 +68,3 @@ def backward_prop(X, Y, A1, A2, W2):
 
     return dW1, dW2
 
-def generic_w_derivative(w: tuple,layer , a, t, m, lbd, layer_error:np.array) -> np.array:
-    delta = a[layer - 1] * layer_error
-    D = 1 / m * delta + (lbd * w[layer - 1][w[0][w[1]]])
-    return D
-
