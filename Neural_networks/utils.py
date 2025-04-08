@@ -30,14 +30,9 @@ def J(A, T, W1, W2, lbd=0):
         cost += reg_term
     return cost
 
-def w_derivative(w, a1, node_error, m, lbd, prev_delta=0):
-    delta = prev_delta + a1 * node_error
-    gradient = (1/m * delta) + (lbd * w)
-    return gradient, delta
 
-
-
-def gradient_descent(X, Y, W1, W2, learning_rate=0.01, epochs=1000):
+def gradient_descent(X, Y, W1, W2, learning_rate=0.01, epochs=1000, lbd=0):
+    m = Y.shape[0]
     for epoch in range(epochs):
         # Forward propagation
         A1, A2 = forward_prop(X, W1, W2)
@@ -48,9 +43,12 @@ def gradient_descent(X, Y, W1, W2, learning_rate=0.01, epochs=1000):
         # Backward propagation
         dW1, dW2 = backward_prop(X, Y, A1, A2, W2)
 
+        # Ds
+        D1 , D2 = dW1/m + lbd*W1, dW2/m + lbd*W2
+
         # Update weights
-        W1 -= learning_rate * dW1
-        W2 -= learning_rate * dW2
+        W1 -= learning_rate * D1
+        W2 -= learning_rate * D2
 
         if epoch % 100 == 0:
             print(f"Epoch {epoch}, Cost: {cost}")
@@ -67,4 +65,6 @@ def backward_prop(X, Y, A1, A2, W2):
     dW1 = np.dot(X.T, dZ1)
 
     return dW1, dW2
+
+
 
