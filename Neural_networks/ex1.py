@@ -69,7 +69,7 @@ y = forward_prop(X, W1, W2)
 j = J(y[1], T, W1, W2)
 gradient, new_delta = w_derivative(W2[1][1], y[0][1], y[1][1] -  T[1], m=T.shape[0], lbd=0)
 W2[1][1] -= learning_rate * gradient
-print(f"output {h}, Cost: {j}, W2[1][1]: {W2[1][1]}")  
+print(f"output {h}, Cost: {j}, W2[1][1]: {W2[1][1]} not used in the update")  
 ## second run
 y = forward_prop(X, W1, W2)
 j = J(y[1], T, W1, W2)
@@ -93,8 +93,9 @@ y = forward_prop(X, W1, W2)
 j = J(y[1], T, W1, W2)
 gradient = w_derivative2(W1[1][1], y, T, m=T.shape[0], lbd=0)
 W2[0][1] -= learning_rate * gradient
-print(f"output {h}, Cost: {j}, W2[1][1]: {W2[0][1]}") 
+print(f"output {h}, Cost: {j}, W2[0][1]: {W2[0][1]} not used in the update") 
+
 y = forward_prop(X, W1, W2)
 j = J(y[1], T, W1, W2)
 gradient = w_derivative2(W1[1][1], y, T, m=T.shape[0], lbd=0)
-print(f"output {h}, Cost: {j}, W2[1][1]: {W2[0][1]}") 
+print(f"output {h}, Cost: {j}, W2[0][1]: {W2[0][1]}") 
