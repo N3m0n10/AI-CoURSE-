@@ -3,6 +3,12 @@ import numpy as np
 # TODO: MAKE THIS A CLASS 
 # TODO: TEST
 
+class NeuralNetwork:
+    def __init__(self,name, args:list):
+        self.name = f"name"
+
+    ## TODO
+
 def squared_error(y, t):
     return ((y - t)**2)
 
@@ -69,6 +75,9 @@ def backward_prop(X, Y, A, W, l ):
                 dw.append(np.dot(A[i +1].T, dz[i]))
             
     return dw.reverse()
+
+def gradient_validation():
+    pass
 
 
 
