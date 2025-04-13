@@ -12,8 +12,13 @@ class NeuralNetwork:
 def squared_error(y, t):
     return ((y - t)**2)
 
-def sigmoid ( z ) :   
+def logistic_error():
+    pass
+
+def sigmoid (z):
     return 1 / (1 + np.e**-z)
+
+
 
 def forward_prop(X, W : list, l : int):
     Z = []
