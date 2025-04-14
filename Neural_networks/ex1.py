@@ -1,5 +1,7 @@
 import numpy as np
 
+# TODO: Gradient verification
+
 # 2 inputs , numerical
 # 1 hidden layer
 # 2 outputs, 2 hidden neurons (4 neurons)
@@ -38,7 +40,7 @@ def forward_prop(X, W1, W2):
     return A1, A2 , 
 
 def J(A, T, W1, W2, lbd=0):
-    cost = squared_error(A, T) / (2)
+    cost = sum(squared_error(A, T) / (2))
     if lbd > 0:  # regularization
         reg_term = (lbd / (2)) * (np.sum(W1 ** 2) + np.sum(W2 ** 2))
         cost += reg_term
@@ -47,7 +49,6 @@ def J(A, T, W1, W2, lbd=0):
 def w_derivative(a1, node_error):
     delta = a1 * node_error
     return delta
-    
 
 def layer_error(a, t): # ""
     delta2 = a[1] - t
