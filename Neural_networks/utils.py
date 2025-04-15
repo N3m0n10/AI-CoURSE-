@@ -4,6 +4,7 @@ import numpy as np
 # TODO: TEST
 
 class NeuralNetwork:
+    ## args: input, output, hidden, activation_func, learning_rate, epochs, 
     def __init__(self,name, args:list):
         self.name = f"name"
 
@@ -33,64 +34,89 @@ def forward_prop(X, W : list, l : int):
         Z.append(np.dot(A[i], W[i]))
         A.append(sigmoid(Z[i]))
 
-    return Z , A
+    return A
 
-def J(A, T, W1 = None, W2 = None, lbd=0, error_func=squared_error): # T = Y
-    m = T.shape[0]
+def J(A, T, w = None, lbd=0, error_func=squared_error): # T = Y
+    m = len(input)
     cost = sum(error_func(A, T) / (2 * m))
     if lbd > 0:  # regularization
-        reg_term = (lbd / (2 * m)) * (np.sum(W1 ** 2) + np.sum(W2 ** 2))
+        sum += np.sum(w[i] for i in range(len(w)) ** 2) 
+        reg_term = (lbd / (2 * m)) * sum
         cost += reg_term
     return cost
 
 def j(theta): ## error func for gradient check
-    activation = forward_prop(X, theta, l)[1][-1]  # those eill be class atrbt so no need to add to args
+    activation = forward_prop(X, theta, l)[-1]  # those eill be class atrbt so no need to add to args
     cost = J(activation, T) #no regularization
     return cost
 
-def gradient_descent(X, Y, W1, W2, learning_rate=0.01, epochs=1000, lbd=0):
-    m = Y.shape[0]
+def gradient_descent(X, Y, w:list, learning_rate=0.01, epochs = 500 , lbd=0):
+    M = len(X)
+    last_dw = None
     n_layers = len(W) + 1
-    W = [W1, W2]
+    initial_weights = w.copy()
+    W = np.array(w)
     for epoch in range(epochs):
-        # Forward propagation
-        Z , A = forward_prop(X, W, n_layers)
+        for inp in range(M):
+            # Forward propagation
+            A = forward_prop(X, W, n_layers)
 
-        # Compute cost
-        cost = J(A, Y, W1, W2)
-        
-        # Backward propagation
-        dW = backward_prop(X, Y, A, W, n_layers)
+            # Compute cost
+            cost = J(A, Y, W)
+            
+            # Backward propagation  ## dW is delta
+            dW = backward_prop(X, Y, A, W, n_layers, last_delta=last_dw)
+            last_dw = dW # acumulate all the dW
 
         # Error Derivatives and weights
         D = []
         for i in range(n_layers - 1):
-            D.append(dW[i] / m + lbd * W[i])
+            D.append(dW[i] / M + lbd * W[i])
             W[i] -= learning_rate * D[i]
 
+        if epoch == 0:  # add a if for each iter --> check other implementation
+            grad_chk = gradient_validation(np.hstack(initial_weights))
+            if D - 0.0001 <= grad_chk <= D + 0.0001: #1e-4
+                print("Gradient check failed")
+                return None
+
         if epoch % 100 == 0:
-            print(f"Epoch {epoch}, Cost: {cost}")
+            print(f"tht = {W}, cost = {cost}")
+    return W
+
+def gradient_for_op_minimize():
+    # Remember that there can't be args, so match the variables propely
+    # There's no "epoch" here
+    for inp in range(M):
+        A = forward_prop(X, W, n_layers)
+        dW = backward_prop(X, Y, A, W, n_layers, last_delta=last_dw)
+        last_dw = dW
+    D = []
+    for i in range(n_layers - 1):
+        D.append(dW[i] / M + lbd * W[i])
+        W[i] -= learning_rate * D[i]
 
     return W
 
-def backward_prop(X, Y, A, W, l, activation_derivative=sigmoid):
+
+def backward_prop(X, Y, A, W, l, activation_derivative=sigmoid, last_delta=None):
     A.reverse()
     dz, dw = [], []
     dz.append(A[0] - Y)
-    dw.append(np.dot(A[0].T, dz[0]))
+    dw.append(last_delta[0] + np.dot(A[0].T, dz[0]))
 
     if l > 0:
         for i in range(1, l - 1):  
             dz.append(np.dot(dz[-1], W[-i].T) * activation_derivative())  ##this is sig devivation ##TODO: call the activator derivation funcion
             if i == l - 2:
-                dw.append(np.dot(X.T, dz[-1]))
+                dw.append(last_delta[i] + np.dot(X.T, dz[-1]))
             else:
-                dw.append(np.dot(A[i +1].T, dz[i]))
+                dw.append(last_delta[i] + np.dot(A[i +1].T, dz[i]))
             
     return dw.reverse()
 
 #provisory
-def gradient_validation(theta):
+def gradient_validation(theta): # use np.hstack()
     grad_aprox = np.zeros(len(theta))
     for i in range(len(theta)):
         theta_plus = np.array(theta)
@@ -99,5 +125,6 @@ def gradient_validation(theta):
         theta_minus[i] -= 1e-4
         grad_aprox[i] = j(theta_plus) - j(theta_minus) / (2 * 1e-4)
 
-
+def initialize_weights():
+    pass
 
