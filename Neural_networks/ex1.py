@@ -28,16 +28,16 @@ def sigmoid ( z ) :
 def forward_prop(X, W1, W2):
     global h
     # Calculate the hidden layer activations
-    Z1 = np.dot(X, W1)
+    Z1 = np.dot(X, W1.T)
     A1 = sigmoid(Z1)
 
     # Calculate the output layer activations
-    Z2 = np.dot(A1, W2)
+    Z2 = np.dot(A1, W2.T)
     A2 = sigmoid(Z2)
 
     h = A2
 
-    return A1, A2 , 
+    return A1, A2 
 
 def J(A, T, W1, W2, lbd=0):
     cost = sum(squared_error(A, T) / (2))
