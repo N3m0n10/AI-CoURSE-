@@ -45,19 +45,20 @@ def J(A, T, w = None, lbd=0, error_func=squared_error): # T = dados de saída
         cost += reg_term
     return cost
 
-def j(theta): ## error func for gradient check
+def j(theta,X,T,l): ## error func for gradient check
     activation = forward_prop(X, theta, l)[-1]  # those eill be class atrbt so no need to add to args
     cost = J(activation, T) #no regularization
     return cost
 
 def gradient_descent(X, Y, w:list, learning_rate=0.01, epochs = 500 , lbd=0,single_output = False):
     M = len(X)
-    last_dw = [0,0,0,0,0,0,0,0,0,0,0,0,0,0] ## change
+    last_dw = [np.zeros_like(w_i) for w_i in w]
     print(last_dw)
     n_layers = len(w) + 1
     initial_weights = w.copy()
-    W = w.copy() 
+    W = w.copy()
     for epoch in range(epochs):
+        H = [] 
         for inp in range(M):
             # Forward propagation
             A = forward_prop(X[inp], W, n_layers)
@@ -66,25 +67,33 @@ def gradient_descent(X, Y, w:list, learning_rate=0.01, epochs = 500 , lbd=0,sing
             dW = backward_prop(X[inp], Y[inp], A, W, n_layers, last_delta=last_dw,iter = inp)
             last_dw = dW # acumulate all the dW
             print("atualized dw", last_dw)
+            H.append(A[-1])  # Store the output of the last layer for each input
 
-        # Error Derivatives and weights
+            # Error Derivatives and weights
         D = []
-        for i in range(n_layers - 1):
+        for i in range(n_layers - 2):
             D.append(dW[i] / M + lbd * W[i])
             W[i] -= learning_rate * D[i]
 
-        if epoch == 0:  # add a if for each iter --> check other implementation
-            grad_chk = gradient_validation(np.hstack(initial_weights))
-            if D - 0.0001 <= grad_chk <= D + 0.0001: #1e-4
-                print("Gradient check failed")
-                return None
-            
-        # Compute cost
-            cost = J(A, Y)
+        #gradient validation
+        #if epoch == 0:  # add a if for each iter --> check other implementation
+        #    gdr_stack = []
+        #    for i in range(len(initial_weights)):
+        #        for j in initial_weights[i]:
+        #            gdr_stack.append(np.hstack(j))
+        #    print("gdr_stack", gdr_stack)
+        #    grad_chk = gradient_validation(gdr_stack)
+        #    if D - 0.0001 <= grad_chk <= D + 0.0001: #1e-4
+        #        print("Gradient check failed")
+        #        return None
+                
+        cost = J(H, Y)
 
         if epoch % 100 == 0:
             print(f"tht = {W}, cost = {cost}")
-    return W
+
+
+    return W , H
 
 def gradient_for_op_minimize():
     # Remember that there can't be args, so match the variables propely
@@ -101,21 +110,35 @@ def gradient_for_op_minimize():
     return W
 
 
-def backward_prop(X, Y, A, W, l,iter, activation_derivative=sigmoid, last_delta = []):
-    A.reverse()
-    dz, dw = [], []
-    dz.append(A[0] - Y)
-    dw.append(last_delta[iter] + np.dot(A[0].T, dz[0]))
+def backward_prop(X, Y, A, W, l, activation_derivative=sigmoid, last_delta = [], iter=None): ## FIX ITER I
+    if last_delta is None:
+        last_delta = [np.zeros_like(w) for w in W]  # Initialize last_delta if not provided
 
-    if l > 0:
-        for i in range(1, l - 1):  
-            dz.append(np.dot(dz[-1], W[-i].T) * activation_derivative(A[i],derivative = True))  ##this is sig devivation ##TODO: call the activator derivation funcion
-            if i == l - 2:
-                dw.append(last_delta[i] + np.dot(X.T, dz[-1]))
-            else:
-                dw.append(last_delta[i] + np.dot(A[i +1].T, dz[i]))
-            
-    dw.reverse()
+    A_reversed = A[::-1]  # Reverse a copy of A to avoid modifying the original
+    ldt_reverse = last_delta[::-1]  # Reverse last_delta to match the order of W
+    dz, dw = [], []
+
+    # Output layer delta
+    dz.append(A_reversed[0] - Y)
+    dz_reshaped = dz[0].reshape(-1, 1)  
+    A_reversed_reshaped = A_reversed[1].reshape(1, -1)
+    print(ldt_reverse[0])
+    print(A_reversed[1].T)
+    print(dz[0])
+    dw.append(ldt_reverse[0] + np.dot(A_reversed_reshaped.T, dz_reshaped).flatten())
+
+    # Hidden layers
+    for i in range(1, l - 2):
+        dz.append(np.dot(W[-i].T,dz[-1]) * activation_derivative(A_reversed[i], derivative=True))
+        if i == l - 2:  # First hidden layer (connected to input)
+            dw.append(last_delta[0][i] + np.dot(X[iter].T, dz[-1]))
+        else:  # Other hidden layers
+            print("A_reversed[i + 1].T", A_reversed[i + 1].T)
+            print("dz[-1]", dz[-1])
+            print("lst_dlt", last_delta[i])
+            dw.append(last_delta[i] + np.dot(A_reversed[i + 1].T, dz[-1]))
+
+    dw.reverse()  # Reverse dw to match the order of W
     return dw
 
 #provisory
@@ -127,6 +150,7 @@ def gradient_validation(theta): # use np.hstack()
         theta_plus[i] += 1e-4  #make epsilon a class atribute
         theta_minus[i] -= 1e-4
         grad_aprox[i] = j(theta_plus) - j(theta_minus) / (2 * 1e-4)
+    return grad_aprox
 
 def initialize_weights():
     pass
