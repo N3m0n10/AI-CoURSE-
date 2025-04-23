@@ -1,5 +1,6 @@
 ## save thetas and result to a txt file
-from utils import J,j, gradient_descent, forward_prop, backward_prop, sigmoid, gradient_validation
+from utils import J,j, gradient_descent, forward_prop, backward_prop, sigmoid,\
+    gradient_validation, bin_logistic_error, gradient_for_op_minimize
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -18,8 +19,8 @@ import os
 # tesing and validation
 # cross validation
 
-init_epsilon = 0.01
-learning_rate = 0.01
+init_epsilon = 1e-2
+learning_rate = 0.001
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, "classification2.txt")
@@ -31,37 +32,88 @@ except FileNotFoundError:
     print(f"Error: Could not find {data_path}")
     print(f"Current working directory: {os.getcwd()}")
 training_data = [line.strip().split(",") for line in training_data]
-X = np.array([[float(data[0]), float(data[1])] for data in training_data])
-Y = np.array([float(data[2]) for data in training_data])
+input_data = np.array([[float(data[0]), float(data[1])] for data in training_data])
+print("input_data:", input_data)
+X_mean = input_data.mean(axis=0)
+X_std = input_data.std(axis=0)
+data = (input_data - X_mean) / (X_std + 1e-8)
+X = data
+Y = np.array([float(data[2]) for data in training_data], dtype=np.float32).reshape(-1, 1)
+
+#teste
+#X = np.array([[0.1, 0.2], [0.3, 0.4], [0.5, 0.6], [0.7, 0.8] ,[0.9, 1.0]])
+#Y = np.array([0 if sum(X[i]) < 1 else 1 for i in range(len(X))]).reshape(-1, 1)
+
 input_file.close()
 M = len(X)
 ## TODO: separate training and test data
 
-#provisory
-theta0 = np.random.rand(2,2) * 2 * init_epsilon - init_epsilon
-theta1 = np.random.rand(2,2) * 2 * init_epsilon - init_epsilon
-theta2 = np.random.rand(1,2) * 2 * init_epsilon - init_epsilon
+#provisory  ##bias added  
+def xavier_init(n_out, n_in):
+    return np.random.randn(n_out, n_in) * np.sqrt(1.0 / n_in)
+
+shapes = [(10, 3), (7, 11), (1, 8)]
+theta0 = xavier_init(shapes[0][0],shapes[0][1])  # 4 neurons, 3 inputs (including bias)
+theta1 = xavier_init(shapes[1][0],shapes[1][1])
+theta2 = xavier_init(shapes[2][0],shapes[2][1])  # 1 neuron, 4 inputs (including bias)
 
 W = [theta0, theta1, theta2]
+print(W)
 n_layers = len(W) + 1
-
-a = forward_prop(X[0],W,n_layers)
-print(a[-1])
 
 # gradient validation 
 theta = np.concatenate([w.flatten() for w in W])
-print(theta)
-grad_extimate = gradient_validation(theta)
-# cmompare 
+initial_theta = np.hstack(theta)  # Add a zero for the bias term
+print("theta:", theta)
+#grad_extimate = gradient_validation(theta)
+analytical_grad = gradient_for_op_minimize(theta, X, Y)
+numerical_grad = gradient_validation(theta, X, Y)
+print("diff:", np.linalg.norm(analytical_grad - numerical_grad))
+for i, (a, n) in enumerate(zip(analytical_grad,numerical_grad)):
+    print(f"Layer {i} diff:", np.abs(a - n).mean(), np.max(np.abs(a - n)))
+#raise ValueError("Gradient check done")
+# compare 
 # start descent
-
-## test 1 ->  
-result, H = gradient_descent(X, Y, W, learning_rate=0.01, epochs=100, lbd=0)
+result = optimize.minimize(fun=J, jac=gradient_for_op_minimize,\
+                x0=initial_theta, method='TNC', args=(X, Y), options={'maxiter': 50000, 'disp': True})
 print(result)
+if result.success:
+    final_loss = result.fun
+    print("Optimization successful!")
+    print("Final loss:", final_loss)
+else:
+    print("Optimization failed:", result.message)
+
+sizes = [np.prod(shape) for shape in shapes]
+split_points = np.cumsum([0] + sizes)
+reshaped_W = [
+    result.x[split_points[i]:split_points[i+1]].reshape(shapes[i])
+    for i in range(len(shapes))
+]
+acc = 0
+for i in range(len(X)):
+    acc += Y[i] - np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])
+acc = acc / len(X)
+for i in range(len(X)):
+    print(f"X: {X[i]}, Y: {Y[i]}, prediction: {np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])}")
+print("accuracy:", acc)
+save = input("save data y/n: \t")
+print(save.lower())
+if save.lower() == "y":
+    with open("Neural_networks/saved_weights.txt", "w") as f:
+        f.write(f"Final weights: {reshaped_W}\n")
+    
+"""
+## test 1 ->  
+result, H = gradient_descent(X, Y, W, learning_rate=0.01, epochs=300, lbd=0)
+print(result)
+print("H:",H)
 prediction = []
+result_format = np.concatenate([r.flatten() for r in result])
 #for i in range(len(X)):
 #    prediction.append(forward_prop(X[i], result, len(result) + 1)[-1]) 
 # result = op.minimize(fun=J, jac=ut.gradient_for_op_minimize, x0=theta, method='TNC', args=(X, Y, lbd))
-error = J(H, Y, lbd=0)  # no regularization
+error = J(H, Y, w=None , lbd=0, error_func=bin_logistic_error)  # no regularization
 print(result)
 print(error)
+"""
