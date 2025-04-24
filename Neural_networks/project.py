@@ -1,6 +1,6 @@
 ## save thetas and result to a txt file
 from utils import J,j, gradient_descent, forward_prop, backward_prop, sigmoid,\
-    gradient_validation, bin_logistic_error, gradient_for_op_minimize
+    gradient_validation, bin_logistic_error, gradient_for_op_minimize, gradient_descent_for_grad_check
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -21,6 +21,8 @@ import os
 
 init_epsilon = 1e-2
 learning_rate = 0.001
+epochs = 10000
+lbd = 0
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, "classification2.txt")
@@ -37,7 +39,8 @@ print("input_data:", input_data)
 X_mean = input_data.mean(axis=0)
 X_std = input_data.std(axis=0)
 data = (input_data - X_mean) / (X_std + 1e-8)
-X = data
+#X = data
+X = input_data
 Y = np.array([float(data[2]) for data in training_data], dtype=np.float32).reshape(-1, 1)
 
 #teste
@@ -63,17 +66,25 @@ n_layers = len(W) + 1
 
 # gradient validation 
 theta = np.concatenate([w.flatten() for w in W])
-initial_theta = np.hstack(theta)  # Add a zero for the bias term
+initial_theta = np.hstack(theta)  
 print("theta:", theta)
 #grad_extimate = gradient_validation(theta)
-analytical_grad = gradient_for_op_minimize(theta, X, Y)
+#analytical_grad = gradient_for_op_minimize(theta, X, Y)
+analytical_grad = gradient_descent_for_grad_check(X, Y, W, lbd=lbd)
 numerical_grad = gradient_validation(theta, X, Y)
+## do flaten and hstack for gradient
+analytical_grad = np.concatenate([w.flatten() for w in analytical_grad])
+print("numerical_grad:", numerical_grad)
+print("analytical_grad:", analytical_grad)
 print("diff:", np.linalg.norm(analytical_grad - numerical_grad))
 for i, (a, n) in enumerate(zip(analytical_grad,numerical_grad)):
     print(f"Layer {i} diff:", np.abs(a - n).mean(), np.max(np.abs(a - n)))
+if sum(np.abs(analytical_grad - numerical_grad))/len(theta) < 1e-2:
+    print("Gradient check passed")
+else:
+    print("gradient_check_failed")
 #raise ValueError("Gradient check done")
-# compare 
-# start descent
+"""
 result = optimize.minimize(fun=J, jac=gradient_for_op_minimize,\
                 x0=initial_theta, method='TNC', args=(X, Y), options={'maxiter': 50000, 'disp': True})
 print(result)
@@ -90,13 +101,18 @@ reshaped_W = [
     result.x[split_points[i]:split_points[i+1]].reshape(shapes[i])
     for i in range(len(shapes))
 ]
+"""
+result = gradient_descent(X, Y, W, learning_rate=learning_rate, epochs=epochs, lbd=lbd)
+reshaped_W = result
 acc = 0
 for i in range(len(X)):
     acc += Y[i] - np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])
 acc = acc / len(X)
+
 for i in range(len(X)):
     print(f"X: {X[i]}, Y: {Y[i]}, prediction: {np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])}")
 print("accuracy:", acc)
+
 save = input("save data y/n: \t")
 print(save.lower())
 if save.lower() == "y":

@@ -13,12 +13,9 @@ class NeuralNetwork:
 def squared_error(y, t):
     return ((y - t)**2)
 
-#cross entropy
 def bin_logistic_error(t,y):
     eps = 1e-8
     return -np.mean(y * np.log(t + eps) + (1 - y) * np.log(1 - t + eps))
-
-
 
 def categorical_logistic_error():
     pass
@@ -46,7 +43,7 @@ def forward_prop(X, W, l, activation_func=sigmoid):
         A.append(a)
         AWB.append(np.insert(a, 0, 1))  # Add bias for next layer
 
-    return A, Z, AWB
+    return A, AWB
 
 def J(W, X, Y, error_func=bin_logistic_error):
     lbd = 0  # Regularization parameter
@@ -63,7 +60,7 @@ def J(W, X, Y, error_func=bin_logistic_error):
     # Get the output layer activations for all training examples
     A = []
     for i in range(m):
-        activations, _, _ = forward_prop(X[i], reshaped_W, len(reshaped_W) + 1)
+        activations, _ = forward_prop(X[i], reshaped_W, len(reshaped_W) + 1)
         A.append(activations[-1])  # Output layer activation
 
     # Calculate the cost
@@ -85,58 +82,70 @@ def j(theta,X,T,l): ## error func for gradient check
     cost = J(activation, T) #no regularization
     return cost
 
-def gradient_descent(X, Y, w:list, learning_rate=0.01, epochs = 500 , lbd=0,single_output = False):
+def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
     M = len(X)
-    last_dw = [np.zeros_like(w_i) for w_i in w]
-    print(last_dw)
     n_layers = len(w) + 1
-    initial_weights = w.copy()
-    W = w.copy()
+    W = [wi.copy() for wi in w]
+
     for epoch in range(epochs):
-        H = [] 
+        dW_total = [np.zeros_like(wi) for wi in W]
+        total_loss = 0
+
         for inp in range(M):
-            # Forward propagation
-            A , Z , AWB= forward_prop(X[inp], W, n_layers)  # ANB = A with no bias
+            A, AWB = forward_prop(X[inp], W, n_layers)
+            y_hat = float(A[-1])
+            y_true = float(Y[inp])
+            # Compute loss
+            loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
+            total_loss += loss
+
+            dW = backward_prop(Y[inp], A, AWB, W, n_layers)
+            for i in range(len(W)):
+                dW_total[i] += dW[i]
+
+        grad_list = []
+        for i in range(len(W)):
+            grad = dW_total[i] / M
+
+            grad[:, 1:] += lbd * W[i][:, 1:]  # regularize only non-bias
+            grad_list.append(grad)
+            W[i] -= learning_rate * grad
+
+        if epoch % 100 == 0:
+            print(f"Epoch {epoch}, Loss: {total_loss / M:.4f}")
+
+    return W 
+
+def gradient_descent_for_grad_check(X, Y, w: list,lbd=0):
+    M = len(X)
+    n_layers = len(w) + 1
+    W = [wi.copy() for wi in w]
+
+    dW_total = [np.zeros_like(wi) for wi in W]
+    total_loss = 0
+
+    for inp in range(M):
+        A, AWB = forward_prop(X[inp], W, n_layers)
+        y_hat = float(A[-1])
+        y_true = float(Y[inp])
+        # Compute loss
+        loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
+        total_loss += loss
+
+        dW = backward_prop(Y[inp], A, AWB, W, n_layers)
+        for i in range(len(W)):
+            dW_total[i] += dW[i]
+
+    grad_list = []
+    for i in range(len(W)):
+        grad = dW_total[i] / M
+
+        grad[:, 1:] += lbd * W[i][:, 1:]  # regularize only non-bias
+        grad_list.append(grad)
             
-            # Backward propagation  ## dW is delta
-            #dW = backward_prop(Z, Y[inp], A, W, n_layers, last_delta=last_dw,iter = inp)
-            dW = backward_prop(Z, Y[inp], A , AWB , W, n_layers, last_delta=last_dw)
-            last_dw = dW # acumulate all the dW
-            print("atualized dw", last_dw)
-            H.append(A[-1])  # Store the output of the last layer for each input
 
-            # Error Derivatives and weights
-        D = []
-        for i in range(n_layers - 1):  # Changed from n_layers - 2
-            # Regular gradient term
-            gradient_term = dW[i] / M
-            
-            # Regularization term (excluding bias weights)
-            reg_term = np.zeros_like(W[i])
-            reg_term[:, 1:] = lbd * W[i][:, 1:]  # Only apply to non-bias weights
-            
-            D.append(gradient_term + reg_term)
-            W[i] -= learning_rate * D[i]
+    return grad_list
 
-        #gradient validation
-        #if epoch == 0:  # add a if for each iter --> check other implementation
-        #    gdr_stack = []
-        #    for i in range(len(initial_weights)):
-        #        for j in initial_weights[i]:
-        #            gdr_stack.append(np.hstack(j))
-        #    print("gdr_stack", gdr_stack)
-        #    grad_chk = gradient_validation(gdr_stack)
-        #    if D - 0.0001 <= grad_chk <= D + 0.0001: #1e-4
-        #        print("Gradient check failed")
-        #        return None
-
-
-        #if epoch % 100 == 0:
-        #cost = J(H, Y) 
-            #print(f"tht = {W}, cost = {cost}")
-
-
-    return W , H
 
 def gradient_for_op_minimize(W,X,Y):
     # Remember that there can't be args, so match the variables propely
@@ -156,8 +165,8 @@ def gradient_for_op_minimize(W,X,Y):
     D = [np.zeros_like(w) for w in reshaped_W]
 
     for inp in range(M):
-        A , Z , AWB = forward_prop(X[inp], reshaped_W, n_layers)
-        dW = backward_prop(Z, Y[inp], A, AWB, reshaped_W, n_layers)
+        A , AWB = forward_prop(X[inp], reshaped_W, n_layers)
+        dW = backward_prop( Y[inp], A, AWB, reshaped_W, n_layers)
         for i in range(len(D)):
             D[i] += dW[i]
 
@@ -169,7 +178,7 @@ def gradient_for_op_minimize(W,X,Y):
     return ret
 
 
-def backward_prop(Z, Y, A, AWB, W, l, activation_derivative=sigmoid):
+def backward_prop( Y, A, AWB, W, l, activation_derivative=sigmoid):
     gradients = []
     deltas = []
 
@@ -188,7 +197,6 @@ def backward_prop(Z, Y, A, AWB, W, l, activation_derivative=sigmoid):
         w_next_no_bias = w_next[:, 1:]
         delta_next = deltas[0]
 
-        z_curr = Z[layer - 1]
         a_curr = A[layer]
         act_deriv = activation_derivative(a_curr, derivative=True).reshape(-1, 1)
 
@@ -220,7 +228,6 @@ def backward_prop_batch(X_batch, y_batch, A, Z, W):
     
     return gradients
 
-#provisory
 def gradient_validation(theta, X, Y, epsilon=1e-5):
     grad = np.zeros_like(theta)
     for i in range(len(theta)):
