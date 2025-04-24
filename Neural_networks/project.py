@@ -20,9 +20,9 @@ import os
 # cross validation
 
 init_epsilon = 1e-2
-learning_rate = 0.001
+learning_rate = 0.0001
 epochs = 10000
-lbd = 0
+lbd = 0.00001
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, "classification2.txt")
@@ -84,7 +84,8 @@ if sum(np.abs(analytical_grad - numerical_grad))/len(theta) < 1e-2:
 else:
     print("gradient_check_failed")
 #raise ValueError("Gradient check done")
-"""
+
+#"""
 result = optimize.minimize(fun=J, jac=gradient_for_op_minimize,\
                 x0=initial_theta, method='TNC', args=(X, Y), options={'maxiter': 50000, 'disp': True})
 print(result)
@@ -101,9 +102,11 @@ reshaped_W = [
     result.x[split_points[i]:split_points[i+1]].reshape(shapes[i])
     for i in range(len(shapes))
 ]
+#"""
 """
 result = gradient_descent(X, Y, W, learning_rate=learning_rate, epochs=epochs, lbd=lbd)
 reshaped_W = result
+"""
 acc = 0
 for i in range(len(X)):
     acc += Y[i] - np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])
@@ -111,13 +114,19 @@ acc = acc / len(X)
 
 for i in range(len(X)):
     print(f"X: {X[i]}, Y: {Y[i]}, prediction: {np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])}")
+## remove round for seeing true results
 print("accuracy:", acc)
 
 save = input("save data y/n: \t")
 print(save.lower())
 if save.lower() == "y":
-    with open("Neural_networks/saved_weights.txt", "w") as f:
-        f.write(f"Final weights: {reshaped_W}\n")
+    with open("Neural_networks/saved_weights.txt", "a+") as f:
+        f.seek(0)  # Go to start of file
+        old = f.read()  # Read existing content
+        f.seek(0)  # Go back to start
+        f.truncate()  # Clear the file
+        weights = f"Final weights: {reshaped_W}\n"
+        f.write(old + weights)
     
 """
 ## test 1 ->  
