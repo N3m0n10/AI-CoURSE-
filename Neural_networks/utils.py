@@ -96,8 +96,17 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
             y_hat = float(A[-1])
             y_true = float(Y[inp])
             # Compute loss
-            loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
-            total_loss += loss
+            if epoch % 100 == 0:
+                loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
+                if lbd > 0:
+                    reg_sum = 0
+                    for i in range(len(W)):
+                        # Exclude bias terms from regularization
+                        reg_sum += np.sum(W[i][:, 1:] ** 2)  # Sum of squares of non-bias weights
+                    reg_term = (lbd / (2 * M)) * reg_sum
+                    loss += reg_term
+
+                total_loss += loss
 
             dW = backward_prop(Y[inp], A, AWB, W, n_layers)
             for i in range(len(W)):

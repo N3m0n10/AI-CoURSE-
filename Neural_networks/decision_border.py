@@ -2,10 +2,12 @@
 ##### Plotando fronteira de decisão não-linear
 ###############
 
-import numpy as np
+### from op.minimize
+
+from numpy import array, linspace, zeros , exp, insert, dot
 import matplotlib.pyplot as plt
 
-theta = [np.array([[ -0.23357722,   2.31939449,   3.84737183],
+theta = [array([[ -0.23357722,   2.31939449,   3.84737183],
        [  5.47444283,  10.01908269,  16.22609267],
        [ -5.28343354,  -0.19998228,  -0.28308919],
        [  4.1086489 ,  -6.15897004,  -2.1029299 ],
@@ -14,7 +16,7 @@ theta = [np.array([[ -0.23357722,   2.31939449,   3.84737183],
        [  6.39377788,   7.30775644,  -5.41300155],
        [ -7.61961076,   9.55333819,  -1.56298011],
        [ -0.09315695,  -2.68757902,  -1.0913084 ],
-       [  5.27578282, -19.78414188,   1.63022724]]), np.array([[  1.71499238,  -1.22587934,  -5.88339196,   0.13434031,
+       [  5.27578282, -19.78414188,   1.63022724]]), array([[  1.71499238,  -1.22587934,  -5.88339196,   0.13434031,
           3.72310062,   1.22153812,  -0.24027193,  -7.33902209,
           3.87285269,   3.77986328,   0.81864014],
        [  1.86917611,   0.90911745,  -9.28883553,  -0.62395098,
@@ -34,20 +36,20 @@ theta = [np.array([[ -0.23357722,   2.31939449,   3.84737183],
          -9.82070633,   8.19481561,  12.48065213],
        [  2.12451682,  -0.24547786,  -2.45005974,  -0.19006795,
          -2.34575398,   3.60389715,   0.18569074,  -5.88785083,
-          5.69234205,   2.82316697,   3.34103402]]), np.array([[-1.37615263, -3.15239609, -9.39038145,  2.05740907, -3.14999284,
+          5.69234205,   2.82316697,   3.34103402]]), array([[-1.37615263, -3.15239609, -9.39038145,  2.05740907, -3.14999284,
          2.09091099,  4.04038087, -5.07563873]])]
 
 
 # Plotando fronteira de decisão
-x1s = np.linspace(-1,1.5,50)
-x2s = np.linspace(-1,1.5,50)
-z=np.zeros((len(x1s),len(x2s)))
+x1s = linspace(-1,1.5,50)
+x2s = linspace(-1,1.5,50)
+z= zeros((len(x1s),len(x2s)))
 
 #y = h(x) = 1/(1+exp(- z))
 #z = theta.T * x
 
 def sigmoid(z, derivative=False):
-    sig = 1 / (1 + np.exp(-z))
+    sig = 1 / (1 + exp(-z))
     if derivative:
         return z * (1 - z)
     return sig
@@ -55,21 +57,21 @@ def sigmoid(z, derivative=False):
 def net_z_output(X, W, l, activation_func=sigmoid):
     Z = []
     A = [X.reshape(-1)]  # Ensure it's a flat vector
-    AWB = [np.insert(X, 0, 1)]  # Add bias term to input
+    AWB = [insert(X, 0, 1)]  # Add bias term to input
 
     for i in range(l - 1):
-        z = np.dot(W[i], AWB[i])
+        z = dot(W[i], AWB[i])
         Z.append(z)
         a = activation_func(z)
         A.append(a)
-        AWB.append(np.insert(a, 0, 1))  # Add bias for next layer
+        AWB.append(insert(a, 0, 1))  # Add bias for next layer
 
     return  Z[-1]
 
 
 for i in range(len(x1s)):
     for j in range(len(x2s)):
-        x = np.array([x1s[i], x2s[j]]).reshape(2,-1)
+        x = array([x1s[i], x2s[j]]).reshape(2,-1)
         z[i,j] = net_z_output(x,theta,4)  # saida do modelo antes de aplicar a função sigmoide - substituir aqui teu código
 plt.contour(x1s,x2s,z.T,0)
 plt.xlabel("x1")

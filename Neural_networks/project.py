@@ -20,8 +20,8 @@ import os
 # cross validation
 
 init_epsilon = 1e-2
-learning_rate = 0.1
-epochs = 1000
+learning_rate = 0.0002
+epochs = 7000
 lbd = 0
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -103,20 +103,34 @@ reshaped_W = [
     for i in range(len(shapes))
 ]
 """
-#"""
-
-result = gradient_descent(X, Y, W, learning_rate=learning_rate, epochs=epochs, lbd=lbd)
-reshaped_W = result
-#"""
 acc = 0
-for i in range(len(X)):
-    acc += Y[i] - np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])
-acc = acc / len(X)
+run = False
+
+#"""
+while acc <= 0.65:
+    
+    if run:
+       learning_rate += np.random.random() * (2 * np.random.randint(0, 2) - 1) * 0.05
+    
+    
+    result = gradient_descent(X, Y, W, learning_rate=learning_rate, epochs=epochs, lbd=lbd)
+    reshaped_W = result
+    #"""
+
+    for i in range(len(X)):
+        if Y[i] == np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1]): acc+=1
+    acc = acc / len(X)
+    print("acc: ",acc)
+
+    run = True
+
+    
 
 for i in range(len(X)):
     print(f"X: {X[i]}, Y: {Y[i]}, prediction: {np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])}")
 ## remove round for seeing true results
 print("accuracy:", acc)
+print("learning_rate", learning_rate)
 
 save = input("save data y/n: \t")
 print(save.lower())
