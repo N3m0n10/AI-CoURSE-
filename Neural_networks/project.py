@@ -7,21 +7,19 @@ import pandas as pd
 from scipy import optimize
 import os
 
-## TODO: BIAS
-
-#result = op.minimize(fun,J,jac=gradient, x0=theta, method='TNC', args=(X, Y, lbd))
+## TODO: separate training and test data
 
 ## logistic regression
 ## cross entropy error
 ## 2 hidden (for now)
-## hypostesis wil change the layer number
+## hypostesis will change the layer number
 
 # tesing and validation
 # cross validation
 
 init_epsilon = 1e-2
-learning_rate = 0.0002
-epochs = 7000
+learning_rate = 0.05
+epochs = 10000
 lbd = 0
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,6 +32,7 @@ except FileNotFoundError:
     print(f"Error: Could not find {data_path}")
     print(f"Current working directory: {os.getcwd()}")
 training_data = [line.strip().split(",") for line in training_data]
+#np.random.shuffle(training_data)
 input_data = np.array([[float(data[0]), float(data[1])] for data in training_data])
 print("input_data:", input_data)
 X_mean = input_data.mean(axis=0)
@@ -49,16 +48,15 @@ Y = np.array([float(data[2]) for data in training_data], dtype=np.float32).resha
 
 input_file.close()
 M = len(X)
-## TODO: separate training and test data
 
 #provisory  ##bias added  
 def xavier_init(n_out, n_in):
     return np.random.randn(n_out, n_in) * np.sqrt(1.0 / n_in)
 
 shapes = [(10, 3), (7, 11), (1, 8)]
-theta0 = xavier_init(shapes[0][0],shapes[0][1])  # 4 neurons, 3 inputs (including bias)
+theta0 = xavier_init(shapes[0][0],shapes[0][1])  
 theta1 = xavier_init(shapes[1][0],shapes[1][1])
-theta2 = xavier_init(shapes[2][0],shapes[2][1])  # 1 neuron, 4 inputs (including bias)
+theta2 = xavier_init(shapes[2][0],shapes[2][1])  
 
 W = [theta0, theta1, theta2]
 print(W)
@@ -71,7 +69,7 @@ print("theta:", theta)
 #grad_extimate = gradient_validation(theta)
 #analytical_grad = gradient_for_op_minimize(theta, X, Y)
 analytical_grad = gradient_descent_for_grad_check(X, Y, W, lbd=lbd)
-numerical_grad = gradient_validation(theta, X, Y)
+numerical_grad = gradient_validation(theta, X, Y,shapes)
 ## do flaten and hstack for gradient
 analytical_grad = np.concatenate([w.flatten() for w in analytical_grad])
 print("numerical_grad:", numerical_grad)
@@ -83,11 +81,12 @@ if sum(np.abs(analytical_grad - numerical_grad))/len(theta) < 1e-2:
     print("Gradient check passed")
 else:
     print("gradient_check_failed")
+    raise ValueError("gradient is wrong!")
 #raise ValueError("Gradient check done")
 
 """
 result = optimize.minimize(fun=J, jac=gradient_for_op_minimize,\
-                x0=initial_theta, method='TNC', args=(X, Y), options={'maxiter': 50000, 'disp': True})
+                x0=initial_theta, method='TNC', args=(X, Y,shapes,lbd), options={'maxiter': 50000, 'disp': True})
 print(result)
 if result.success:
     final_loss = result.fun
@@ -104,13 +103,13 @@ reshaped_W = [
 ]
 """
 acc = 0
-run = False
+#run = False
 
 #"""
 while acc <= 0.65:
     
-    if run:
-       learning_rate += np.random.random() * (2 * np.random.randint(0, 2) - 1) * 0.05
+    #if run:
+       #learning_rate += np.random.random() * (2 * np.random.randint(0, 2) - 1) * 0.05
     
     
     result = gradient_descent(X, Y, W, learning_rate=learning_rate, epochs=epochs, lbd=lbd)
@@ -122,7 +121,7 @@ while acc <= 0.65:
     acc = acc / len(X)
     print("acc: ",acc)
 
-    run = True
+    #run = True
 
     
 
@@ -130,7 +129,6 @@ for i in range(len(X)):
     print(f"X: {X[i]}, Y: {Y[i]}, prediction: {np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])}")
 ## remove round for seeing true results
 print("accuracy:", acc)
-print("learning_rate", learning_rate)
 
 save = input("save data y/n: \t")
 print(save.lower())
@@ -142,18 +140,3 @@ if save.lower() == "y":
         f.truncate()  # Clear the file
         weights = f"Final weights: {reshaped_W}\n"
         f.write(old + weights)
-
-"""
-## test 1 ->  
-result, H = gradient_descent(X, Y, W, learning_rate=0.01, epochs=300, lbd=0)
-print(result)
-print("H:",H)
-prediction = []
-result_format = np.concatenate([r.flatten() for r in result])
-#for i in range(len(X)):
-#    prediction.append(forward_prop(X[i], result, len(result) + 1)[-1]) 
-# result = op.minimize(fun=J, jac=ut.gradient_for_op_minimize, x0=theta, method='TNC', args=(X, Y, lbd))
-error = J(H, Y, w=None , lbd=0, error_func=bin_logistic_error)  # no regularization
-print(result)
-print(error)
-"""

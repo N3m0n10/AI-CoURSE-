@@ -45,11 +45,9 @@ def forward_prop(X, W, l, activation_func=sigmoid):
 
     return A, AWB
 
-def J(W, X, Y, error_func=bin_logistic_error):
-    lbd = 0  # Regularization parameter
+def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error):
     m = len(Y)  # Number of training examples
 
-    shapes = [(10, 3), (7, 11), (1, 8)]
     sizes = [np.prod(shape) for shape in shapes]
     split_points = np.cumsum([0] + sizes)
     reshaped_W = [
@@ -65,13 +63,13 @@ def J(W, X, Y, error_func=bin_logistic_error):
 
     # Calculate the cost
     cost = error_func(np.array(A), Y) / (2 * m)
-
+    
     # Regularization term
     if lbd > 0:
         reg_sum = 0
-        for i in range(len(W)):
+        for i in range(len(reshaped_W)):
             # Exclude bias terms from regularization
-            reg_sum += np.sum(W[i][:, 1:] ** 2)  # Sum of squares of non-bias weights
+            reg_sum += np.sum(reshaped_W[i][:, 1:] ** 2)  # Sum of squares of non-bias weights
         reg_term = (lbd / (2 * m)) * reg_sum
         cost += reg_term
 
@@ -93,10 +91,11 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
 
         for inp in range(M):
             A, AWB = forward_prop(X[inp], W, n_layers)
-            y_hat = float(A[-1])
-            y_true = float(Y[inp])
+    
             # Compute loss
             if epoch % 100 == 0:
+                y_hat = float(A[-1])
+                y_true = float(Y[inp])
                 loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
                 if lbd > 0:
                     reg_sum = 0
@@ -109,15 +108,14 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
                 total_loss += loss
 
             dW = backward_prop(Y[inp], A, AWB, W, n_layers)
-            for i in range(len(W)):
-                dW_total[i] += dW[i]
 
-        grad_list = []
+            for i in range(len(W)):
+                dW_total[i] += dW[i] # sum all
+
         for i in range(len(W)):
-            grad = dW_total[i] / M
+            grad = dW_total[i] / M  
 
             grad[:, 1:] += lbd * W[i][:, 1:]  # regularize only non-bias
-            grad_list.append(grad)
             W[i] -= learning_rate * grad
 
         if epoch % 100 == 0:
@@ -156,12 +154,9 @@ def gradient_descent_for_grad_check(X, Y, w: list,lbd=0):
     return grad_list
 
 
-def gradient_for_op_minimize(W,X,Y):
-    # Remember that there can't be args, so match the variables propely
-    # There's no "epoch" here
+def gradient_for_op_minimize(W,X,Y,shapes,lbd=0):
+    
     M = len(X)
-    lbd = 0  # Regularization parameter
-    shapes = [(10, 3), (7, 11), (1, 8)]
     sizes = [np.prod(shape) for shape in shapes]
     split_points = np.cumsum([0] + sizes)
     reshaped_W = [
@@ -237,19 +232,31 @@ def backward_prop_batch(X_batch, y_batch, A, Z, W):
     
     return gradients
 
-def gradient_validation(theta, X, Y, epsilon=1e-5):
+def gradient_validation(theta, X, Y, shapes,epsilon=1e-5):
     grad = np.zeros_like(theta)
     for i in range(len(theta)):
         theta_eps1 = np.copy(theta)
         theta_eps2 = np.copy(theta)
         theta_eps1[i] += epsilon
         theta_eps2[i] -= epsilon
-        loss1 = J(theta_eps1, X, Y)
-        loss2 = J(theta_eps2, X, Y)
+        loss1 = J(theta_eps1, X, Y,shapes)
+        loss2 = J(theta_eps2, X, Y,shapes)
         grad[i] = (loss1 - loss2) / (2 * epsilon)
     return grad
 
+def xavier_init(n_out, n_in):
+    return np.random.randn(n_out, n_in) * np.sqrt(1.0 / n_in)
 
-def initialize_weights():
+def epsilon_init(n_out, n_in, epsilon):
     pass
+
+def initialize_weights(shapes , method:int) -> list:
+    match method:
+        case 0: # XAVIER
+            theta = []
+            for layer in shapes:
+                theta.append(xavier_init(shapes[i][0],shapes[i][1]))
+            return theta
+        case _: 
+            raise ValueError("input out of bounds")
 
