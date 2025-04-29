@@ -18,7 +18,7 @@ import os
 # cross validation
 
 init_epsilon = 1e-2
-learning_rate = 0.05
+learning_rate = 0.01
 epochs = 10000
 lbd = 0
 
