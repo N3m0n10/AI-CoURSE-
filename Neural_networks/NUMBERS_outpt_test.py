@@ -17,29 +17,32 @@ def load_weights(filename="trained_weights.npz"):
 theta = load_weights(filename = "Neural_networks/Number_weights.npz")
 l = len(theta) + 1
 
-r_num = rand.randint(0,4999)
+# Test single random example
+r_num = rand.randint(0, 4999)
 use_X = X[r_num]
-use_y = y[r_num]
+use_y = y[r_num][0]
+use_y = 0 if use_y == 10 else use_y
 
-if use_y[0] == 10:
-    use_y = 0
-else: use_y = use_y[0]
-
-result, _ = forward_prop_multiclass(use_X,theta,l)
-result_alg = argmax((result[-1]))
-if result_alg == 9:
-    result_alg = 0
-else: result_alg = result_alg + 1
-print("result:", result_alg)
+result, _ = forward_prop_multiclass(use_X, theta, l)
+result_alg = argmax(result[-1])
+result_alg = 0 if result_alg == 9 else result_alg + 1
+print("Single test result:", result_alg)
 print("True value:", use_y)
 
-
+# Test multiple examples
 acc = 0
-for i in range(0,5000,7):
-    result, _ = forward_prop_multiclass(use_X,theta,l)
-    result_alg = argmax((result[-1]))
-    if y[i][0] == 10:
-        use_y = 0
-    else: use_y = y[i][0] 
-    print("True:",use_y,"\tresult:",result_alg)
+total = 0
+test_indices = range(0, 5000)  # Testing every 7th sample
 
+for i in test_indices:
+    result, _ = forward_prop_multiclass(X[i], theta, l)
+    result_alg = argmax(result[-1])
+    result_alg = 0 if result_alg == 9 else result_alg + 1
+    true_y = 0 if y[i][0] == 10 else y[i][0]
+    
+    acc += (result_alg == true_y)
+    total += 1
+    print(f"Sample {i} - True: {true_y}\tPredicted: {result_alg}")
+
+accuracy = acc / total
+print(f"\nTotal accuracy: {accuracy:.2%}")

@@ -42,6 +42,7 @@ from utils import  gradient_descent, forward_prop, backward_prop, sigmoid,\
 from scipy import optimize
 import os
 
+
 def save_weights(weights,txt_file, filename="trained_weights.npz"):
     """
     Save weights with full precision and shape information
@@ -50,10 +51,11 @@ def save_weights(weights,txt_file, filename="trained_weights.npz"):
     weight_dict = {f'layer_{i}': w for i, w in enumerate(weights)}
     
     # Save using numpy's savez_compressed
+    np.savez_compressed("Neural_networks/"+filename, **weight_dict)
     np.savez_compressed(filename, **weight_dict)
     
     # Also save readable version
-    with open(txt_file + '.txt', 'w') as f:
+    with open("Neural_networks/" + txt_file + '.txt', 'w') as f:
         f.write("Neural Network Weights\n")
         f.write("=" * 50 + "\n\n")
         for i, w in enumerate(weights):
@@ -142,12 +144,12 @@ for i in range(len(shapes)):
 n_layers = len(theta) + 1
 initial_theta = np.concatenate([tht.flatten() for tht in theta])
 initial_theta = np.hstack(initial_theta)
-lbd = 0.0001
+lbd = 0.001
 
 worked = False
 while not worked:
     result = optimize.minimize(fun=J, jac=gradient_for_op_minimize,\
-                    x0=initial_theta, method='TNC', args=(X[:1500], Y[:1500],shapes,lbd), options={'disp': True})
+                    x0=initial_theta, method='TNC', args=(X[:1000], Y[:1000],shapes,lbd), options={'disp': True})
     print(result)
     if result.success:
         sizes = [np.prod(shape) for shape in shapes]
