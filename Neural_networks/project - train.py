@@ -7,20 +7,13 @@ import pandas as pd
 from scipy import optimize
 import os
 
-## TODO: separate training and test data
-
 ## logistic regression
 ## cross entropy error
 ## 2 hidden (for now)
 ## hypostesis will change the layer number
 
-# tesing and validation
+# testing and validation
 # cross validation
-
-init_epsilon = 1e-2
-learning_rate = 0.01
-epochs = 10000
-lbd = 0
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, "classification2.txt")
@@ -41,7 +34,6 @@ np.random.shuffle(training_data)
 ####################################
 ####################################
 input_data = np.array([[float(data[0]), float(data[1])] for data in training_data])
-print("input_data:", input_data)
 X_mean = input_data.mean(axis=0)
 X_std = input_data.std(axis=0)
 data = (input_data - X_mean) / (X_std + 1e-8)
@@ -52,9 +44,9 @@ Y = np.array([float(data[2]) for data in training_data], dtype=np.float32).resha
 ####################################
 ###### data sets conditioning ######
 ####################################
-train_set_X , train_set_Y = X[:80] , Y[:80]
-valid_set_X , valid_set_Y = X[80:103] , Y[80:103]
-check_set_X , check_set_Y = X[103:] , Y[103:]
+train_set_X , train_set_Y = X[:80] , Y[:80]  ## 80 for train
+valid_set_X , valid_set_Y = X[80:103] , Y[80:103]  ## 23 for validation
+check_set_X , check_set_Y = X[103:] , Y[103:]  ## 15 for test
 
 M_train = len(train_set_X)
 M_valid = len(valid_set_X)
@@ -67,95 +59,117 @@ M_check = len(check_set_X)
 def xavier_init(n_out, n_in):
     return np.random.randn(n_out, n_in) * np.sqrt(1.0 / n_in)
 
-shapes = [(10, 3), (7, 11), (1, 8)]
-theta0 = xavier_init(shapes[0][0],shapes[0][1])  
-theta1 = xavier_init(shapes[1][0],shapes[1][1])
-theta2 = xavier_init(shapes[2][0],shapes[2][1])  
+shapes = [[(10, 3), (7, 11), (1, 8)],
+          #[(2, 3), (2, 3), (1, 3)],
+          [(15, 3), (15, 16), (1, 16)],
+          [(10, 3), (10, 11), (10, 11), (1, 11)]
+          #[(15, 3), (25, 16), (15, 26), (1, 16)],
+          #[(30, 3), (35, 31), (30, 36), (1, 31)]
+          ]
 
-W = [theta0, theta1, theta2]
-print(W)
-n_layers = len(W) + 1
+#constants
+init_epsilon = 1e-2
+epochs = 10000
 
-###############################
-##### gradient validation #####
-###############################
-theta = np.concatenate([w.flatten() for w in W])
-initial_theta = np.hstack(theta)  
-print("theta:", theta)
-#grad_extimate = gradient_validation(theta)
-#analytical_grad = gradient_for_op_minimize(theta, X, Y)
-analytical_grad = gradient_descent_for_grad_check(X, Y, W, lbd=lbd)
-numerical_grad = gradient_validation(theta, X, Y,shapes)
-## do flaten and hstack for gradient
-analytical_grad = np.concatenate([w.flatten() for w in analytical_grad])
-print("numerical_grad:", numerical_grad)
-print("analytical_grad:", analytical_grad)
-print("diff:", np.linalg.norm(analytical_grad - numerical_grad))
-for i, (a, n) in enumerate(zip(analytical_grad,numerical_grad)):
-    print(f"Layer {i} diff:", np.abs(a - n).mean(), np.max(np.abs(a - n)))
-if sum(np.abs(analytical_grad - numerical_grad))/len(theta) < 1e-2:
-    print("Gradient check passed")
-else:
-    print("gradient_check_failed")
-    raise ValueError("gradient is wrong!")
-###############################
-##### gradient validation #####
-###############################
-#raise ValueError("Gradient check done")
+#Variable hyper paramiters
+regularizer = [0,0.01,0.001]
+learning_rate = [0.1,0.01,0.001]
+results = []
+keys = []
 
-"""
-result = optimize.minimize(fun=J, jac=gradient_for_op_minimize,\
-                x0=initial_theta, method='TNC', args=(X, Y,shapes,lbd), options={'maxiter': 50000, 'disp': True})
-print(result)
-if result.success:
-    final_loss = result.fun
-    print("Optimization successful!")
-    print("Final loss:", final_loss)
-else:
-    print("Optimization failed:", result.message)
+for lbd in regularizer:
+    for alpha in learning_rate:
+        for shape in shapes:
 
-sizes = [np.prod(shape) for shape in shapes]
-split_points = np.cumsum([0] + sizes)
-reshaped_W = [
-    result.x[split_points[i]:split_points[i+1]].reshape(shapes[i])
-    for i in range(len(shapes))
-]
-"""
+            W = []
+
+            for k in range(len(shape)):
+                W.append(xavier_init(shape[k][0],shape[k][1]))
+
+            n_layers = len(W) + 1
+
+            ###############################
+            ##### gradient validation #####
+            ###############################
+            grad_checked = False
+            while not grad_checked:
+                theta = np.concatenate([w.flatten() for w in W])
+                initial_theta = np.hstack(theta)  
+                analytical_grad = gradient_descent_for_grad_check(train_set_X, train_set_Y, W, lbd=lbd)
+                numerical_grad = gradient_validation(theta, train_set_X, train_set_Y,shape)
+                analytical_grad = np.concatenate([g.flatten() for g in analytical_grad])
+                
+                if sum(np.abs(analytical_grad - numerical_grad))/len(theta) < 1e-2:
+                    print("Gradient check passed")
+                    grad_checked = True
+                else:
+                    print("gradient_check_failed")
+            ###############################
+            ##### gradient validation #####
+            ###############################
+            ###############################
+            ########## TRAINING ###########
+            ###############################
+            acc = 0
+            acc_list , rslt_list = [] , []
+            for tests in range(3):  ## in case of non convergence, but 1 training is expected for majors shapes
+                print(f"training: {tests}")
+                
+                result = gradient_descent(train_set_X, train_set_Y, W, learning_rate=alpha, epochs=epochs, lbd=lbd)
+                reshaped_W = result[0]
+
+                for i in range(M_valid):  
+                    if valid_set_Y[i] == np.round(forward_prop(valid_set_X[i], reshaped_W, n_layers)[0][-1]): acc+=1
+                acc = acc / M_valid
+
+                if acc >= 0.75:
+                    break
+
+                acc_list.append(acc)
+                rslt_list.append(result)
+
+            if tests >= 4:  ## acc wasn't fullfiled
+                result,acc = rslt_list[np.argmax(acc_list)], max(acc_list)  ## chooses best
+
+            results.append([f"lbd:{lbd},alpha:{alpha},\n shape:{shape}",[result,acc]])  
+
+            ###############################
+            ########## TRAINING ###########
+            ###############################
+
+################validation################
+acc_check = []
 acc = 0
-#run = False
+for rs in results:
+    acc_check.append(rs[1][1])
 
-#"""
-while acc <= 0.65:
-    
-    #if run:
-       #learning_rate += np.random.random() * (2 * np.random.randint(0, 2) - 1) * 0.05
-    
-    
-    result = gradient_descent(X, Y, W, learning_rate=learning_rate, epochs=epochs, lbd=lbd)
-    reshaped_W = result
-    #"""
+choosen = results[np.argmax(acc_check)]
+del acc_check 
+################validation################
+############################
+###### final accuracy ######
+############################
+for i in range(M_check):  
+    if check_set_Y[i] == np.round(forward_prop(check_set_X[i], choosen[1][0][0], n_layers)[0][-1]): acc+=1
 
-    for i in range(len(X)):
-        if Y[i] == np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1]): acc+=1
-    acc = acc / len(X)
-    print("acc: ",acc)
+final_acc = acc / M_check
+weights = choosen[1][0][0]
+history_loss = choosen[1][0][1]
 
-    #run = True
+with open("Neural_networks/training_results_a).txt", "a+") as f:
+    f.seek(0)  # Go to start of file
+    old = f.read()  # Read existing content
+    f.seek(0)  # Go back to start
+    f.truncate()  # Clear the file
+    text = "#####################################\n"+ \
+    f"{choosen[0]} \n" +\
+    f"accuary: {final_acc} \n"+\
+    f"loss: {history_loss}\n"+\
+    f"Final weights: {weights}\n"
+    f.write(old + text)
 
-    
-
-for i in range(len(X)):
-    print(f"X: {X[i]}, Y: {Y[i]}, prediction: {np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1])}")
-## remove round for seeing true results
-print("accuracy:", acc)
-
-save = input("save data y/n: \t")
-print(save.lower())
-if save.lower() == "y":
-    with open("Neural_networks/saved_weights.txt", "a+") as f:
-        f.seek(0)  # Go to start of file
-        old = f.read()  # Read existing content
-        f.seek(0)  # Go back to start
-        f.truncate()  # Clear the file
-        weights = f"Final weights: {reshaped_W}\n"
-        f.write(old + weights)
+## TODO: HISTORY LOSS PLOT
+plt.plot(np.linspace(0, np.pi, 500),history_loss,label = "Loss")
+plt.title(f"Loss of {choosen[0]}")
+plt.legend()
+plt.show()

@@ -5,6 +5,10 @@ mat=loadmat("Neural_Networks/classification3.mat")
 X=mat["X"]
 y=mat["y"]
 
+
+#####################################
+#activate_func = relu  ## sigmoid is default
+#####################################
 """
 count = 0
 for num in (y): 
@@ -27,7 +31,7 @@ X_shuffled = X[indices]
 y_shuffled = y[indices]
 
 #y is yet not one-hot encoding
-
+"""
 import matplotlib.image as mpimg
 fig, axis = plt.subplots(10,10,figsize=(8,8))
 for i in range(10):
@@ -35,9 +39,9 @@ for i in range(10):
         axis[i,j].imshow(X[np.random.randint(0,4999),:].reshape(20,20,order="F"), cmap="hot") #reshape back to 20 pixel by 20 pixel
         axis[i,j].axis("off")
 plt.show()
-
+"""
 from utils import  gradient_descent, forward_prop, backward_prop, sigmoid,\
-    gradient_validation, bin_logistic_error,backward_prop_multiclass,\
+    gradient_validation, bin_logistic_error,backward_prop_multiclass, relu,\
     initialize_weights , softmax, categorical_logistic_error, forward_prop_multiclass
 from scipy import optimize
 import os
@@ -91,8 +95,8 @@ def gradient_for_op_minimize(W,X,Y,shapes,lbd=0):
     D = [np.zeros_like(w) for w in reshaped_W]
 
     for inp in range(M):
-        A , AWB = forward_prop_multiclass(X[inp], reshaped_W, n_layers)
-        dW = backward_prop_multiclass( Y[inp], A, AWB, reshaped_W, n_layers)
+        A , AWB = forward_prop_multiclass(X[inp], reshaped_W, n_layers,activation_func=relu)
+        dW = backward_prop_multiclass( Y[inp], A, AWB, reshaped_W, n_layers,activation_derivative=relu)
         for i in range(len(D)):
             D[i] += dW[i]
 
@@ -116,7 +120,7 @@ def J(W, X, Y, shapes, lbd=0, error_func=categorical_logistic_error):  # for unr
     # Get the output layer activations for all training examples
     A = []
     for i in range(m):
-        activations, _ = forward_prop_multiclass(X[i], reshaped_W, len(reshaped_W) + 1)
+        activations, _ = forward_prop_multiclass(X[i], reshaped_W, len(reshaped_W) + 1, activation_func=relu)
         A.append(activations[-1])  # Output layer activation
 
     # Calculate the cost

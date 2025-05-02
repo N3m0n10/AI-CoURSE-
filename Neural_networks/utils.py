@@ -17,11 +17,11 @@ def bin_logistic_error(t,y):
     eps = 1e-8
     return -np.mean(y * np.log(t + eps) + (1 - y) * np.log(1 - t + eps))
 
-def categorical_logistic_error(t,y):
+def categorical_logistic_error(y_pred,y_true):
     eps = 1e-8
     # Convert lists to arrays and ensure correct shapes
-    t = np.array(t)
-    y = np.array(y)
+    t = np.array(y_pred)
+    y = np.array(y_true)
     
     # Reshape if needed
     if t.ndim > 2:
@@ -96,7 +96,7 @@ def forward_prop_multiclass(X, W, l, activation_func=sigmoid):
 
     return A, AWB
 
-def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error):  # for unrolled thetas
+def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error, activate_func = sigmoid):  # for unrolled thetas
     m = len(Y)  # Number of training examples
 
     sizes = [np.prod(shape) for shape in shapes]
@@ -109,7 +109,7 @@ def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error):  # for unrolled th
     # Get the output layer activations for all training examples
     A = []
     for i in range(m):
-        activations, _ = forward_prop(X[i], reshaped_W, len(reshaped_W) + 1)
+        activations, _ = forward_prop(X[i], reshaped_W, len(reshaped_W) + 1, activation_func=activate_func)
         A.append(activations[-1])  # Output layer activation
 
     # Calculate the cost
@@ -135,6 +135,7 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
     M = len(X)
     n_layers = len(w) + 1
     W = [wi.copy() for wi in w]
+    loss_list = []
     #initial_lr = learning_rate
     #decay_rate = 1e-8
 
@@ -148,19 +149,19 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
             A, AWB = forward_prop(X[inp], W, n_layers)
     
             # Compute loss
-            if epoch % 100 == 0:
-                y_hat = float(A[-1])
-                y_true = float(Y[inp])
-                loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
-                if lbd > 0:
-                    reg_sum = 0
-                    for i in range(len(W)):
-                        # Exclude bias terms from regularization
-                        reg_sum += np.sum(W[i][:, 1:] ** 2)  # Sum of squares of non-bias weights
-                    reg_term = (lbd / (2 * M)) * reg_sum
-                    loss += reg_term
+            
+            y_hat = float(A[-1])
+            y_true = float(Y[inp])
+            loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
+            if lbd > 0:
+                reg_sum = 0
+                for i in range(len(W)):
+                    # Exclude bias terms from regularization
+                    reg_sum += np.sum(W[i][:, 1:] ** 2)  # Sum of squares of non-bias weights
+                reg_term = (lbd / (2 * M)) * reg_sum
+                loss += reg_term
 
-                total_loss += loss
+            total_loss += loss
 
             dW = backward_prop(Y[inp], A, AWB, W, n_layers)
 
@@ -173,10 +174,9 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
             grad[:, 1:] += lbd * W[i][:, 1:]  # regularize only non-bias
             W[i] -= learning_rate * grad
 
-        if epoch % 100 == 0:
-            print(f"Epoch {epoch}, Loss: {total_loss / M:.4f}")
+        loss_list.append(total_loss)
 
-    return W 
+    return W ,total_loss
 
 def gradient_descent_for_grad_check(X, Y, w: list,lbd=0):
     M = len(X)
@@ -245,7 +245,7 @@ def backward_prop( Y, A, AWB, W, l, activation_derivative=sigmoid):
     a_output = A[-1]                  # (n_output,)
     a_prev = AWB[-2]                  # (n_hidden + 1,)
     error = a_output - Y              # (n_output,)
-    delta = error.reshape(-1, 1) * sigmoid(a_output, derivative=True)    # (n_output, 1)
+    delta = error.reshape(-1, 1) * activation_derivative(a_output, derivative=True)    # (n_output, 1)
     grad = np.dot(delta, a_prev.reshape(1, -1))  # (n_output, n_hidden + 1)
     deltas.insert(0, delta)
     gradients.insert(0, grad)
