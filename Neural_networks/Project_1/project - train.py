@@ -9,11 +9,7 @@ import os
 
 ## logistic regression
 ## cross entropy error
-## 2 hidden (for now)
 ## hypostesis will change the layer number
-
-# testing and validation
-# cross validation
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, "classification2.txt")
@@ -25,21 +21,18 @@ except FileNotFoundError:
     print(f"Error: Could not find {data_path}")
     print(f"Current working directory: {os.getcwd()}")
 training_data = [line.strip().split(",") for line in training_data]
-input_file.close()
 ####################################
 ########## RANDOMIZE INPUT #########
 ####################################
-np.random.shuffle(training_data)
-####################################
-####################################
-####################################
+
 input_data = np.array([[float(data[0]), float(data[1])] for data in training_data])
-X_mean = input_data.mean(axis=0)
-X_std = input_data.std(axis=0)
-data = (input_data - X_mean) / (X_std + 1e-8)
-#X = data
 X = input_data
-Y = np.array([float(data[2]) for data in training_data], dtype=np.float32).reshape(-1, 1)
+Y = np.array([int(data[2]) for data in training_data]).reshape(-1, 1)
+#indices = np.arange(X.shape[0])
+#np.random.shuffle(indices)
+#X = X[indices]
+#Y= Y[indices]
+indices = None
 
 ####################################
 ###### data sets conditioning ######
@@ -62,24 +55,27 @@ def xavier_init(n_out, n_in):
 shapes = [[(10, 3), (7, 11), (1, 8)],
           #[(2, 3), (2, 3), (1, 3)],
           [(15, 3), (15, 16), (1, 16)],
-          [(10, 3), (10, 11), (10, 11), (1, 11)]
+          [(10, 3), (10, 11), (10, 11), (1, 11)],
           #[(15, 3), (25, 16), (15, 26), (1, 16)],
           #[(30, 3), (35, 31), (30, 36), (1, 31)]
           ]
 
 #constants
 init_epsilon = 1e-2
-epochs = 10000
+epochs = 7000
 
 #Variable hyper paramiters
-regularizer = [0,0.01,0.001]
-learning_rate = [0.1,0.01,0.001]
+#regularizer = [0,0.001]
+#learning_rate = [0.01,0.001]
+regularizer = [0,0.1]
+learning_rate = [0.5,0.1]
 results = []
 keys = []
 
 for lbd in regularizer:
     for alpha in learning_rate:
         for shape in shapes:
+            print(lbd,alpha,shape)
 
             W = []
 
@@ -91,19 +87,21 @@ for lbd in regularizer:
             ###############################
             ##### gradient validation #####
             ###############################
-            grad_checked = False
-            while not grad_checked:
-                theta = np.concatenate([w.flatten() for w in W])
-                initial_theta = np.hstack(theta)  
-                analytical_grad = gradient_descent_for_grad_check(train_set_X, train_set_Y, W, lbd=lbd)
-                numerical_grad = gradient_validation(theta, train_set_X, train_set_Y,shape)
-                analytical_grad = np.concatenate([g.flatten() for g in analytical_grad])
+            
+            
+            theta = np.concatenate([w.flatten() for w in W])
+            initial_theta = np.hstack(theta)  
+            analytical_grad = gradient_descent_for_grad_check(train_set_X, train_set_Y, W, lbd=lbd)
+            numerical_grad = gradient_validation(theta, train_set_X, train_set_Y,shape)
+            analytical_grad = np.concatenate([g.flatten() for g in analytical_grad])
+            
+            if sum(np.abs(analytical_grad - numerical_grad))/len(theta) < 1e-2:
+                print("Gradient check passed")
                 
-                if sum(np.abs(analytical_grad - numerical_grad))/len(theta) < 1e-2:
-                    print("Gradient check passed")
-                    grad_checked = True
-                else:
-                    print("gradient_check_failed")
+            else:
+                print("gradient_check_failed")
+                continue
+        
             ###############################
             ##### gradient validation #####
             ###############################
@@ -122,13 +120,13 @@ for lbd in regularizer:
                     if valid_set_Y[i] == np.round(forward_prop(valid_set_X[i], reshaped_W, n_layers)[0][-1]): acc+=1
                 acc = acc / M_valid
 
-                if acc >= 0.75:
+                if acc >= 0.6:
                     break
 
                 acc_list.append(acc)
                 rslt_list.append(result)
 
-            if tests >= 4:  ## acc wasn't fullfiled
+            if tests >= 2:  ## acc wasn't fullfiled
                 result,acc = rslt_list[np.argmax(acc_list)], max(acc_list)  ## chooses best
 
             results.append([f"lbd:{lbd},alpha:{alpha},\n shape:{shape}",[result,acc]])  
@@ -144,32 +142,34 @@ for rs in results:
     acc_check.append(rs[1][1])
 
 choosen = results[np.argmax(acc_check)]
+print(choosen)
+print(choosen[1][0][0])
 del acc_check 
 ################validation################
 ############################
 ###### final accuracy ######
 ############################
-for i in range(M_check):  
-    if check_set_Y[i] == np.round(forward_prop(check_set_X[i], choosen[1][0][0], n_layers)[0][-1]): acc+=1
 
-final_acc = acc / M_check
 weights = choosen[1][0][0]
 history_loss = choosen[1][0][1]
-
-with open("Neural_networks/training_results_a).txt", "a+") as f:
-    f.seek(0)  # Go to start of file
-    old = f.read()  # Read existing content
-    f.seek(0)  # Go back to start
-    f.truncate()  # Clear the file
-    text = "#####################################\n"+ \
-    f"{choosen[0]} \n" +\
-    f"accuary: {final_acc} \n"+\
-    f"loss: {history_loss}\n"+\
-    f"Final weights: {weights}\n"
-    f.write(old + text)
+for result in results:
+    with open("Neural_networks/training_results_c).txt", "a+") as f:
+        f.seek(0)  # Go to start of file
+        old = f.read()  # Read existing content
+        f.seek(0)  # Go back to start
+        f.truncate()  # Clear the file
+        text = ("#####################################\n"
+        f"indeces:{indices}\n"
+        f"{result[0]} \n" 
+        #f"accuary: {final_acc} \n"+\
+        f"loss: {result[1][0][1][-1]}\n"
+        f"Final weights: {result[1][0][0]}\n"
+        "#######################################"
+        )
+        f.write(old + text)
 
 ## TODO: HISTORY LOSS PLOT
-plt.plot(np.linspace(0, np.pi, 500),history_loss,label = "Loss")
+plt.plot(np.linspace(0, epochs,7000),history_loss,label = "Loss")
 plt.title(f"Loss of {choosen[0]}")
 plt.legend()
 plt.show()

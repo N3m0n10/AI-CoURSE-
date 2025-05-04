@@ -65,29 +65,29 @@ def softmax(z, derivative = False):
 
 def forward_prop(X, W, l, activation_func=sigmoid):  ## TODO make this and multiclass a single func
     Z = []
-    A = [X.reshape(-1)]  # Ensure it's a flat vector
-    AWB = [np.insert(X, 0, 1)]  # Add bias term to input
+    A = [X.reshape(-1)]  
+    AWB = [np.insert(X, 0, 1)]  
 
     for i in range(l - 1):
         z = np.dot(W[i], AWB[i])
         Z.append(z)
         a = activation_func(z)
         A.append(a)
-        AWB.append(np.insert(a, 0, 1))  # Add bias for next layer
+        AWB.append(np.insert(a, 0, 1))  
 
     return A, AWB
 
 def forward_prop_multiclass(X, W, l, activation_func=sigmoid):
     Z = []
-    A = [X.reshape(-1)]  # Ensure it's a flat vector
-    AWB = [np.insert(X, 0, 1)]  # Add bias term to input
+    A = [X.reshape(-1)]  
+    AWB = [np.insert(X, 0, 1)]  
 
     for i in range(l - 2):
         z = np.dot(W[i], AWB[i])
         Z.append(z)
         a = activation_func(z)
         A.append(a)
-        AWB.append(np.insert(a, 0, 1))  # Add bias for next layer
+        AWB.append(np.insert(a, 0, 1))  
 
     z = np.dot(W[-1], AWB[-1])
     Z.append(z)
@@ -97,8 +97,7 @@ def forward_prop_multiclass(X, W, l, activation_func=sigmoid):
     return A, AWB
 
 def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error, activate_func = sigmoid):  # for unrolled thetas
-    m = len(Y)  # Number of training examples
-
+    m = len(Y)  
     sizes = [np.prod(shape) for shape in shapes]
     split_points = np.cumsum([0] + sizes)
     reshaped_W = [
@@ -106,13 +105,12 @@ def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error, activate_func = sig
         for i in range(len(shapes))
     ]
 
-    # Get the output layer activations for all training examples
+    
     A = []
     for i in range(m):
         activations, _ = forward_prop(X[i], reshaped_W, len(reshaped_W) + 1, activation_func=activate_func)
         A.append(activations[-1])  # Output layer activation
 
-    # Calculate the cost
     cost = error_func(np.array(A), Y) 
     
     # Regularization term
@@ -120,7 +118,7 @@ def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error, activate_func = sig
         reg_sum = 0
         for i in range(len(reshaped_W)):
             # Exclude bias terms from regularization
-            reg_sum += np.sum(reshaped_W[i][:, 1:] ** 2)  # Sum of squares of non-bias weights
+            reg_sum += np.sum(reshaped_W[i][:, 1:] ** 2)  
         reg_term = (lbd / (2 * m)) * reg_sum
         cost += reg_term
 
@@ -136,12 +134,8 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
     n_layers = len(w) + 1
     W = [wi.copy() for wi in w]
     loss_list = []
-    #initial_lr = learning_rate
-    #decay_rate = 1e-8
-
 
     for epoch in range(epochs):
-        #learning_rate = initial_lr / (1 + decay_rate * epoch)
         dW_total = [np.zeros_like(wi) for wi in W]
         total_loss = 0
 
@@ -149,14 +143,12 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
             A, AWB = forward_prop(X[inp], W, n_layers)
     
             # Compute loss
-            
             y_hat = float(A[-1])
             y_true = float(Y[inp])
             loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
             if lbd > 0:
                 reg_sum = 0
                 for i in range(len(W)):
-                    # Exclude bias terms from regularization
                     reg_sum += np.sum(W[i][:, 1:] ** 2)  # Sum of squares of non-bias weights
                 reg_term = (lbd / (2 * M)) * reg_sum
                 loss += reg_term
@@ -174,9 +166,11 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
             grad[:, 1:] += lbd * W[i][:, 1:]  # regularize only non-bias
             W[i] -= learning_rate * grad
 
-        loss_list.append(total_loss)
+        loss_list.append(total_loss/M)
+        if epoch % 1000 ==0:
+            print(total_loss/M)
 
-    return W ,total_loss
+    return W ,loss_list
 
 def gradient_descent_for_grad_check(X, Y, w: list,lbd=0):
     M = len(X)
@@ -184,15 +178,9 @@ def gradient_descent_for_grad_check(X, Y, w: list,lbd=0):
     W = [wi.copy() for wi in w]
 
     dW_total = [np.zeros_like(wi) for wi in W]
-    total_loss = 0
 
     for inp in range(M):
         A, AWB = forward_prop(X[inp], W, n_layers)
-        y_hat = float(A[-1])
-        y_true = float(Y[inp])
-        # Compute loss
-        loss = -y_true * np.log(y_hat + 1e-8) - (1 - y_true) * np.log(1 - y_hat + 1e-8)
-        total_loss += loss
 
         dW = backward_prop(Y[inp], A, AWB, W, n_layers)
         for i in range(len(W)):
@@ -303,23 +291,27 @@ def backward_prop_multiclass(Y, A, AWB, W, l, activation_derivative=sigmoid):
 
     return gradients
 
-def backward_prop_batch(X_batch, y_batch, A, Z, W):
-    """Vectorized backward pass for a batch of samples"""
+def backward_prop_batch(X_batch, y_batch, A, Z, W, activation_derivative=sigmoid, output_activation="sigmoid"):
+    
     m = X_batch.shape[0]
+    n_layers = len(W)
     gradients = [np.zeros_like(w) for w in W]
     
     # Output layer error
-    delta3 = (A[3] - y_batch) * sigmoid(Z[2], derivative=True)
-    gradients[2] = np.dot(delta3.T, A[2]) / m
-    
-    # Hidden layer 2 error
-    delta2 = np.dot(delta3, W[2][:, 1:]) * sigmoid(Z[1], derivative=True)
-    gradients[1] = np.dot(delta2.T, A[1]) / m
-    
-    # Hidden layer 1 error
-    delta1 = np.dot(delta2, W[1][:, 1:]) * sigmoid(Z[0], derivative=True)
-    gradients[0] = np.dot(delta1.T, A[0]) / m
-    
+    if output_activation == "sigmoid":
+        delta = (A[-1] - y_batch) * activation_derivative(Z[-1], derivative=True)
+    elif output_activation == "softmax":
+        delta = A[-1] - y_batch  # Simplified gradient for softmax + cross-entropy
+    else:
+        raise ValueError("Unsupported output activation function")
+
+    gradients[-1] = np.dot(delta.T, A[-2]) / m  # Gradient for the output layer
+
+    # Backpropagate through hidden layers
+    for layer in range(n_layers - 2, -1, -1):
+        delta = np.dot(delta, W[layer + 1][:, 1:]) * activation_derivative(Z[layer], derivative=True)
+        gradients[layer] = np.dot(delta.T, A[layer]) / m
+
     return gradients
 
 def gradient_validation(theta, X, Y, shapes,epsilon=1e-5):

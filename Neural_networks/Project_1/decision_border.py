@@ -82,7 +82,6 @@ theta = [array([[-1.26461662, -3.49735046, -0.83527465],
          0.774867  ,  0.49307061, -7.78848603]])]
 """
 
-
 # Plotando fronteira de decisão
 x1s = linspace(-1,1.5,50)
 x2s = linspace(-1,1.5,50)

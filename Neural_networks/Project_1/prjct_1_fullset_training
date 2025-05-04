@@ -18,9 +18,9 @@ import os
 # cross validation
 
 init_epsilon = 1e-2
-learning_rate = 0.01
 epochs = 10000
-lbd = 0
+lbd = 0.00001
+learning_rate = 0.3
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, "classification2.txt")
@@ -59,14 +59,12 @@ theta1 = xavier_init(shapes[1][0],shapes[1][1])
 theta2 = xavier_init(shapes[2][0],shapes[2][1])  
 
 W = [theta0, theta1, theta2]
-print(W)
 n_layers = len(W) + 1
 
 # gradient validation 
 theta = np.concatenate([w.flatten() for w in W])
 initial_theta = np.hstack(theta)  
 print("theta:", theta)
-#grad_extimate = gradient_validation(theta)
 #analytical_grad = gradient_for_op_minimize(theta, X, Y)
 analytical_grad = gradient_descent_for_grad_check(X, Y, W, lbd=lbd)
 numerical_grad = gradient_validation(theta, X, Y,shapes)
@@ -102,26 +100,14 @@ reshaped_W = [
     for i in range(len(shapes))
 ]
 """
+reshaped_W = gradient_descent(X,Y,W,learning_rate=learning_rate,epochs=epochs,lbd=lbd)[0]
 acc = 0
-#run = False
 
-#"""
-while acc <= 0.65:
-    
-    #if run:
-       #learning_rate += np.random.random() * (2 * np.random.randint(0, 2) - 1) * 0.05
-    
-    
-    result = gradient_descent(X, Y, W, learning_rate=learning_rate, epochs=epochs, lbd=lbd)
-    reshaped_W = result
-    #"""
 
-    for i in range(len(X)):
-        if Y[i] == np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1]): acc+=1
-    acc = acc / len(X)
-    print("acc: ",acc)
-
-    #run = True
+for i in range(len(X)):
+    if Y[i] == np.round(forward_prop(X[i], reshaped_W, n_layers)[0][-1]): acc+=1
+acc = acc / len(X)
+print("acc: ",acc)
 
     
 

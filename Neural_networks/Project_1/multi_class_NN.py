@@ -5,7 +5,6 @@ mat=loadmat("Neural_Networks/classification3.mat")
 X=mat["X"]
 y=mat["y"]
 
-
 #####################################
 #activate_func = relu  ## sigmoid is default
 #####################################
@@ -20,15 +19,17 @@ mold = np.zeros(10)
 Y = []
 for yps in range(len(y)):
     y_dec = np.array(mold)
-    y_dec[y[[yps]] - 1] = 1
-    Y.append(y_dec)   ## 0 is the last, 1 is first
+    if y[yps][0] != 10:
+        y_dec[y[[yps]]] = 1
+    else: y_dec[0] = 1
+    Y.append(y_dec)   
 #Y = np.eye(10)[y.reshape(-1) - 1] see later
-
+Y = np.array(Y)
 #shuffle for test
 indices = np.arange(X.shape[0])
 np.random.shuffle(indices)
 X_shuffled = X[indices]
-y_shuffled = y[indices]
+y_shuffled = Y[indices]
 
 #y is yet not one-hot encoding
 """
@@ -95,8 +96,8 @@ def gradient_for_op_minimize(W,X,Y,shapes,lbd=0):
     D = [np.zeros_like(w) for w in reshaped_W]
 
     for inp in range(M):
-        A , AWB = forward_prop_multiclass(X[inp], reshaped_W, n_layers,activation_func=relu)
-        dW = backward_prop_multiclass( Y[inp], A, AWB, reshaped_W, n_layers,activation_derivative=relu)
+        A , AWB = forward_prop_multiclass(X[inp], reshaped_W, n_layers)
+        dW = backward_prop_multiclass( Y[inp], A, AWB, reshaped_W, n_layers)
         for i in range(len(D)):
             D[i] += dW[i]
 
@@ -120,7 +121,7 @@ def J(W, X, Y, shapes, lbd=0, error_func=categorical_logistic_error):  # for unr
     # Get the output layer activations for all training examples
     A = []
     for i in range(m):
-        activations, _ = forward_prop_multiclass(X[i], reshaped_W, len(reshaped_W) + 1, activation_func=relu)
+        activations, _ = forward_prop_multiclass(X[i], reshaped_W, len(reshaped_W) + 1)
         A.append(activations[-1])  # Output layer activation
 
     # Calculate the cost
@@ -141,6 +142,7 @@ def J(W, X, Y, shapes, lbd=0, error_func=categorical_logistic_error):  # for unr
 
 #shapes = [(20,401),(20,21),(10,21),(10,11)]
 shapes = [(25,401),(15,26),(10,16)] 
+#shapes = [(50, 401), (30, 51), (10, 31)]
 theta = []
 for i in range(len(shapes)):
     theta.append(initialize_weights((shapes[i][0],shapes[i][1]),0))
@@ -148,12 +150,14 @@ for i in range(len(shapes)):
 n_layers = len(theta) + 1
 initial_theta = np.concatenate([tht.flatten() for tht in theta])
 initial_theta = np.hstack(initial_theta)
-lbd = 0.001
+lbd = 0.0001
+losses = []
 
 worked = False
 while not worked:
     result = optimize.minimize(fun=J, jac=gradient_for_op_minimize,\
-                    x0=initial_theta, method='TNC', args=(X[:1000], Y[:1000],shapes,lbd), options={'disp': True})
+                    x0=initial_theta, method='TNC', args=(X[:2000], Y[:2000],shapes,lbd), options={'disp': True})
+    losses.append(result.fun)
     print(result)
     if result.success:
         sizes = [np.prod(shape) for shape in shapes]
