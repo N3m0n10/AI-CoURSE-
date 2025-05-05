@@ -24,6 +24,11 @@ def sigmoid(z):
 def h(x, _theta):
     return sigmoid(_theta[0] + _theta[1] * x)
 
+"""
+#TODO: two input
+def h2(X:tuple, _theta):   #do Xlist for 2+ cases
+    return sigmid(_theta[0] + _theta[1] * X[0] + _theta[2] * X[1])
+"""
 def cost(h, y):
     return -y * np.log(h) - (1 - y) * np.log(1 - h)
 
@@ -53,7 +58,6 @@ alpha = 0.1  # Taxa de aprendizado
 epochs = 2000
 theta = np.array([1, 5.0])  # Inicialização dos parâmetros
 
-# Armazenar métricas
 costs = []
 accuracies = []
 
