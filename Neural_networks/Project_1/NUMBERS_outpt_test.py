@@ -2,25 +2,14 @@ from scipy.io import loadmat
 from numpy import array , random as rand , load as nload, argmax, arange
 import matplotlib.pyplot as plt
 from utils import forward_prop_multiclass , relu
-mat=loadmat("Neural_Networks/classification3.mat")
+mat=loadmat("Neural_Networks/Project_1/classification3.mat")
 X=mat["X"]
 y=mat["y"]
 
 
 # Determine neuron-to-class mapping
 def map_neurons_to_classes_by_mean(X, y, theta, l):
-    """
-    Map neurons to classes based on the mean predictions for 500 inputs per class.
-    
-    Args:
-        X: Input data.
-        y: Labels.
-        theta: Trained weights.
-        l: Number of layers in the network.
-    
-    Returns:
-        neuron_class_map: Dictionary mapping neurons to classes.
-    """
+ 
     num_classes = 10
     samples_per_class = 500
     neuron_class_map = {}
@@ -49,7 +38,7 @@ def load_weights(filename="trained_weights.npz"):
     weights = [loaded[f'layer_{i}'] for i in range(len(loaded.files))]
     return weights
 
-theta = load_weights(filename = "Neural_networks/best_digit_classifier_weights_0.3.npz")
+theta = load_weights(filename = "Neural_networks/Project_1/digit_classifier_weights_5.npz")
 l = len(theta) + 1
 
 # Generate the mapping

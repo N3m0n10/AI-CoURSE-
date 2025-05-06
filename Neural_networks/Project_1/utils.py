@@ -292,7 +292,7 @@ def backward_prop_multiclass(Y, A, AWB, W, l, activation_derivative=sigmoid):
     return gradients
 
 def backward_prop_batch(X_batch, y_batch, A, Z, W, activation_derivative=sigmoid, output_activation="sigmoid"):
-    
+    ### function unnused!!
     m = X_batch.shape[0]
     n_layers = len(W)
     gradients = [np.zeros_like(w) for w in W]

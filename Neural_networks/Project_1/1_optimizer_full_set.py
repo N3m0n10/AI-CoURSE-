@@ -115,7 +115,7 @@ print("accuracy:", acc)
 save = input("save data y/n: \t")
 print(save.lower())
 if save.lower() == "y":
-    with open("Neural_networks/saved_weights.txt", "a+") as f:
+    with open("Neural_networks/Project_1/saved_weights.txt", "a+") as f:
         f.seek(0)  # Go to start of file
         old = f.read()  # Read existing content
         f.seek(0)  # Go back to start

@@ -7,7 +7,7 @@
 from numpy import array, linspace, zeros , exp, insert, dot
 import matplotlib.pyplot as plt
 
-#"""
+#"""    ##copy your weights here!!!
 theta = [array([[ -0.23357722,   2.31939449,   3.84737183],
        [  5.47444283,  10.01908269,  16.22609267],
        [ -5.28343354,  -0.19998228,  -0.28308919],

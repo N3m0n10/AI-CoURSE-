@@ -28,11 +28,11 @@ training_data = [line.strip().split(",") for line in training_data]
 input_data = np.array([[float(data[0]), float(data[1])] for data in training_data])
 X = input_data
 Y = np.array([int(data[2]) for data in training_data]).reshape(-1, 1)
-#indices = np.arange(X.shape[0])
-#np.random.shuffle(indices)
-#X = X[indices]
-#Y= Y[indices]
-indices = None
+indices = np.arange(X.shape[0])
+np.random.shuffle(indices)
+X = X[indices]
+Y= Y[indices]
+#indices = None
 
 ####################################
 ###### data sets conditioning ######
@@ -52,23 +52,24 @@ M_check = len(check_set_X)
 def xavier_init(n_out, n_in):
     return np.random.randn(n_out, n_in) * np.sqrt(1.0 / n_in)
 
-shapes = [[(10, 3), (7, 11), (1, 8)],
+shapes = [[(50,3),(1,51)]
+          #[(10, 3), (7, 11), (1, 8)],
           #[(2, 3), (2, 3), (1, 3)],
-          [(15, 3), (15, 16), (1, 16)],
-          [(10, 3), (10, 11), (10, 11), (1, 11)],
+          #[(15, 3), (15, 16), (1, 16)],
+          #[(10, 3), (10, 11), (10, 11), (1, 11)],
           #[(15, 3), (25, 16), (15, 26), (1, 16)],
           #[(30, 3), (35, 31), (30, 36), (1, 31)]
           ]
 
 #constants
 init_epsilon = 1e-2
-epochs = 7000
+epochs = 10000
 
 #Variable hyper paramiters
 #regularizer = [0,0.001]
 #learning_rate = [0.01,0.001]
-regularizer = [0,0.1]
-learning_rate = [0.5,0.1]
+regularizer = [0]
+learning_rate = [0.5]
 results = []
 keys = []
 
@@ -153,7 +154,7 @@ del acc_check
 weights = choosen[1][0][0]
 history_loss = choosen[1][0][1]
 for result in results:
-    with open("Neural_networks/training_results_c).txt", "a+") as f:
+    with open("Neural_networks/Project_1/training_results_c).txt", "a+") as f:
         f.seek(0)  # Go to start of file
         old = f.read()  # Read existing content
         f.seek(0)  # Go back to start
@@ -169,7 +170,7 @@ for result in results:
         f.write(old + text)
 
 ## TODO: HISTORY LOSS PLOT
-plt.plot(np.linspace(0, epochs,7000),history_loss,label = "Loss")
+plt.plot(np.linspace(0, epochs,epochs),history_loss,label = "Loss")
 plt.title(f"Loss of {choosen[0]}")
 plt.legend()
 plt.show()
