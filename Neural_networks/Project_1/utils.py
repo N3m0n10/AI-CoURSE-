@@ -265,7 +265,7 @@ def backward_prop_multiclass(Y, A, AWB, W, l, activation_derivative=sigmoid):
     a_prev = AWB[-1]                  # (n_hidden + 1,)
     error = a_output - Y              # (n_output,)
 
-    softmax_grad = softmax(a_output, derivative=True)  # (1, n_classes, n_classes)
+    softmax_grad = softmax(a_output, derivative=True) # (1, n_classes, n_classes)
     delta = np.dot(error, softmax_grad[0])            # (n_classes,)
     grad = np.outer(delta, a_prev)                    # (n_classes, n_hidden + 1)
     
@@ -292,7 +292,7 @@ def backward_prop_multiclass(Y, A, AWB, W, l, activation_derivative=sigmoid):
     return gradients
 
 def backward_prop_batch(X_batch, y_batch, A, Z, W, activation_derivative=sigmoid, output_activation="sigmoid"):
-    ### function unnused!!
+   
     m = X_batch.shape[0]
     n_layers = len(W)
     gradients = [np.zeros_like(w) for w in W]
