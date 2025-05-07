@@ -247,11 +247,11 @@ def backward_prop( Y, A, AWB, W, l, activation_derivative=sigmoid):
         a_curr = A[layer]
         act_deriv = activation_derivative(a_curr, derivative=True).reshape(-1, 1)
 
-        delta = np.dot(w_next_no_bias.T, delta_next) * act_deriv
+        delta = np.dot(w_next_no_bias.T, delta_next) * act_deriv  ## layer error
         deltas.insert(0, delta)
 
         a_prev = AWB[layer - 1]
-        grad = np.dot(delta, a_prev.reshape(1, -1))
+        grad = np.dot(delta, a_prev.reshape(1, -1))  ## The error propagate here
         gradients.insert(0, grad)
 
     return gradients
@@ -282,10 +282,10 @@ def backward_prop_multiclass(Y, A, AWB, W, l, activation_derivative=sigmoid):
         a_curr = A[layer]
         act_deriv = activation_derivative(a_curr, derivative=True).reshape(-1, 1)
 
-        delta = np.dot(w_next_no_bias.T, delta_next) * act_deriv
+        delta = np.dot(w_next_no_bias.T, delta_next) * act_deriv  ## erro da layer
         deltas.insert(0, delta)
 
-        a_prev = AWB[layer - 1]
+        a_prev = AWB[layer - 1] 
         grad = np.dot(delta, a_prev.reshape(1, -1))
         gradients.insert(0, grad)
 
