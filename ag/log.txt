@@ -1,4 +1,88 @@
 ====================================
+TIMESTAMP: 07/05/2025 19:08
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 23.09 s
+Stats: population: 150, mutation rate: 0.001, crossover rate: 0.6
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:06
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 11.63 s
+Stats: population: 150, mutation rate: 0.001, crossover rate: 0.7
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:06
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 10.76 s
+Stats: population: 150, mutation rate: 0.001, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:05
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 18.27 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:05
+VERSION: 0.5 - RANK - CONVERTED
+Converged at generation: Nan
+Finish time: 1.43 s
+Stats: population: 130, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:04
+VERSION: 0.5 - RANK - CONVERTED
+Converged at generation: Nan
+Finish time: 1.08 s
+Stats: population: 130, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:04
+VERSION: 0.5 - RANK - CONVERTED
+Converged at generation: Nan
+Finish time: 3.09 s
+Stats: population: 130, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:04
+VERSION: 0.5 - RANK - CONVERTED
+Converged at generation: Nan
+Finish time: 4.27 s
+Stats: population: 130, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:04
+VERSION: 0.5 - RANK - CONVERTED
+Converged at generation: Nan
+Finish time: 11.16 s
+Stats: population: 130, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:03
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 43.74 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 19:02
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 47.74 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
+TIMESTAMP: 07/05/2025 17:42
+VERSION: 0.13 ROULLET WHEEL PURE - CONVERTED
+Converged at generation: Nan
+Finish time: 42.89 s
+Stats: population: 150, mutation rate: 0.01, crossover rate: 0.9
+====================================
+====================================
 TIMESTAMP: 19/03/2025 18:40
 VERSION: 0.2 - roullet - keep best
 Converged at generation: Converged at generation 98

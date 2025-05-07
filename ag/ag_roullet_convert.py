@@ -7,10 +7,10 @@ from datetime import datetime
 
 start_tme = os.times()
 population_size = 150
-mutation_rate = 0.01
-pc = 0.9 ##crossover rate
+mutation_rate = 0.001
+pc = 0.6 ##crossover rate
 L = 32
-iters = 1200
+iters = 600
 version = "0.13 ROULLET WHEEL PURE - CONVERTED"
 stats = f"population: {population_size}, mutation rate: {mutation_rate}, crossover rate: {pc}"
 #TODO: make own conversion functions

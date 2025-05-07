@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Entrega #4 - Dynamic Programming - TEMPLATE
 #
@@ -59,3 +60,21 @@ while Delta > 0.01:
 
 print(value)
 print(f"iter num: {k}")
+
+plt.imshow(value, cmap='Greys')
+
+for i in range(4):
+    for j in range(4):
+        if (i,j) == (0,0) or (i,j) == (3,3):
+            print('a')
+            plt.text(j, i, f'{value[i,j]:.0f}', 
+                    ha='center', va='center', color='white')
+        else:
+            plt.text(j, i, f'{value[i,j]:.1f}', 
+                    ha='center', va='center', color='black')
+
+plt.xticks([])  # Remove eixo 
+plt.yticks([])  
+
+plt.title('Value Function Grid')
+plt.show()

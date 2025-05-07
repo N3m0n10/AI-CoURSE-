@@ -36,28 +36,31 @@ def expected_value(s, a):
         # <YOUR CODE HERE>
     return evalue
 
-Delta = 10
-k = 0
-theta = 0.01  # <YOUR CODE HERE>
-while Delta > theta:
-    Delta = 0
-    for s in state_set:
-        v = V[s]
-        action_set = range(0, min(s, 100-s)+1)   # o quanto pode ser apostado # <YOUR CODE HERE>
-        V[s] = max(expected_value(s, a) for a in action_set) # maior valor esperado
-        Delta = max(Delta, abs(V[s] - v))
-    k += 1
-
-#print(V)
-plt.plot(V)  ## V --> probabilidade de vitória
-
 def policy(s):
     action_set = range(0, min(s, 100-s)+1)
     # One step lookahead to find the best action for this state
-    values_actions = [float(expected_value(s,a)) for a in action_set]# <YOUR CODE HERE>
+    values_actions = [np.float64(expected_value(s,a)) for a in action_set]# <YOUR CODE HERE>
     return np.argmax(values_actions)  # 0,1,.... min(s,100-s)
 
-final_policy = [policy(s) for s in state_set]
+for i in range(48): ## sweeps
+    Delta = 10
+    k = 0
+    theta = 1e-6
+    while Delta > theta:
+        Delta = 0
+        for s in state_set:
+            v = V[s]
+            action_set = range(0, min(s, 100-s)+1)   # o quanto pode ser apostado # <YOUR CODE HERE>
+            V[s] = max(expected_value(s, a) for a in action_set) # maior valor esperado
+            Delta = max(Delta, abs(V[s] - v))
+        k += 1
+
+    #print(V)
+    if i <= 4 or i%16 == 0:
+        plt.plot(V, label= f"{i}")  ## V --> probabilidade de vitória
+        plt.legend()
+
+    final_policy = [policy(s) for s in state_set]
 
 
 plt.figure()

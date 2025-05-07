@@ -1,0 +1,7 @@
+====================================
+TIMESTAMP: 07/05/2025 19:09
+VERSION: 0.1 ROULLET WHEEL PURE
+Converged at generation: Nan
+Finish time: 25.31 s
+Stats: population: 150, mutation rate: 0.001, crossover rate: 0.6
+====================================
