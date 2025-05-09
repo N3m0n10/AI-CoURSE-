@@ -37,14 +37,15 @@ def act(s, a):
     return ns, reward
 
 pi_as = 0.25  # pi(a/s), equiprobable random policy
-gamma = 0.99 # discount factor  
+gamma = 0.99999 # discount factor  
 
 Delta = 10
 k = 0
 # mx, my = 4,4
 value = np.zeros((4,4))
+eps = 0.00001
 
-while Delta > 0.01:
+while Delta > eps:
     Delta = 0
     # for all states in state space (grid (i,j))
     for i in range(4):
@@ -66,7 +67,6 @@ plt.imshow(value, cmap='Greys')
 for i in range(4):
     for j in range(4):
         if (i,j) == (0,0) or (i,j) == (3,3):
-            print('a')
             plt.text(j, i, f'{value[i,j]:.0f}', 
                     ha='center', va='center', color='white')
         else:
@@ -75,6 +75,6 @@ for i in range(4):
 
 plt.xticks([])  # Remove eixo 
 plt.yticks([])  
-
-plt.title('Value Function Grid')
+#  Δ:{Delta}
+plt.title(f'Value Function Grid γ:{gamma}')
 plt.show()

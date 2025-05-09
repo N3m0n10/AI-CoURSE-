@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<!-- saved from url=(0131)https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-1-4-points-value-iteration -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="./rl_project_files/athena.js" type="text/javascript"></script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app216.us.archive.org';v.server_ms=562;archive_analytics.send_pageview({});});</script>
+<script type="text/javascript" src="./rl_project_files/bundle-playback.js" charset="utf-8"></script>
+<script type="text/javascript" src="./rl_project_files/wombat.js" charset="utf-8"></script>
+<script>window.RufflePlayer=window.RufflePlayer||{};window.RufflePlayer.config={"autoplay":"on","unmuteOverlay":"hidden"};</script>
+<script type="text/javascript" src="./rl_project_files/ruffle.js"></script>
+<script type="text/javascript">
+    __wm.init("https://web.archive.org/web");
+  __wm.wombat("https://inst.eecs.berkeley.edu/~cs188/sp20/project3/","20221128020834","https://web.archive.org/","web","https://web-static.archive.org/_static/",
+	      "1669601314");
+</script>
+<link rel="stylesheet" type="text/css" href="./rl_project_files/banner-styles.css">
+<link rel="stylesheet" type="text/css" href="./rl_project_files/iconochive.css">
+<!-- End Wayback Rewrite JS Include -->
+
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://web.archive.org/web/20221128020834im_/https://inst.eecs.berkeley.edu/~cs188/sp20/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://web.archive.org/web/20221128020834im_/https://inst.eecs.berkeley.edu/~cs188/sp20/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://web.archive.org/web/20221128020834im_/https://inst.eecs.berkeley.edu/~cs188/sp20/favicon-16x16.png">
+  <link rel="manifest" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/site.webmanifest">
+  <link rel="mask-icon" href="https://web.archive.org/web/20221128020834im_/https://inst.eecs.berkeley.edu/~cs188/sp20/safari-pinned-tab.svg" color="#fdb515">
+  <meta name="apple-mobile-web-app-title" content="CS 188">
+  <meta name="application-name" content="CS 188">
+  <meta name="msapplication-TileColor" content="#3b7ea1">
+  <meta name="msapplication-TileImage" content="/~cs188/sp20/mstile-144x144.png">
+  <meta name="theme-color" content="#3b7ea1">
+
+  <title>
+    
+      Project 3 - Reinforcement Learning - CS 188: Introduction to Artificial Intelligence, Spring 2020
+    
+  </title>
+
+  <link rel="stylesheet" href="./rl_project_files/main.css" type="text/css">
+
+  <script src="./rl_project_files/jquery.min.js"></script>
+  <script src="./rl_project_files/bootstrap.min.js" integrity="" crossorigin="anonymous"></script>
+  <script src="./rl_project_files/bootstrap-toc.min.js"></script>
+
+
+  <script src="./rl_project_files/jquery.qtip.min.js" type="text/javascript"></script>
+  <script src="./rl_project_files/moment.min.js"></script>
+  <script src="./rl_project_files/fullcalendar.min.js"></script>
+
+  <script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      CommonHTML: {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+      "HTML-CSS": {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+     SVG: {
+       linebreaks: { automatic: true },
+       scale: 90,
+       preferredFont: "Latin Modern"
+     }
+    });
+  </script>
+  <script type="text/javascript" async="" src="./rl_project_files/MathJax.js"></script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.mjx-chtml {display: inline-block; line-height: 0; text-indent: 0; text-align: left; text-transform: none; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; word-wrap: normal; word-spacing: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; margin: 0; padding: 1px 0}
+.MJXc-display {display: block; text-align: center; margin: 1em 0; padding: 0}
+.mjx-chtml[tabindex]:focus, body :focus .mjx-chtml[tabindex] {display: inline-table}
+.mjx-full-width {text-align: center; display: table-cell!important; width: 10000em}
+.mjx-math {display: inline-block; border-collapse: separate; border-spacing: 0}
+.mjx-math * {display: inline-block; -webkit-box-sizing: content-box!important; -moz-box-sizing: content-box!important; box-sizing: content-box!important; text-align: left}
+.mjx-numerator {display: block; text-align: center}
+.mjx-denominator {display: block; text-align: center}
+.MJXc-stacked {height: 0; position: relative}
+.MJXc-stacked > * {position: absolute}
+.MJXc-bevelled > * {display: inline-block}
+.mjx-stack {display: inline-block}
+.mjx-op {display: block}
+.mjx-under {display: table-cell}
+.mjx-over {display: block}
+.mjx-over > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-under > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-stack > .mjx-sup {display: block}
+.mjx-stack > .mjx-sub {display: block}
+.mjx-prestack > .mjx-presup {display: block}
+.mjx-prestack > .mjx-presub {display: block}
+.mjx-delim-h > .mjx-char {display: inline-block}
+.mjx-surd {vertical-align: top}
+.mjx-mphantom * {visibility: hidden}
+.mjx-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 2px 3px; font-style: normal; font-size: 90%}
+.mjx-annotation-xml {line-height: normal}
+.mjx-menclose > svg {fill: none; stroke: currentColor}
+.mjx-mtr {display: table-row}
+.mjx-mlabeledtr {display: table-row}
+.mjx-mtd {display: table-cell; text-align: center}
+.mjx-label {display: table-row}
+.mjx-box {display: inline-block}
+.mjx-block {display: block}
+.mjx-span {display: inline}
+.mjx-char {display: block; white-space: pre}
+.mjx-itable {display: inline-table; width: auto}
+.mjx-row {display: table-row}
+.mjx-cell {display: table-cell}
+.mjx-table {display: table; width: 100%}
+.mjx-line {display: block; height: 0}
+.mjx-strut {width: 0; padding-top: 1em}
+.mjx-vsize {width: 0}
+.MJXc-space1 {margin-left: .167em}
+.MJXc-space2 {margin-left: .222em}
+.MJXc-space3 {margin-left: .278em}
+.mjx-chartest {display: block; visibility: hidden; position: absolute; top: 0; line-height: normal; font-size: 500%}
+.mjx-chartest .mjx-char {display: inline}
+.mjx-chartest .mjx-box {padding-top: 1000px}
+.MJXc-processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MJXc-processed {display: none}
+.mjx-test {font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow: hidden; height: 1px}
+.mjx-test.mjx-test-display {display: table!important}
+.mjx-test.mjx-test-inline {display: inline!important; margin-right: -1px}
+.mjx-test.mjx-test-default {display: block!important; clear: both}
+.mjx-ex-box {display: inline-block!important; position: absolute; overflow: hidden; min-height: 0; max-height: none; padding: 0; border: 0; margin: 0; width: 1px; height: 60ex}
+.mjx-test-inline .mjx-left-box {display: inline-block; width: 0; float: left}
+.mjx-test-inline .mjx-right-box {display: inline-block; width: 0; float: right}
+.mjx-test-display .mjx-right-box {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+#MathJax_CHTML_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.mjx-chtml .mjx-noError {line-height: 1.2; vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+.MJXc-TeX-unknown-R {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: normal}
+.MJXc-TeX-unknown-I {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: normal}
+.MJXc-TeX-unknown-B {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: bold}
+.MJXc-TeX-unknown-BI {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: bold}
+.MJXc-TeX-ams-R {font-family: MJXc-TeX-ams-R,MJXc-TeX-ams-Rw}
+.MJXc-TeX-cal-B {font-family: MJXc-TeX-cal-B,MJXc-TeX-cal-Bx,MJXc-TeX-cal-Bw}
+.MJXc-TeX-frak-R {font-family: MJXc-TeX-frak-R,MJXc-TeX-frak-Rw}
+.MJXc-TeX-frak-B {font-family: MJXc-TeX-frak-B,MJXc-TeX-frak-Bx,MJXc-TeX-frak-Bw}
+.MJXc-TeX-math-BI {font-family: MJXc-TeX-math-BI,MJXc-TeX-math-BIx,MJXc-TeX-math-BIw}
+.MJXc-TeX-sans-R {font-family: MJXc-TeX-sans-R,MJXc-TeX-sans-Rw}
+.MJXc-TeX-sans-B {font-family: MJXc-TeX-sans-B,MJXc-TeX-sans-Bx,MJXc-TeX-sans-Bw}
+.MJXc-TeX-sans-I {font-family: MJXc-TeX-sans-I,MJXc-TeX-sans-Ix,MJXc-TeX-sans-Iw}
+.MJXc-TeX-script-R {font-family: MJXc-TeX-script-R,MJXc-TeX-script-Rw}
+.MJXc-TeX-type-R {font-family: MJXc-TeX-type-R,MJXc-TeX-type-Rw}
+.MJXc-TeX-cal-R {font-family: MJXc-TeX-cal-R,MJXc-TeX-cal-Rw}
+.MJXc-TeX-main-B {font-family: MJXc-TeX-main-B,MJXc-TeX-main-Bx,MJXc-TeX-main-Bw}
+.MJXc-TeX-main-I {font-family: MJXc-TeX-main-I,MJXc-TeX-main-Ix,MJXc-TeX-main-Iw}
+.MJXc-TeX-main-R {font-family: MJXc-TeX-main-R,MJXc-TeX-main-Rw}
+.MJXc-TeX-math-I {font-family: MJXc-TeX-math-I,MJXc-TeX-math-Ix,MJXc-TeX-math-Iw}
+.MJXc-TeX-size1-R {font-family: MJXc-TeX-size1-R,MJXc-TeX-size1-Rw}
+.MJXc-TeX-size2-R {font-family: MJXc-TeX-size2-R,MJXc-TeX-size2-Rw}
+.MJXc-TeX-size3-R {font-family: MJXc-TeX-size3-R,MJXc-TeX-size3-Rw}
+.MJXc-TeX-size4-R {font-family: MJXc-TeX-size4-R,MJXc-TeX-size4-Rw}
+.MJXc-TeX-vec-R {font-family: MJXc-TeX-vec-R,MJXc-TeX-vec-Rw}
+.MJXc-TeX-vec-B {font-family: MJXc-TeX-vec-B,MJXc-TeX-vec-Bx,MJXc-TeX-vec-Bw}
+@font-face {font-family: MJXc-TeX-ams-R; src: local('MathJax_AMS'), local('MathJax_AMS-Regular')}
+@font-face {font-family: MJXc-TeX-ams-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_AMS-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_AMS-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_AMS-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-B; src: local('MathJax_Caligraphic Bold'), local('MathJax_Caligraphic-Bold')}
+@font-face {font-family: MJXc-TeX-cal-Bx; src: local('MathJax_Caligraphic'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-cal-Bw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Bold.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Bold.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-R; src: local('MathJax_Fraktur'), local('MathJax_Fraktur-Regular')}
+@font-face {font-family: MJXc-TeX-frak-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-B; src: local('MathJax_Fraktur Bold'), local('MathJax_Fraktur-Bold')}
+@font-face {font-family: MJXc-TeX-frak-Bx; src: local('MathJax_Fraktur'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-frak-Bw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Bold.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Bold.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-BI; src: local('MathJax_Math BoldItalic'), local('MathJax_Math-BoldItalic')}
+@font-face {font-family: MJXc-TeX-math-BIx; src: local('MathJax_Math'); font-weight: bold; font-style: italic}
+@font-face {font-family: MJXc-TeX-math-BIw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Math-BoldItalic.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Math-BoldItalic.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Math-BoldItalic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-R; src: local('MathJax_SansSerif'), local('MathJax_SansSerif-Regular')}
+@font-face {font-family: MJXc-TeX-sans-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-B; src: local('MathJax_SansSerif Bold'), local('MathJax_SansSerif-Bold')}
+@font-face {font-family: MJXc-TeX-sans-Bx; src: local('MathJax_SansSerif'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-sans-Bw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Bold.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Bold.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-I; src: local('MathJax_SansSerif Italic'), local('MathJax_SansSerif-Italic')}
+@font-face {font-family: MJXc-TeX-sans-Ix; src: local('MathJax_SansSerif'); font-style: italic}
+@font-face {font-family: MJXc-TeX-sans-Iw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Italic.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Italic.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-script-R; src: local('MathJax_Script'), local('MathJax_Script-Regular')}
+@font-face {font-family: MJXc-TeX-script-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Script-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Script-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Script-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-type-R; src: local('MathJax_Typewriter'), local('MathJax_Typewriter-Regular')}
+@font-face {font-family: MJXc-TeX-type-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Typewriter-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Typewriter-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Typewriter-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-R; src: local('MathJax_Caligraphic'), local('MathJax_Caligraphic-Regular')}
+@font-face {font-family: MJXc-TeX-cal-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-B; src: local('MathJax_Main Bold'), local('MathJax_Main-Bold')}
+@font-face {font-family: MJXc-TeX-main-Bx; src: local('MathJax_Main'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-main-Bw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Main-Bold.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-I; src: local('MathJax_Main Italic'), local('MathJax_Main-Italic')}
+@font-face {font-family: MJXc-TeX-main-Ix; src: local('MathJax_Main'); font-style: italic}
+@font-face {font-family: MJXc-TeX-main-Iw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Main-Italic.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-R; src: local('MathJax_Main'), local('MathJax_Main-Regular')}
+@font-face {font-family: MJXc-TeX-main-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-I; src: local('MathJax_Math Italic'), local('MathJax_Math-Italic')}
+@font-face {font-family: MJXc-TeX-math-Ix; src: local('MathJax_Math'); font-style: italic}
+@font-face {font-family: MJXc-TeX-math-Iw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Math-Italic.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size1-R; src: local('MathJax_Size1'), local('MathJax_Size1-Regular')}
+@font-face {font-family: MJXc-TeX-size1-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Size1-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size2-R; src: local('MathJax_Size2'), local('MathJax_Size2-Regular')}
+@font-face {font-family: MJXc-TeX-size2-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Size2-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size3-R; src: local('MathJax_Size3'), local('MathJax_Size3-Regular')}
+@font-face {font-family: MJXc-TeX-size3-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Size3-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size4-R; src: local('MathJax_Size4'), local('MathJax_Size4-Regular')}
+@font-face {font-family: MJXc-TeX-size4-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Size4-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-vec-R; src: local('MathJax_Vector'), local('MathJax_Vector-Regular')}
+@font-face {font-family: MJXc-TeX-vec-Rw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Vector-Regular.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Vector-Regular.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Vector-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-vec-B; src: local('MathJax_Vector Bold'), local('MathJax_Vector-Bold')}
+@font-face {font-family: MJXc-TeX-vec-Bx; src: local('MathJax_Vector'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-vec-Bw; src /*1*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/eot/MathJax_Vector-Bold.eot'); src /*2*/: url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/woff/MathJax_Vector-Bold.woff') format('woff'), url('https://web.archive.org/web/20221128020834/https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/fonts/HTML-CSS/TeX/otf/MathJax_Vector-Bold.otf') format('opentype')}
+</style></head>
+
+<body data-spy="scroll" data-target="#toc"><div id="MathJax_Message" style="display: none;"></div><!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script>__wm.rw(0);</script>
+<div id="wm-ipp-base" lang="en" style="display: block; direction: ltr;"><template shadowrootmode="closed"><div id="wm-ipp" style="position:fixed;left:0;top:0;right:0;" class="">
+<div id="donato" style="position:relative;width:100%;">
+  <div id="donato-base">
+    <iframe id="donato-if" src="https://archive.org/includes/donate.php?as_page=1&amp;platform=wb&amp;referer=https%3A//web.archive.org/web/20221128020834/https%3A//inst.eecs.berkeley.edu/~cs188/sp20/project3/" scrolling="no" frameborder="0" style="width:100%; height:100%">
+    </iframe>
+  </div>
+</div><div id="wm-ipp-inside">
+  <div id="wm-toolbar" style="position:relative;display:flex;flex-flow:row nowrap;justify-content:space-between;">
+    <div id="wm-logo" style="/*width:110px;*/padding-top:12px;">
+      <a href="https://web.archive.org/web/" title="Wayback Machine home page"><img src="https://web-static.archive.org/_static/images/toolbar/wayback-toolbar-logo-200.png" srcset="https://web-static.archive.org/_static/images/toolbar/wayback-toolbar-logo-100.png, https://web-static.archive.org/_static/images/toolbar/wayback-toolbar-logo-150.png 1.5x, https://web-static.archive.org/_static/images/toolbar/wayback-toolbar-logo-200.png 2x" alt="Wayback Machine" style="width:100px" border="0"></a>
+    </div>
+    <div class="c" style="display:flex;flex-flow:column nowrap;justify-content:space-between;flex:1;">
+      <form class="u" style="display:flex;flex-direction:row;flex-wrap:nowrap;" target="_top" method="get" action="https://web.archive.org/web/submit" name="wmtb" id="wmtb"><input type="text" name="url" id="wmtbURL" value="https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" onfocus="this.focus();this.select();" style="flex:1;" autocomplete="off"><input type="hidden" name="type" value="replay"><input type="hidden" name="date" value="20221128020834"><input type="submit" value="Go">
+      </form>
+      <div style="display:flex;flex-flow:row nowrap;align-items:flex-end;">
+                <div class="s" id="wm-nav-captures" style="flex:1;"><a class="t" href="https://web.archive.org/web/*/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" title="See a list of every capture for this URL">16 captures</a><div class="r" title="Timespan for captures of this URL">23 Jan 2020 - 28 Nov 2022</div></div>
+        <div class="k">
+          <a href="https://web.archive.org/web/19990601000000/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" id="wm-graph-anchor">
+            <div id="wm-ipp-sparkline" title="Explore captures for this URL" style="position: relative">
+              <canvas id="wm-sparkline-canvas" width="725" height="27" border="0"></canvas>
+            <div class="yt" style="display: none; width: 25px; height: 27px; left: 75px;"></div><div class="mt" style="display: none; width: 2px; height: 27px; left: 86px;"></div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="n">
+      <table>
+        <tbody>
+          <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+          <tr class="m">
+            <td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20201126131350/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" title="26 Nov 2020"><strong>Nov</strong></a></td>
+            <td class="c" id="displayMonthEl" title="You are here: 02:08:34 Nov 28, 2022">Nov</td>
+            <td class="f" nowrap="nowrap">Dec</td>
+          </tr>
+          <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+          <tr class="d">
+            <td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20201126131350/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" title="13:13:50 Nov 26, 2020"><img src="https://web-static.archive.org/_static/images/toolbar/wm_tb_prv_on.png" alt="Previous capture" width="14" height="16" border="0"></a></td>
+            <td class="c" id="displayDayEl" style="width:34px;font-size:22px;white-space:nowrap;" title="You are here: 02:08:34 Nov 28, 2022">28</td>
+            <td class="f" nowrap="nowrap"><img src="https://web-static.archive.org/_static/images/toolbar/wm_tb_nxt_off.png" alt="Next capture" width="14" height="16" border="0"></td>
+          </tr>
+          <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+          <tr class="y">
+            <td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20201126131350/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" title="26 Nov 2020"><strong>2020</strong></a></td>
+            <td class="c" id="displayYearEl" title="You are here: 02:08:34 Nov 28, 2022">2022</td>
+            <td class="f" nowrap="nowrap">2023</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="r" style="display:flex;flex-flow:column nowrap;align-items:flex-end;justify-content:space-between;">
+      <div id="wm-btns" style="text-align:right;height:23px;">
+                <span class="xxs">
+          <div id="wm-save-snapshot-success">success</div>
+          <div id="wm-save-snapshot-fail">fail</div>
+          <a id="wm-save-snapshot-open" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#" title="Share via My Web Archive" style="display: none;">
+            <span class="iconochive-web"></span>
+          </a>
+          <a href="https://archive.org/account/login.php" title="Sign In" id="wm-sign-in" style="display: inline-block;">
+            <span class="iconochive-person"></span>
+          </a>
+          <span id="wm-save-snapshot-in-progress" class="iconochive-web" style="display: none;"></span>
+        </span>
+                <a class="xxs" href="http://faq.web.archive.org/" title="Get some help using the Wayback Machine" style="top:-6px;"><span class="iconochive-question" style="color:rgb(87,186,244);font-size:160%;"></span></a>
+        <a id="wm-tb-close" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#close" style="top:-2px;" title="Close the toolbar"><span class="iconochive-remove-circle" style="color:#888888;font-size:240%;"></span></a>
+      </div>
+      <div id="wm-share" class="xxs">
+        <a href="https://web.archive.org/web/20221128020834/http://web.archive.org/screenshot/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" id="wm-screenshot" title="screenshot" style="visibility: hidden;">
+          <span class="wm-icon-screen-shot"></span>
+        </a>
+        <a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#" id="wm-video" title="video">
+          <span class="iconochive-movies"></span>
+        </a>
+        <a id="wm-share-facebook" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#" data-url="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" title="Share on Facebook" style="margin-right:5px;" target="_blank"><span class="iconochive-facebook" style="color:#3b5998;font-size:160%;"></span></a>
+        <a id="wm-share-twitter" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#" data-url="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/" title="Share on Twitter" style="margin-right:5px;" target="_blank"><span class="iconochive-twitter" style="color:#1dcaff;font-size:160%;"></span></a>
+      </div>
+      <div style="padding-right:2px;text-align:right;white-space:nowrap;">
+        <a id="wm-expand" class="wm-btn wm-closed" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#expand"><span id="wm-expand-icon" class="iconochive-down-solid"></span> <span class="xxs" style="font-size:80%;">About this capture</span></a>
+      </div>
+    </div>
+  </div>
+    <div id="wm-capinfo" style="border-top:1px solid #777;display:none; overflow: hidden">
+        <div id="wm-capinfo-notice" source="api"></div>
+                <div id="wm-capinfo-collected-by">
+    <div style="background-color:#666;color:#fff;font-weight:bold;text-align:center">COLLECTED BY</div>
+    <div style="padding:3px;position:relative" id="wm-collected-by-content">
+      <div style="display:inline-block;vertical-align:top;width:49%;">
+			<span class="c-logo" style="background-image:url(https://archive.org/services/img/commoncrawl)"></span>
+		<div>Collection: <a style="color:#33f;" href="https://archive.org/details/commoncrawl" target="_new"><span class="wm-title">Common Crawl</span></a></div>
+		<div style="max-height:75px;overflow:hidden;position:relative;">
+	  <div style="position:absolute;top:0;left:0;width:100%;height:75px;background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 90%,rgba(255,255,255,255) 100%);"></div>
+	  Web crawl data from Common Crawl.
+	</div>
+	      </div>
+    </div>
+    </div>
+    <div id="wm-capinfo-timestamps">
+    <div style="background-color:#666;color:#fff;font-weight:bold;text-align:center" title="Timestamps for the elements of this page">TIMESTAMPS</div>
+    <div>
+      <div id="wm-capresources" style="margin:0 5px 5px 5px;max-height:250px;overflow-y:scroll !important"></div>
+      <div id="wm-capresources-loading" style="text-align:left;margin:0 20px 5px 5px;display:none"><img src="https://web-static.archive.org/_static/images/loading.gif" alt="loading"></div>
+    </div>
+    </div>
+  </div></div></div><link rel="stylesheet" type="text/css" href="./rl_project_files/banner-styles.css"><link rel="stylesheet" type="text/css" href="./rl_project_files/iconochive.css"><div class="wb-autocomplete-suggestions "></div></template>
+</div><div id="wm-ipp-print">The Wayback Machine - https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/</div>
+<script type="text/javascript">//<![CDATA[
+__wm.bt(725,27,25,2,"web","https://inst.eecs.berkeley.edu/~cs188/sp20/project3/","20221128020834",1996,"https://web-static.archive.org/_static/",["https://web-static.archive.org/_static/css/banner-styles.css?v=S1zqJCYt","https://web-static.archive.org/_static/css/iconochive.css?v=qtvMKcIJ"], false);
+  __wm.rw(1);
+//]]></script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+ 
+  <div id="navscroll">
+  <nav id="navbar" class="navbar navbar-light navbar-expand-lg align-items-center">
+    <div class="container">
+      <a class="navbar-brand" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/" style="color: #000;"><strong>CS 188</strong> | Spring 2020</a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse ml-auto collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          
+          
+          
+  
+
+  
+
+  
+
+  
+
+  
+    
+      <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/" class="nav-link">Syllabus</a></li>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+      <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/policies/" class="nav-link">Policies</a></li>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+      <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/projects/" class="nav-link">Projects</a></li>
+    
+  
+
+  
+    
+      <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/schedule/" class="nav-link">Schedule</a></li>
+    
+  
+
+  
+    
+      <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/staff/" class="nav-link">Staff</a></li>
+    
+  
+
+
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="https://web.archive.org/web/20221128020834/https://piazza.com/class/jza9erz2ojy3qr">Piazza
+              <i class="fal fa-link"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- Return to Top -->
+<a href="javascript:" id="return-to-top" style="display: none;"><i class="fas fa-chevron-up"></i></a>
+
+<script>
+  // ===== Scroll to Top ====
+  $(window).scroll(function() {
+    if ($(this).scrollTop() >= 50) {      // If page is scrolled more than 50px
+      $('#return-to-top').fadeIn(200);    // Fade in the arrow
+    } else {
+      $('#return-to-top').fadeOut(200);   // Else fade out the arrow
+    }
+  });
+  $('#return-to-top').click(function() {  // When arrow is clicked
+    $('body,html').animate({
+      scrollTop : 0                       // Scroll to top of body
+    }, 500);
+  });
+</script>
+
+
+  <script src="./rl_project_files/jquery(1).min.js" type="text/javascript"></script>
+<script>var $j = jQuery.noConflict(true);</script>
+<script>
+  $(document).ready(function(){
+    console.log($().jquery); // this prints v1.11.0
+    console.log($j().jquery); // this prints v3.1.0
+  });
+</script>
+<script src="./rl_project_files/parallax.min.js"></script>
+
+<script src="./rl_project_files/main.min.js"></script>
+
+
+  <div class="container">
+    <!-- <div class="alert alert-info">
+  <i class="far fa-exclamation-triangle"></i>
+  <strong>IMPORTANT ANNOUNCEMENT: Please go to DWINELLE 155 for lecture starting from WED Jun 26, 2019)!!!</strong>
+</div> -->
+
+<!-- <div class="alert alert-warning">
+  <i class="far fa-exclamation-triangle"></i>
+  <strong>Warning: Spring 2020 website is under construction.</strong> There may be misleading information from past semesters on this website, which may be different from the Spring 2020 offering of the course. We will remove this warning when the information on this website is accurate.
+</div> -->
+
+<!-- <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="3800" style="float: left; top: 5em; position: absolute; z-index: 1000">
+  <div class="toast-header">
+    <i class="fal fa-bell"></i>
+    <strong class="mr-auto pl-1">Announcement</strong>
+    <small class="text-white" id="announcementTime"></small>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body">
+    <b>Lecture venue for changed AGAIN! Wednesday's (6/26) and future lectures will be held at DWINELLE 155.</b>
+  </div>
+</div> -->
+
+<script>
+  // $('.toast').toast('show')
+  document.getElementById('announcementTime').innerHTML = moment([2019, 5, 25, 21, 35]).fromNow()
+</script>
+
+
+    <div class="row">
+      <div class="col-sm-3">
+  <nav id="toc" data-toggle="toc" class="sticky-top" style="top: 40px; margin-bottom: 40px"><ul class="nav navbar-nav"><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#introduction">Introduction</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#mdps">MDPs</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-1-4-points-value-iteration">Question 1 (4 points): Value Iteration</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-2-1-point-bridge-crossing-analysis">Question 2 (1 point): Bridge Crossing Analysis</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-3-5-points-policies">Question 3 (5 points): Policies</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-4-1-point-asynchronous-value-iteration">Question 4 (1 point): Asynchronous Value Iteration</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-5-3-points-prioritized-sweeping-value-iteration">Question 5 (3 points): Prioritized Sweeping Value Iteration</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-6-4-points-q-learning">Question 6 (4 points): Q-Learning</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-7-2-points-epsilon-greedy">Question 7 (2 points): Epsilon Greedy</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-8-1-point-bridge-crossing-revisited">Question 8 (1 point): Bridge Crossing Revisited</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-9-1-point-q-learning-and-pacman">Question 9 (1 point): Q-Learning and Pacman</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#question-10-3-points-approximate-q-learning">Question 10 (3 points): Approximate Q-Learning</a></li><li><a class="nav-link" href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/project3/#submission">Submission</a></li></ul></nav>
+</div>
+
+      <div class="col-sm-9">
+          <h1 class="mt-0 center" id="project-3-reinforcement-learning">Project 3: Reinforcement Learning</h1>
+
+<center>Version 1.009. Last Updated: 02/22/2020.</center>
+
+<p class="center">Due: <b>Friday 03/06</b> at <b>11:59 pm</b></p>
+
+<hr>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In this project, you will implement value iteration and Q-learning. You will test your agents first on Gridworld (from class), then apply them to a simulated robot controller (Crawler) and Pacman.</p>
+
+<p>As in previous projects, this project includes an autograder for you to grade your solutions on your machine. This can be run on all questions with the command:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock0">python autograder.py
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock0"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>It can be run for one particular question, such as q2, by:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock1">python autograder.py <span class="nt">-q</span> q2
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock1"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>It can be run for one particular test by commands of the form:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock2">python autograder.py <span class="nt">-t</span> test_cases/q2/1-bridge-grid
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock2"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>The code for this project contains the following files, available as a <a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/assets/files/reinforcement.zip">zip archive</a>.</p>
+
+<table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td colspan="2"><b>Files you'll edit:</b></td>
+              </tr>
+              <tr>
+                <td><code>valueIterationAgents.py</code></td>
+                <td>A value iteration agent for solving known MDPs.</td>
+              </tr>
+              <tr>
+                <td><code>qlearningAgents.py</code></td>
+                <td>Q-learning agents for Gridworld, Crawler and Pacman.</td>
+              </tr>
+              <tr>
+                <td><code>analysis.py</code></td>
+                <td>A file to put your answers to questions given in the project.</td>
+              </tr>
+
+              <tr>
+                <td colspan="2"><b>Files you should read but NOT edit:</b></td>
+              </tr>
+              <tr>
+                <td><code>mdp.py</code></td>
+                <td>Defines methods on general MDPs.</td>
+              </tr>
+              <tr>
+                <td><code>learningAgents.py</code></td>
+                <td>Defines the base classes <code>ValueEstimationAgent</code> and <code>QLearningAgent</code>, which your agents will extend.</td>
+              </tr>
+              <tr>
+                <td><code>util.py</code></td>
+                <td>Utilities, including <code>util.Counter</code>, which is particularly useful for Q-learners.</td>
+              </tr>
+              <tr>
+                <td><code>gridworld.py</code></td>
+                <td>The Gridworld implementation.</td>
+              </tr>
+              <tr>
+                <td><code>featureExtractors.py</code></td>
+                <td>Classes for extracting features on (state, action) pairs. Used for the approximate Q-learning agent (in <code>qlearningAgents.py</code>).</td>
+              </tr>
+
+              <tr>
+                <td colspan="2"><b>Files you can ignore:</b></td>
+              </tr>
+              <tr>
+                <td><code>environment.py</code></td>
+                <td>Abstract class for general reinforcement learning environments. Used by <code>gridworld.py</code>.</td>
+              </tr>
+              <tr>
+                <td><code>graphicsGridworldDisplay.py</code></td>
+                <td>Gridworld graphical display.</td>
+              </tr>
+              <tr>
+                <td><code>graphicsUtils.py</code></td>
+                <td>Graphics utilities.</td>
+              </tr>
+              <tr>
+                <td><code>textGridworldDisplay.py</code></td>
+                <td>Plug-in for the Gridworld text interface.</td>
+              </tr>
+              <tr>
+                <td><code>crawler.py</code></td>
+                <td>The crawler code and test harness. You will run this but not edit it.</td>
+              </tr>
+              <tr>
+                <td><code>graphicsCrawlerDisplay.py</code></td>
+                <td>GUI for the crawler robot.</td>
+              </tr>
+              <tr>
+                <td><code>autograder.py</code></td>
+                <td>Project autograder</td>
+              </tr>
+              <tr>
+                <td><code>testParser.py</code></td>
+                <td>Parses autograder test and solution files</td>
+              </tr>
+              <tr>
+                <td><code>testClasses.py</code></td>
+                <td>General autograding test classes</td>
+              </tr>
+              <tr>
+                <td><code>test_cases/</code></td>
+                <td>Directory containing the test cases for each question</td>
+              </tr>
+              <tr>
+                <td><code>reinforcementTestClasses.py</code></td>
+                <td>Project 3 specific autograding test classes</td>
+              </tr>
+            </tbody>
+          </table>
+
+<p><strong>Files to Edit and Submit:</strong> You will fill in portions of <code class="highlighter-rouge">valueIterationAgents.py</code>, <code class="highlighter-rouge">qlearningAgents.py</code>, and <code class="highlighter-rouge">analysis.py</code> during the assignment. Please <em>do not</em> change the other files in this distribution or submit any of our original files other than these files.</p>
+
+<p><em>Note:</em> <strong>You only need to submit <code class="highlighter-rouge">reinforcement.token</code>, generated by running <code class="highlighter-rouge">submission_autograder.py</code>.</strong> It contains the evaluation results from your local autograder, and a copy of all your code. You do not need to submit any other files.</p>
+
+<p><strong>Evaluation:</strong> Your code will be autograded for technical correctness. Please <em>do not</em> change the names of any provided functions or classes within the code, or you will wreak havoc on the autograder. However, the correctness of your implementation – not the autograder’s judgements – will be the final judge of your score. If necessary, we will review and grade assignments individually to ensure that you receive due credit for your work.</p>
+
+<p><strong>Academic Dishonesty:</strong> We will be checking your code against other submissions in the class for logical redundancy. If you copy someone else’s code and submit it with minor changes, we will know. These cheat detectors are quite hard to fool, so please don’t try. We trust you all to submit your own work only; <em>please</em> don’t let us down. If you do, we will pursue the strongest consequences available to us.</p>
+
+<p><strong>Getting Help:</strong> You are not alone! If you find yourself stuck on something, contact the course staff for help. Office hours, section, and the discussion forum are there for your support; please use them. If you can’t make our office hours, let us know and we will schedule more. We want these projects to be rewarding and instructional, not frustrating and demoralizing. But, we don’t know when or how to help unless you ask.</p>
+
+<p><strong>Discussion:</strong> Please be careful not to post spoilers.</p>
+
+<hr>
+
+<h2 id="mdps">MDPs</h2>
+
+<p>To get started, run Gridworld in manual control mode, which uses the arrow keys:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock3">python gridworld.py <span class="nt">-m</span>
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock3"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>You will see the two-exit layout from class. The blue dot is the agent. Note that when you press <em>up</em>, the agent only actually moves north 80% of the time. Such is the life of a Gridworld agent!</p>
+
+<p>You can control many aspects of the simulation. A full list of options is available by running:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock4">python gridworld.py <span class="nt">-h</span>
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock4"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>The default agent moves randomly</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock5">python gridworld.py <span class="nt">-g</span> MazeGrid
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock5"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>You should see the random agent bounce around the grid until it happens upon an exit. Not the finest hour for an AI agent.</p>
+
+<p><em>Note:</em> The Gridworld MDP is such that you first must enter a pre-terminal state (the double boxes shown in the GUI) and then take the special ‘exit’ action before the episode actually ends (in the true terminal state called <code class="highlighter-rouge">TERMINAL_STATE</code>, which is not shown in the GUI). If you run an episode manually, your total return may be less than you expected, due to the discount rate (<code class="highlighter-rouge">-d</code> to change; 0.9 by default).</p>
+
+<p>Look at the console output that accompanies the graphical output (or use <code class="highlighter-rouge">-t</code> for all text). You will be told about each transition the agent experiences (to turn this off, use <code class="highlighter-rouge">-q</code>).</p>
+
+<p>As in Pacman, positions are represented by <code class="highlighter-rouge">(x,y)</code> Cartesian coordinates and any arrays are indexed by <code class="highlighter-rouge">[x][y]</code>, with <code class="highlighter-rouge">'north'</code> being the direction of increasing <code class="highlighter-rouge">y</code>, etc. By default, most transitions will receive a reward of zero, though you can change this with the living reward option (<code class="highlighter-rouge">-r</code>).</p>
+
+<hr>
+
+<h2 id="question-1-4-points-value-iteration">Question 1 (4 points): Value Iteration</h2>
+
+<p>Recall the value iteration state update equation:</p>
+
+<p><img src="./rl_project_files/bellman2.png" alt="bellman" class="img-fluid center-image" style="width: 600px;"></p>
+
+<p>Write a value iteration agent in <code class="highlighter-rouge">ValueIterationAgent</code>, which has been partially specified for you in <code class="highlighter-rouge">valueIterationAgents.py</code>. Your value iteration agent is an offline planner, not a reinforcement learning agent, and so the relevant training option is the number of iterations of value iteration it should run (option <code class="highlighter-rouge">-i</code>) in its initial planning phase. <code class="highlighter-rouge">ValueIterationAgent</code> takes an MDP on construction and runs value iteration for the specified number of iterations before the constructor returns.</p>
+
+<p>Value iteration computes <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-1"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-2">k</span></span></span><span id="MathJax-Element-1-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-1" class="mjx-math"><span id="MJXc-Node-2" class="mjx-mrow"><span id="MJXc-Node-3" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span><script type="math/tex" id="MathJax-Element-1">k</script>-step estimates of the optimal values, <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-3"><span class="MJXp-msubsup" id="MJXp-Span-4"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-5" style="margin-right: 0.05em;">V</span><span class="MJXp-mi MJXp-italic MJXp-script" id="MJXp-Span-6" style="vertical-align: -0.4em;">k</span></span></span></span><span id="MathJax-Element-2-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-4" class="mjx-math"><span id="MJXc-Node-5" class="mjx-mrow"><span id="MJXc-Node-6" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.186em;"><span id="MJXc-Node-7" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.323em; padding-right: 0.186em;">V</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-8" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span></span></span><script type="math/tex" id="MathJax-Element-2">V_k</script>. In addition to running value iteration, implement the following methods for <code class="highlighter-rouge">ValueIterationAgent</code> using <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-7"><span class="MJXp-msubsup" id="MJXp-Span-8"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-9" style="margin-right: 0.05em;">V</span><span class="MJXp-mi MJXp-italic MJXp-script" id="MJXp-Span-10" style="vertical-align: -0.4em;">k</span></span></span></span><span id="MathJax-Element-3-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-9" class="mjx-math"><span id="MJXc-Node-10" class="mjx-mrow"><span id="MJXc-Node-11" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.186em;"><span id="MJXc-Node-12" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.323em; padding-right: 0.186em;">V</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-13" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span></span></span><script type="math/tex" id="MathJax-Element-3">V_k</script>.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">computeActionFromValues(state)</code> computes the best action according to the value function given by <code class="highlighter-rouge">self.values</code>.</li>
+  <li><code class="highlighter-rouge">computeQValueFromValues(state, action)</code> returns the Q-value of the (state, action) pair given by the value function given by <code class="highlighter-rouge">self.values</code>.</li>
+</ul>
+
+<p>These quantities are all displayed in the GUI: values are numbers in squares, Q-values are numbers in square quarters, and policies are arrows out from each square.</p>
+
+<p><em>Important:</em> Use the “batch” version of value iteration where each vector <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-11"><span class="MJXp-msubsup" id="MJXp-Span-12"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-13" style="margin-right: 0.05em;">V</span><span class="MJXp-mi MJXp-italic MJXp-script" id="MJXp-Span-14" style="vertical-align: -0.4em;">k</span></span></span></span><span id="MathJax-Element-4-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-14" class="mjx-math"><span id="MJXc-Node-15" class="mjx-mrow"><span id="MJXc-Node-16" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.186em;"><span id="MJXc-Node-17" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.323em; padding-right: 0.186em;">V</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-18" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span></span></span><script type="math/tex" id="MathJax-Element-4">V_k</script> is computed from a fixed vector <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-15"><span class="MJXp-msubsup" id="MJXp-Span-16"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-17" style="margin-right: 0.05em;">V</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-18" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-19">k</span><span class="MJXp-mo" id="MJXp-Span-20">−</span><span class="MJXp-mn" id="MJXp-Span-21">1</span></span></span></span></span><span id="MathJax-Element-5-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-19" class="mjx-math"><span id="MJXc-Node-20" class="mjx-mrow"><span id="MJXc-Node-21" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.186em;"><span id="MJXc-Node-22" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.323em; padding-right: 0.186em;">V</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-23" class="mjx-texatom" style=""><span id="MJXc-Node-24" class="mjx-mrow"><span id="MJXc-Node-25" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span><span id="MJXc-Node-26" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.45em;">−</span></span><span id="MJXc-Node-27" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.386em; padding-bottom: 0.323em;">1</span></span></span></span></span></span></span></span></span><script type="math/tex" id="MathJax-Element-5">V_{k-1}</script> (like in lecture), not the “online” version where one single weight vector is updated in place. This means that when a state’s value is updated in iteration <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-22"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-23">k</span></span></span><span id="MathJax-Element-6-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-28" class="mjx-math"><span id="MJXc-Node-29" class="mjx-mrow"><span id="MJXc-Node-30" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span><script type="math/tex" id="MathJax-Element-6">k</script> based on the values of its successor states, the successor state values used in the value update computation should be those from iteration <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-24"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-25">k</span><span class="MJXp-mo" id="MJXp-Span-26" style="margin-left: 0.267em; margin-right: 0.267em;">−</span><span class="MJXp-mn" id="MJXp-Span-27">1</span></span></span><span id="MathJax-Element-7-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-31" class="mjx-math"><span id="MJXc-Node-32" class="mjx-mrow"><span id="MJXc-Node-33" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span><span id="MJXc-Node-34" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.45em;">−</span></span><span id="MJXc-Node-35" class="mjx-mn MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.386em; padding-bottom: 0.323em;">1</span></span></span></span></span><script type="math/tex" id="MathJax-Element-7">k-1</script> (even if some of the successor states had already been updated in iteration <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-28"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-29">k</span></span></span><span id="MathJax-Element-8-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-36" class="mjx-math"><span id="MJXc-Node-37" class="mjx-mrow"><span id="MJXc-Node-38" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span><script type="math/tex" id="MathJax-Element-8">k</script>). The difference is discussed in <a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/assets/files/SuttonBartoIPRLBook2ndEd.pdf">Sutton &amp; Barto</a> in Chapter 4.1 on page 91.</p>
+
+<p><em>Note:</em> A policy synthesized from values of depth <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-30"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-31">k</span></span></span><span id="MathJax-Element-9-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-39" class="mjx-math"><span id="MJXc-Node-40" class="mjx-mrow"><span id="MJXc-Node-41" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span><script type="math/tex" id="MathJax-Element-9">k</script> (which reflect the next <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-32"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-33">k</span></span></span><span id="MathJax-Element-10-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-42" class="mjx-math"><span id="MJXc-Node-43" class="mjx-mrow"><span id="MJXc-Node-44" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span></span></span></span><script type="math/tex" id="MathJax-Element-10">k</script> rewards) will actually reflect the next <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-34"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-35">k</span><span class="MJXp-mo" id="MJXp-Span-36" style="margin-left: 0.267em; margin-right: 0.267em;">+</span><span class="MJXp-mn" id="MJXp-Span-37">1</span></span></span><span id="MathJax-Element-11-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-45" class="mjx-math"><span id="MJXc-Node-46" class="mjx-mrow"><span id="MJXc-Node-47" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span><span id="MJXc-Node-48" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.45em;">+</span></span><span id="MJXc-Node-49" class="mjx-mn MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.386em; padding-bottom: 0.323em;">1</span></span></span></span></span><script type="math/tex" id="MathJax-Element-11">k+1</script> rewards (i.e. you return <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-38"><span class="MJXp-msubsup" id="MJXp-Span-39"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-40" style="margin-right: 0.05em;">π</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-41" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-42">k</span><span class="MJXp-mo" id="MJXp-Span-43">+</span><span class="MJXp-mn" id="MJXp-Span-44">1</span></span></span></span></span><span id="MathJax-Element-12-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-50" class="mjx-math"><span id="MJXc-Node-51" class="mjx-mrow"><span id="MJXc-Node-52" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.003em;"><span id="MJXc-Node-53" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.195em; padding-bottom: 0.259em; padding-right: 0.003em;">π</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-54" class="mjx-texatom" style=""><span id="MJXc-Node-55" class="mjx-mrow"><span id="MJXc-Node-56" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span><span id="MJXc-Node-57" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.45em;">+</span></span><span id="MJXc-Node-58" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.386em; padding-bottom: 0.323em;">1</span></span></span></span></span></span></span></span></span><script type="math/tex" id="MathJax-Element-12">\pi_{k+1}</script>). Similarly, the Q-values will also reflect one more reward than the values (i.e. you return <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-45"><span class="MJXp-msubsup" id="MJXp-Span-46"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-47" style="margin-right: 0.05em;">Q</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-48" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-49">k</span><span class="MJXp-mo" id="MJXp-Span-50">+</span><span class="MJXp-mn" id="MJXp-Span-51">1</span></span></span></span></span><span id="MathJax-Element-13-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-59" class="mjx-math"><span id="MJXc-Node-60" class="mjx-mrow"><span id="MJXc-Node-61" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-62" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.45em;">Q</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-63" class="mjx-texatom" style=""><span id="MJXc-Node-64" class="mjx-mrow"><span id="MJXc-Node-65" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span><span id="MJXc-Node-66" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.45em;">+</span></span><span id="MJXc-Node-67" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.386em; padding-bottom: 0.323em;">1</span></span></span></span></span></span></span></span></span><script type="math/tex" id="MathJax-Element-13">Q_{k+1}</script>).</p>
+
+<p>You should return the synthesized policy <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-52"><span class="MJXp-msubsup" id="MJXp-Span-53"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-54" style="margin-right: 0.05em;">π</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-55" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-56">k</span><span class="MJXp-mo" id="MJXp-Span-57">+</span><span class="MJXp-mn" id="MJXp-Span-58">1</span></span></span></span></span><span id="MathJax-Element-14-Frame" class="mjx-chtml MathJax_CHTML MJXc-processed" tabindex="0" style="font-size: 103%;"><span id="MJXc-Node-68" class="mjx-math"><span id="MJXc-Node-69" class="mjx-mrow"><span id="MJXc-Node-70" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.003em;"><span id="MJXc-Node-71" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.195em; padding-bottom: 0.259em; padding-right: 0.003em;">π</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.219em; padding-right: 0.071em;"><span id="MJXc-Node-72" class="mjx-texatom" style=""><span id="MJXc-Node-73" class="mjx-mrow"><span id="MJXc-Node-74" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.45em; padding-bottom: 0.259em;">k</span></span><span id="MJXc-Node-75" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.45em;">+</span></span><span id="MJXc-Node-76" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.386em; padding-bottom: 0.323em;">1</span></span></span></span></span></span></span></span></span><script type="math/tex" id="MathJax-Element-14">\pi_{k+1}</script>.</p>
+
+<p><em>Hint:</em> You may optionally use the <code class="highlighter-rouge">util.Counter</code> class in <code class="highlighter-rouge">util.py</code>, which is a dictionary with a default value of zero. However, be careful with <code class="highlighter-rouge">argMax</code>: the actual argmax you want may be a key not in the counter!</p>
+
+<p><em>Note:</em> Make sure to handle the case when a state has no available actions in an MDP (think about what this means for future rewards).</p>
+
+<p>To test your implementation, run the autograder:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock6">python autograder.py <span class="nt">-q</span> q1
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock6"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>The following command loads your <code class="highlighter-rouge">ValueIterationAgent</code>, which will compute a policy and execute it 10 times. Press a key to cycle through values, Q-values, and the simulation. You should find that the value of the start state (<code class="highlighter-rouge">V(start)</code>, which you can read off of the GUI) and the empirical resulting average reward (printed after the 10 rounds of execution finish) are quite close.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock7">python gridworld.py <span class="nt">-a</span> value <span class="nt">-i</span> 100 <span class="nt">-k</span> 10
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock7"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><em>Hint:</em> On the default BookGrid, running value iteration for 5 iterations should give you this output:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock8">python gridworld.py <span class="nt">-a</span> value <span class="nt">-i</span> 5
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock8"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><img src="./rl_project_files/value.png" alt="value iteration with k=5" class="img-fluid center-image" style="width: 600px;"></p>
+
+<p><em>Grading:</em> Your value iteration agent will be graded on a new grid. We will check your values, Q-values, and policies after fixed numbers of iterations and at convergence (e.g. after 100 iterations).</p>
+
+<hr>
+
+<h2 id="question-2-1-point-bridge-crossing-analysis">Question 2 (1 point): Bridge Crossing Analysis</h2>
+
+<p><code class="highlighter-rouge">BridgeGrid</code> is a grid world map with the a low-reward terminal state and a high-reward terminal state separated by a narrow “bridge”, on either side of which is a chasm of high negative reward. The agent starts near the low-reward state. With the default discount of 0.9 and the default noise of 0.2, the optimal policy does not cross the bridge. Change only ONE of the discount and noise parameters so that the optimal policy causes the agent to attempt to cross the bridge. Put your answer in <code class="highlighter-rouge">question2()</code> of <code class="highlighter-rouge">analysis.py</code>. (Noise refers to how often an agent ends up in an unintended successor state when they perform an action.) The default corresponds to:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock9">python gridworld.py <span class="nt">-a</span> value <span class="nt">-i</span> 100 <span class="nt">-g</span> BridgeGrid <span class="nt">--discount</span> 0.9 <span class="nt">--noise</span> 0.2
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock9"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><img src="./rl_project_files/value-q2.png" alt="value iteration with k=100" class="img-fluid center-image" style="width: 600px;"></p>
+
+<p><em>Grading:</em> We will check that you only changed one of the given parameters, and that with this change, a correct value iteration agent should cross the bridge. To check your answer, run the autograder:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock10">python autograder.py <span class="nt">-q</span> q2
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock10"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<hr>
+
+<h2 id="question-3-5-points-policies">Question 3 (5 points): Policies</h2>
+
+<p>Consider the <code class="highlighter-rouge">DiscountGrid</code> layout, shown below. This grid has two terminal states with positive payoff (in the middle row), a close exit with payoff +1 and a distant exit with payoff +10. The bottom row of the grid consists of terminal states with negative payoff (shown in red); each state in this “cliff” region has payoff -10. The starting state is the yellow square. We distinguish between two types of paths: (1) paths that “risk the cliff” and travel near the bottom row of the grid; these paths are shorter but risk earning a large negative payoff, and are represented by the red arrow in the figure below. (2) paths that “avoid the cliff” and travel along the top edge of the grid. These paths are longer but are less likely to incur huge negative payoffs. These paths are represented by the green arrow in the figure below.</p>
+
+<p><img src="./rl_project_files/discountgrid.png" alt="DiscountGrid" class="img-fluid center-image" style="width: 400px;"></p>
+
+<p>In this question, you will choose settings of the discount, noise, and living reward parameters for this MDP to produce optimal policies of several different types. <strong>Your setting of the parameter values for each part should have the property that, if your agent followed its optimal policy without being subject to any noise, it would exhibit the given behavior.</strong> If a particular behavior is not achieved for any setting of the parameters, assert that the policy is impossible by returning the string <code class="highlighter-rouge">'NOT POSSIBLE'</code>.</p>
+
+<p>Here are the optimal policy types you should attempt to produce:</p>
+
+<ol>
+  <li>Prefer the close exit (+1), risking the cliff (-10)</li>
+  <li>Prefer the close exit (+1), but avoiding the cliff (-10)</li>
+  <li>Prefer the distant exit (+10), risking the cliff (-10)</li>
+  <li>Prefer the distant exit (+10), avoiding the cliff (-10)</li>
+  <li>Avoid both exits and the cliff (so an episode should never terminate)</li>
+</ol>
+
+<p>To check your answers, run the autograder:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock11">python autograder.py <span class="nt">-q</span> q3
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock11"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><code class="highlighter-rouge">question3a()</code> through <code class="highlighter-rouge">question3e()</code> should each return a 3-item tuple of (discount, noise, living reward) in <code class="highlighter-rouge">analysis.py</code>.</p>
+
+<p><em>Note:</em> You can check your policies in the GUI. For example, using a correct answer to 3(a), the arrow in (0,1) should point east, the arrow in (1,1) should also point east, and the arrow in (2,1) should point north.</p>
+
+<p><em>Note:</em> On some machines you may not see an arrow. In this case, press a button on the keyboard to switch to qValue display, and mentally calculate the policy by taking the arg max of the available qValues for each state.</p>
+
+<p><em>Grading:</em> We will check that the desired policy is returned in each case.</p>
+
+<hr>
+
+<h2 id="question-4-1-point-asynchronous-value-iteration">Question 4 (1 point): Asynchronous Value Iteration</h2>
+
+<p>Write a value iteration agent in <code class="highlighter-rouge">AsynchronousValueIterationAgent</code>, which has been partially specified for you in <code class="highlighter-rouge">valueIterationAgents.py</code>. Your value iteration agent is an offline planner, not a reinforcement learning agent, and so the relevant training option is the number of iterations of value iteration it should run (option <code class="highlighter-rouge">-i</code>) in its initial planning phase. <code class="highlighter-rouge">AsynchronousValueIterationAgent</code> takes an MDP on construction and runs <em>cyclic</em> value iteration (described in the next paragraph) for the specified number of iterations before the constructor returns. Note that all this value iteration code should be placed inside the constructor (<code class="highlighter-rouge">__init__</code> method).</p>
+
+<p>The reason this class is called <code class="highlighter-rouge">AsynchronousValueIterationAgent</code> is because we will update only <strong>one</strong> state in each iteration, as opposed to doing a batch-style update. Here is how cyclic value iteration works. In the first iteration, only update the value of the first state in the states list. In the second iteration, only update the value of the second. Keep going until you have updated the value of each state once, then start back at the first state for the subsequent iteration. <strong>If the state picked for updating is terminal, nothing happens in that iteration</strong>. You can implement it as indexing into the states variable defined in the code skeleton.</p>
+
+<p>As a reminder, here’s the value iteration state update equation:</p>
+
+<span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math MJXp-display" id="MJXp-Span-72"><span class="MJXp-msubsup" id="MJXp-Span-73"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-74" style="margin-right: 0.05em;">V</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-75" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-76">k</span><span class="MJXp-mo" id="MJXp-Span-77">+</span><span class="MJXp-mn" id="MJXp-Span-78">1</span></span></span><span class="MJXp-mo" id="MJXp-Span-79" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-80">s</span><span class="MJXp-mo" id="MJXp-Span-81" style="margin-left: 0em; margin-right: 0em;">)</span><span class="MJXp-mo" id="MJXp-Span-82" style="margin-left: 0.333em; margin-right: 0.333em;">←</span><span class="MJXp-munderover" id="MJXp-Span-83"><span class=""><span class="MJXp-mo" id="MJXp-Span-84" style="margin-left: 0.333em; margin-right: 0.333em;">max</span></span><span class=" MJXp-script"><span class="MJXp-mrow" id="MJXp-Span-85" style="margin-left: 0px;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-86">a</span></span></span></span><span class="MJXp-munderover" id="MJXp-Span-87"><span class=""><span class="MJXp-mo" id="MJXp-Span-88" style="margin-left: 0.111em; margin-right: 0.167em;"><span class="MJXp-largeop">∑</span></span></span><span class=" MJXp-script"><span class="MJXp-mrow" id="MJXp-Span-89" style="margin-left: 0px;"><span class="MJXp-msubsup" id="MJXp-Span-90"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-91" style="margin-right: 0.05em;">s</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-92" style="vertical-align: 0.5em;"><span class="MJXp-mi" id="MJXp-Span-93">′</span></span></span></span></span></span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-94">T</span><span class="MJXp-mrow" id="MJXp-Span-95"><span class="MJXp-mo" id="MJXp-Span-96" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">(</span></span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-97">s</span><span class="MJXp-mo" id="MJXp-Span-98" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-99">a</span><span class="MJXp-mo" id="MJXp-Span-100" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-msubsup" id="MJXp-Span-101"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-102" style="margin-right: 0.05em;">s</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-103" style="vertical-align: 0.5em;"><span class="MJXp-mi" id="MJXp-Span-104">′</span></span></span><span class="MJXp-mo" id="MJXp-Span-105" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">)</span></span></span><span class="MJXp-mrow" id="MJXp-Span-106"><span class="MJXp-mo" id="MJXp-Span-107" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">[</span></span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-108">R</span><span class="MJXp-mrow" id="MJXp-Span-109"><span class="MJXp-mo" id="MJXp-Span-110" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">(</span></span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-111">s</span><span class="MJXp-mo" id="MJXp-Span-112" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-113">a</span><span class="MJXp-mo" id="MJXp-Span-114" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-msubsup" id="MJXp-Span-115"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-116" style="margin-right: 0.05em;">s</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-117" style="vertical-align: 0.5em;"><span class="MJXp-mi" id="MJXp-Span-118">′</span></span></span><span class="MJXp-mo" id="MJXp-Span-119" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">)</span></span></span><span class="MJXp-mo" id="MJXp-Span-120" style="margin-left: 0.267em; margin-right: 0.267em;">+</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-121">γ</span><span class="MJXp-msubsup" id="MJXp-Span-122"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-123" style="margin-right: 0.05em;">V</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-124" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-125">k</span></span></span><span class="MJXp-mrow" id="MJXp-Span-126"><span class="MJXp-mo" id="MJXp-Span-127" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">(</span></span><span class="MJXp-msubsup" id="MJXp-Span-128"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-129" style="margin-right: 0.05em;">s</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-130" style="vertical-align: 0.5em;"><span class="MJXp-mi" id="MJXp-Span-131">′</span></span></span><span class="MJXp-mo" id="MJXp-Span-132" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">)</span></span></span><span class="MJXp-mo" id="MJXp-Span-133" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">]</span></span></span></span></span><span class="mjx-chtml MJXc-display MJXc-processing"><span id="MathJax-Element-15-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" style="font-size: 103%;"></span></span><script type="math/tex; mode=display" id="MathJax-Element-15">V_{k+1}(s) \leftarrow \max _{a} \sum_{s^{\prime}} T\left(s, a, s^{\prime}\right)\left[R\left(s, a, s^{\prime}\right)+\gamma V_{k}\left(s^{\prime}\right)\right]</script>
+
+<p>Value iteration iterates a fixed-point equation, as discussed in class. It is also possible to update the state values in different ways, such as in a random order (i.e., select a state randomly, update its value, and repeat) or in a batch style (as in Q1). In this question, we will explore another technique.</p>
+
+<p><code class="highlighter-rouge">AsynchronousValueIterationAgent</code> inherits from <code class="highlighter-rouge">ValueIterationAgent</code> from Q1, so the only method you need to implement is <code class="highlighter-rouge">runValueIteration</code>. Since the superclass constructor calls <code class="highlighter-rouge">runValueIteration</code>, overriding it is sufficient to change the agent’s behavior as desired.</p>
+
+<p><em>Note:</em> Make sure to handle the case when a state has no available actions in an MDP (think about what this means for future rewards).</p>
+
+<p>To test your implementation, run the autograder. It should take less than a second to run. <strong>If it takes much longer, you may run into issues later in the project, so make your implementation more efficient now.</strong></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock12">python autograder.py <span class="nt">-q</span> q4
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock12"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>The following command loads your <code class="highlighter-rouge">AsynchronousValueIterationAgent</code> in the Gridworld, which will compute a policy and execute it 10 times. Press a key to cycle through values, Q-values, and the simulation. You should find that the value of the start state (<code class="highlighter-rouge">V(start)</code>, which you can read off of the GUI) and the empirical resulting average reward (printed after the 10 rounds of execution finish) are quite close.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock13">python gridworld.py <span class="nt">-a</span> asynchvalue <span class="nt">-i</span> 1000 <span class="nt">-k</span> 10
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock13"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><em>Grading:</em> Your value iteration agent will be graded on a new grid. We will check your values, Q-values, and policies after fixed numbers of iterations and at convergence (e.g., after 1000 iterations).</p>
+
+<hr>
+
+<h2 id="question-5-3-points-prioritized-sweeping-value-iteration">Question 5 (3 points): Prioritized Sweeping Value Iteration</h2>
+
+<p>You will now implement <code class="highlighter-rouge">PrioritizedSweepingValueIterationAgent</code>, which has been partially specified for you in <code class="highlighter-rouge">valueIterationAgents.py</code>. Note that this class derives from <code class="highlighter-rouge">AsynchronousValueIterationAgent</code>, so the only method that needs to change is <code class="highlighter-rouge">runValueIteration</code>, which actually runs the value iteration.</p>
+
+<p>Prioritized sweeping attempts to focus updates of state values in ways that are likely to change the policy.</p>
+
+<p>For this project, you will implement a simplified version of the standard prioritized sweeping algorithm, which is described in <a href="https://web.archive.org/web/20221128020834/http://papers.nips.cc/paper/651-memory-based-reinforcement-learning-efficient-computation-with-prioritized-sweeping.pdf">this paper</a>. We’ve adapted this algorithm for our setting. First, we define the <strong>predecessors</strong> of a state <code class="highlighter-rouge">s</code> as all states that have a <strong>nonzero</strong> probability of reaching <code class="highlighter-rouge">s</code> by taking some action <code class="highlighter-rouge">a</code>. Also, <code class="highlighter-rouge">theta</code>, which is passed in as a parameter, will represent our tolerance for error when deciding whether to update the value of a state. Here’s the algorithm you should follow in your implementation.</p>
+
+<ul>
+  <li>Compute predecessors of all states.</li>
+  <li>Initialize an empty priority queue.</li>
+  <li>For each non-terminal state <code class="highlighter-rouge">s</code>, do: <strong>(note: to make the autograder work for this question, you must iterate over states in the order returned by <code class="highlighter-rouge">self.mdp.getStates()</code>)</strong>
+    <ul>
+      <li>Find the absolute value of the difference between the current value of <code class="highlighter-rouge">s</code> in <code class="highlighter-rouge">self.values</code> and the highest Q-value across all possible actions from <code class="highlighter-rouge">s</code> (this represents what the value should be); call this number <code class="highlighter-rouge">diff</code>. Do NOT update <code class="highlighter-rouge">self.values[s]</code> in this step.</li>
+      <li>Push <code class="highlighter-rouge">s</code> into the priority queue with priority <code class="highlighter-rouge">-diff</code> (note that this is <strong>negative</strong>). We use a negative because the priority queue is a min heap, but we want to prioritize updating states that have a <strong>higher</strong> error.</li>
+    </ul>
+  </li>
+  <li>For <code class="highlighter-rouge">iteration</code> in <code class="highlighter-rouge">0, 1, 2, ..., self.iterations - 1</code>, do:
+    <ul>
+      <li>If the priority queue is empty, then terminate.</li>
+      <li>Pop a state <code class="highlighter-rouge">s</code> off the priority queue.</li>
+      <li>Update the value of <code class="highlighter-rouge">s</code> (if it is not a terminal state) in <code class="highlighter-rouge">self.values</code>.</li>
+      <li>For each predecessor <code class="highlighter-rouge">p</code> of <code class="highlighter-rouge">s</code>, do:
+        <ul>
+          <li>Find the absolute value of the difference between the current value of <code class="highlighter-rouge">p</code> in <code class="highlighter-rouge">self.values</code> and the highest Q-value across all possible actions from <code class="highlighter-rouge">p</code> (this represents what the value should be); call this number <code class="highlighter-rouge">diff</code>. Do NOT update <code class="highlighter-rouge">self.values[p]</code> in this step.</li>
+          <li>If <code class="highlighter-rouge">diff &gt; theta</code>, push <code class="highlighter-rouge">p</code> into the priority queue with priority <code class="highlighter-rouge">-diff</code> (note that this is <strong>negative</strong>), as long as it does not already exist in the priority queue with equal or lower priority. As before, we use a negative because the priority queue is a min heap, but we want to prioritize updating states that have a <strong>higher</strong> error.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>A couple of important notes on implementation:</p>
+
+<ul>
+  <li>When you compute predecessors of a state, make sure to store them in a <strong>set</strong>, not a list, to avoid duplicates.</li>
+  <li>Please use <code class="highlighter-rouge">util.PriorityQueue</code> in your implementation. The <code class="highlighter-rouge">update</code> method in this class will likely be useful; look at its documentation.</li>
+</ul>
+
+<p>To test your implementation, run the autograder. It should take about 1 second to run. <strong>If it takes much longer, you may run into issues later in the project, so make your implementation more efficient now.</strong></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock14">python autograder.py <span class="nt">-q</span> q5
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock14"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>You can run the <code class="highlighter-rouge">PrioritizedSweepingValueIterationAgen</code> in the Gridworld using the following command.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock15">python gridworld.py <span class="nt">-a</span> priosweepvalue <span class="nt">-i</span> 1000
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock15"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><em>Grading:</em> Your prioritized sweeping value iteration agent will be graded on a new grid. We will check your values, Q-values, and policies after fixed numbers of iterations and at convergence (e.g., after 1000 iterations).</p>
+
+<hr>
+
+<h2 id="question-6-4-points-q-learning">Question 6 (4 points): Q-Learning</h2>
+
+<p>Note that your value iteration agent does not actually learn from experience. Rather, it ponders its MDP model to arrive at a complete policy before ever interacting with a real environment. When it does interact with the environment, it simply follows the precomputed policy (e.g. it becomes a reflex agent). This distinction may be subtle in a simulated environment like a Gridword, but it’s very important in the real world, where the real MDP is not available.</p>
+
+<p>You will now write a Q-learning agent, which does very little on construction, but instead learns by trial and error from interactions with the environment through its <code class="highlighter-rouge">update(state, action, nextState, reward)</code> method. A stub of a Q-learner is specified in <code class="highlighter-rouge">QLearningAgent</code> in <code class="highlighter-rouge">qlearningAgents.py</code>, and you can select it with the option <code class="highlighter-rouge">'-a q'</code>. For this question, you must implement the <code class="highlighter-rouge">update</code>, <code class="highlighter-rouge">computeValueFromQValues</code>, <code class="highlighter-rouge">getQValue</code>, and <code class="highlighter-rouge">computeActionFromQValues</code> methods.</p>
+
+<p><em>Note:</em> For <code class="highlighter-rouge">computeActionFromQValues</code>, you should break ties randomly for better behavior. The <code class="highlighter-rouge">random.choice()</code> function will help. In a particular state, actions that your agent <em>hasn’t</em> seen before still have a Q-value, specifically a Q-value of zero, and if all of the actions that your agent <em>has</em> seen before have a negative Q-value, an unseen action may be optimal.</p>
+
+<p><em>Important:</em> Make sure that in your <code class="highlighter-rouge">computeValueFromQValues</code> and <code class="highlighter-rouge">computeActionFromQValues</code> functions, you only access Q values by calling <code class="highlighter-rouge">getQValue</code> . This abstraction will be useful for question 10 when you override <code class="highlighter-rouge">getQValue</code> to use features of state-action pairs rather than state-action pairs directly.</p>
+
+<p>With the Q-learning update in place, you can watch your Q-learner learn under manual control, using the keyboard:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock16">python gridworld.py <span class="nt">-a</span> q <span class="nt">-k</span> 5 <span class="nt">-m</span>
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock16"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>Recall that <code class="highlighter-rouge">-k</code> will control the number of episodes your agent gets to learn. Watch how the agent learns about the state it was just in, not the one it moves to, and “leaves learning in its wake.” Hint: to help with debugging, you can turn off noise by using the <code class="highlighter-rouge">--noise 0.0</code> parameter (though this obviously makes Q-learning less interesting). If you manually steer Pacman north and then east along the optimal path for four episodes, you should see the following Q-values:</p>
+
+<p><img src="./rl_project_files/q-learning.png" alt="QLearning" class="img-fluid center-image" style="width: 600px;"></p>
+
+<p><em>Grading:</em> We will run your Q-learning agent and check that it learns the same Q-values and policy as our reference implementation when each is presented with the same set of examples. To grade your implementation, run the autograder:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock17">python autograder.py <span class="nt">-q</span> q6
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock17"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<hr>
+
+<h2 id="question-7-2-points-epsilon-greedy">Question 7 (2 points): Epsilon Greedy</h2>
+
+<p>Complete your Q-learning agent by implementing epsilon-greedy action selection in <code class="highlighter-rouge">getAction</code>, meaning it chooses random actions an epsilon fraction of the time, and follows its current best Q-values otherwise. Note that choosing a random action may result in choosing the best action - that is, you should not choose a random sub-optimal action, but rather <em>any</em> random legal action.</p>
+
+<p>You can choose an element from a list uniformly at random by calling the <code class="highlighter-rouge">random.choice</code> function. You can simulate a binary variable with probability <code class="highlighter-rouge">p</code> of success by using <code class="highlighter-rouge">util.flipCoin(p)</code>, which returns <code class="highlighter-rouge">True</code> with probability <code class="highlighter-rouge">p</code> and <code class="highlighter-rouge">False</code> with probability <code class="highlighter-rouge">1-p</code>.</p>
+
+<p>After implementing the <code class="highlighter-rouge">getAction</code> method, observe the following behavior of the agent in gridworld (with epsilon = 0.3).</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock18">python gridworld.py <span class="nt">-a</span> q <span class="nt">-k</span> 100
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock18"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>Your final Q-values should resemble those of your value iteration agent, especially along well-traveled paths. However, your average returns will be lower than the Q-values predict because of the random actions and the initial learning phase.</p>
+
+<p>You can also observe the following simulations for different epsilon values. Does that behavior of the agent match what you expect?</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock19">python gridworld.py <span class="nt">-a</span> q <span class="nt">-k</span> 100 <span class="nt">--noise</span> 0.0 <span class="nt">-e</span> 0.1
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock19"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock20">python gridworld.py <span class="nt">-a</span> q <span class="nt">-k</span> 100 <span class="nt">--noise</span> 0.0 <span class="nt">-e</span> 0.9
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock20"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>To test your implementation, run the autograder:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock21">python autograder.py <span class="nt">-q</span> q7
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock21"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>With no additional code, you should now be able to run a Q-learning crawler robot:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock22">python crawler.py
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock22"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>If this doesn’t work, you’ve probably written some code too specific to the <code class="highlighter-rouge">GridWorld</code> problem and you should make it more general to all MDPs.</p>
+
+<p>This will invoke the crawling robot from class using your Q-learner. Play around with the various learning parameters to see how they affect the agent’s policies and actions. Note that the step delay is a parameter of the simulation, whereas the learning rate and epsilon are parameters of your learning algorithm, and the discount factor is a property of the environment.</p>
+
+<hr>
+
+<h2 id="question-8-1-point-bridge-crossing-revisited">Question 8 (1 point): Bridge Crossing Revisited</h2>
+
+<p>First, train a completely random Q-learner with the default learning rate on the noiseless BridgeGrid for 50 episodes and observe whether it finds the optimal policy.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock23">python gridworld.py <span class="nt">-a</span> q <span class="nt">-k</span> 50 <span class="nt">-n</span> 0 <span class="nt">-g</span> BridgeGrid <span class="nt">-e</span> 1
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock23"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>Now try the same experiment with an epsilon of 0. Is there an epsilon and a learning rate for which it is highly likely (greater than 99%) that the optimal policy will be learned after 50 iterations? <code class="highlighter-rouge">question8()</code> in <code class="highlighter-rouge">analysis.py</code> should return EITHER a 2-item tuple of <code class="highlighter-rouge">(epsilon, learning rate)</code> OR the string <code class="highlighter-rouge">'NOT POSSIBLE'</code> if there is none. Epsilon is controlled by <code class="highlighter-rouge">-e</code>, learning rate by <code class="highlighter-rouge">-l</code>.</p>
+
+<p><em>Note:</em> Your response should be not depend on the exact tie-breaking mechanism used to choose actions. This means your answer should be correct even if for instance we rotated the entire bridge grid world 90 degrees.</p>
+
+<p>To grade your answer, run the autograder:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock24">python autograder.py <span class="nt">-q</span> q8
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock24"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<hr>
+
+<h2 id="question-9-1-point-q-learning-and-pacman">Question 9 (1 point): Q-Learning and Pacman</h2>
+
+<p>Time to play some Pacman! Pacman will play games in two phases. In the first phase, <em>training</em>, Pacman will begin to learn about the values of positions and actions. Because it takes a very long time to learn accurate Q-values even for tiny grids, Pacman’s training games run in quiet mode by default, with no GUI (or console) display. Once Pacman’s training is complete, he will enter <em>testing</em> mode. When testing, Pacman’s <code class="highlighter-rouge">self.epsilon</code> and <code class="highlighter-rouge">self.alpha</code> will be set to 0.0, effectively stopping Q-learning and disabling exploration, in order to allow Pacman to exploit his learned policy. Test games are shown in the GUI by default. Without any code changes you should be able to run Q-learning Pacman for very tiny grids as follows:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock25">python pacman.py <span class="nt">-p</span> PacmanQAgent <span class="nt">-x</span> 2000 <span class="nt">-n</span> 2010 <span class="nt">-l</span> smallGrid
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock25"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>Note that <code class="highlighter-rouge">PacmanQAgent</code> is already defined for you in terms of the <code class="highlighter-rouge">QLearningAgent</code> you’ve already written. <code class="highlighter-rouge">PacmanQAgent</code> is only different in that it has default learning parameters that are more effective for the Pacman problem (<code class="highlighter-rouge">epsilon=0.05, alpha=0.2, gamma=0.8</code>). You will receive full credit for this question if the command above works without exceptions and your agent wins at least 80% of the time. The autograder will run 100 test games after the 2000 training games.</p>
+
+<p><em>Hint:</em> If your <code class="highlighter-rouge">QLearningAgent</code> works for <code class="highlighter-rouge">gridworld.py</code> and <code class="highlighter-rouge">crawler.py</code> but does not seem to be learning a good policy for Pacman on <code class="highlighter-rouge">smallGrid</code>, it may be because your <code class="highlighter-rouge">getAction</code> and/or <code class="highlighter-rouge">computeActionFromQValues</code> methods do not in some cases properly consider unseen actions. In particular, because unseen actions have by definition a Q-value of zero, if all of the actions that <em>have</em> been seen have negative Q-values, an unseen action may be optimal. Beware of the argmax function from util.Counter!</p>
+
+<p><em>Note:</em> To grade your answer, run:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock26">python autograder.py <span class="nt">-q</span> q9
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock26"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><em>Note:</em> If you want to experiment with learning parameters, you can use the option <code class="highlighter-rouge">-a</code>, for example <code class="highlighter-rouge">-a epsilon=0.1,alpha=0.3,gamma=0.7</code>. These values will then be accessible as <code class="highlighter-rouge">self.epsilon, self.gamma</code> and <code class="highlighter-rouge">self.alpha</code> inside the agent.</p>
+
+<p><em>Note:</em> While a total of 2010 games will be played, the first 2000 games will not be displayed because of the option <code class="highlighter-rouge">-x 2000</code>, which designates the first 2000 games for training (no output). Thus, you will only see Pacman play the last 10 of these games. The number of training games is also passed to your agent as the option <code class="highlighter-rouge">numTraining</code>.</p>
+
+<p><em>Note:</em> If you want to watch 10 training games to see what’s going on, use the command:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock27">python pacman.py <span class="nt">-p</span> PacmanQAgent <span class="nt">-n</span> 10 <span class="nt">-l</span> smallGrid <span class="nt">-a</span> <span class="nv">numTraining</span><span class="o">=</span>10
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock27"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>During training, you will see output every 100 games with statistics about how Pacman is faring. Epsilon is positive during training, so Pacman will play poorly even after having learned a good policy: this is because he occasionally makes a random exploratory move into a ghost. As a benchmark, it should take between 1000 and 1400 games before Pacman’s rewards for a 100 episode segment becomes positive, reflecting that he’s started winning more than losing. By the end of training, it should remain positive and be fairly high (between 100 and 350).</p>
+
+<p>Make sure you understand what is happening here: the MDP state is the <em>exact</em> board configuration facing Pacman, with the now complex transitions describing an entire ply of change to that state. The intermediate game configurations in which Pacman has moved but the ghosts have not replied are <em>not</em> MDP states, but are bundled in to the transitions.</p>
+
+<p>Once Pacman is done training, he should win very reliably in test games (at least 90% of the time), since now he is exploiting his learned policy.</p>
+
+<p>However, you will find that training the same agent on the seemingly simple <code class="highlighter-rouge">mediumGrid</code> does not work well. In our implementation, Pacman’s average training rewards remain negative throughout training. At test time, he plays badly, probably losing all of his test games. Training will also take a long time, despite its ineffectiveness.</p>
+
+<p>Pacman fails to win on larger layouts because each board configuration is a separate state with separate Q-values. He has no way to generalize that running into a ghost is bad for all positions. Obviously, this approach will not scale.</p>
+
+<hr>
+
+<h2 id="question-10-3-points-approximate-q-learning">Question 10 (3 points): Approximate Q-Learning</h2>
+
+<p>Implement an approximate Q-learning agent that learns weights for features of states, where many states might share the same features. Write your implementation in <code class="highlighter-rouge">ApproximateQAgent</code> class in <code class="highlighter-rouge">qlearningAgents.py</code>, which is a subclass of <code class="highlighter-rouge">PacmanQAgent</code>.</p>
+
+<p><em>Note:</em> Approximate Q-learning assumes the existence of a feature function <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-134"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-135">f</span><span class="MJXp-mo" id="MJXp-Span-136" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-137">s</span><span class="MJXp-mo" id="MJXp-Span-138" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-139">a</span><span class="MJXp-mo" id="MJXp-Span-140" style="margin-left: 0em; margin-right: 0em;">)</span></span></span><span id="MathJax-Element-16-Frame" class="mjx-chtml MathJax_CHTML MJXc-processing" tabindex="0"></span><script type="math/tex" id="MathJax-Element-16">f(s,a)</script> over state and action pairs, which yields a vector <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-141"><span class="MJXp-mo" id="MJXp-Span-142" style="margin-left: 0em; margin-right: 0em;">[</span><span class="MJXp-msubsup" id="MJXp-Span-143"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-144" style="margin-right: 0.05em;">f</span><span class="MJXp-mn MJXp-script" id="MJXp-Span-145" style="vertical-align: -0.4em;">1</span></span><span class="MJXp-mo" id="MJXp-Span-146" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-147">s</span><span class="MJXp-mo" id="MJXp-Span-148" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-149">a</span><span class="MJXp-mo" id="MJXp-Span-150" style="margin-left: 0em; margin-right: 0em;">)</span><span class="MJXp-mo" id="MJXp-Span-151" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mtext" id="MJXp-Span-152">&nbsp;</span><span class="MJXp-mo" id="MJXp-Span-153" style="margin-left: 0em; margin-right: 0em;">…</span><span class="MJXp-mo" id="MJXp-Span-154" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mtext" id="MJXp-Span-155">&nbsp;</span><span class="MJXp-msubsup" id="MJXp-Span-156"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-157" style="margin-right: 0.05em;">f</span><span class="MJXp-mi MJXp-italic MJXp-script" id="MJXp-Span-158" style="vertical-align: -0.4em;">i</span></span><span class="MJXp-mo" id="MJXp-Span-159" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-160">s</span><span class="MJXp-mo" id="MJXp-Span-161" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-162">a</span><span class="MJXp-mo" id="MJXp-Span-163" style="margin-left: 0em; margin-right: 0em;">)</span><span class="MJXp-mo" id="MJXp-Span-164" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mtext" id="MJXp-Span-165">&nbsp;</span><span class="MJXp-mo" id="MJXp-Span-166" style="margin-left: 0em; margin-right: 0em;">…</span><span class="MJXp-mo" id="MJXp-Span-167" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mtext" id="MJXp-Span-168">&nbsp;</span><span class="MJXp-msubsup" id="MJXp-Span-169"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-170" style="margin-right: 0.05em;">f</span><span class="MJXp-mi MJXp-italic MJXp-script" id="MJXp-Span-171" style="vertical-align: -0.4em;">n</span></span><span class="MJXp-mo" id="MJXp-Span-172" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-173">s</span><span class="MJXp-mo" id="MJXp-Span-174" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-175">a</span><span class="MJXp-mo" id="MJXp-Span-176" style="margin-left: 0em; margin-right: 0em;">)</span><span class="MJXp-mo" id="MJXp-Span-177" style="margin-left: 0em; margin-right: 0em;">]</span></span></span><span id="MathJax-Element-17-Frame" class="mjx-chtml MathJax_CHTML MJXc-processing" tabindex="0"></span><script type="math/tex" id="MathJax-Element-17">[f_1(s,a), \ …, \ f_i(s,a), \ …, \ f_n(s,a)]</script> of feature values. We provide feature functions for you in <code class="highlighter-rouge">featureExtractors.py</code>. Feature vectors are <code class="highlighter-rouge">util.Counter</code> (like a dictionary) objects containing the non-zero pairs of features and values; all omitted features have value zero.</p>
+
+<p>The approximate Q-function takes the following form:</p>
+
+<span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math MJXp-display" id="MJXp-Span-178"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-179">Q</span><span class="MJXp-mo" id="MJXp-Span-180" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-181">s</span><span class="MJXp-mo" id="MJXp-Span-182" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-183">a</span><span class="MJXp-mo" id="MJXp-Span-184" style="margin-left: 0em; margin-right: 0em;">)</span><span class="MJXp-mo" id="MJXp-Span-185" style="margin-left: 0.333em; margin-right: 0.333em;">=</span><span class="MJXp-munderover" id="MJXp-Span-186"><span><span class="MJXp-over"><span class=" MJXp-script"><span class="MJXp-mrow" id="MJXp-Span-192" style="margin-right: 0px; margin-left: 0px;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-193">n</span></span></span><span class=""><span class="MJXp-mo" id="MJXp-Span-187" style="margin-left: 0.111em; margin-right: 0.167em;"><span class="MJXp-largeop">∑</span></span></span></span></span><span class=" MJXp-script"><span class="MJXp-mrow" id="MJXp-Span-188" style="margin-left: 0px;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-189">i</span><span class="MJXp-mo" id="MJXp-Span-190">=</span><span class="MJXp-mn" id="MJXp-Span-191">1</span></span></span></span><span class="MJXp-msubsup" id="MJXp-Span-194"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-195" style="margin-right: 0.05em;">f</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-196" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-197">i</span></span></span><span class="MJXp-mo" id="MJXp-Span-198" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-199">s</span><span class="MJXp-mo" id="MJXp-Span-200" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-201">a</span><span class="MJXp-mo" id="MJXp-Span-202" style="margin-left: 0em; margin-right: 0em;">)</span><span class="MJXp-msubsup" id="MJXp-Span-203"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-204" style="margin-right: 0.05em;">w</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-205" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-206">i</span></span></span></span></span><span class="mjx-chtml MJXc-display MJXc-processing"><span id="MathJax-Element-18-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0"></span></span><script type="math/tex; mode=display" id="MathJax-Element-18">Q(s, a)=\sum_{i=1}^{n} f_{i}(s, a) w_{i}</script>
+
+<p>where each weight <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-207"><span class="MJXp-msubsup" id="MJXp-Span-208"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-209" style="margin-right: 0.05em;">w</span><span class="MJXp-mi MJXp-italic MJXp-script" id="MJXp-Span-210" style="vertical-align: -0.4em;">i</span></span></span></span><span id="MathJax-Element-19-Frame" class="mjx-chtml MathJax_CHTML MJXc-processing" tabindex="0"></span><script type="math/tex" id="MathJax-Element-19">w_i</script> is associated with a particular feature <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-211"><span class="MJXp-msubsup" id="MJXp-Span-212"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-213" style="margin-right: 0.05em;">f</span><span class="MJXp-mi MJXp-italic MJXp-script" id="MJXp-Span-214" style="vertical-align: -0.4em;">i</span></span><span class="MJXp-mo" id="MJXp-Span-215" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-216">s</span><span class="MJXp-mo" id="MJXp-Span-217" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-218">a</span><span class="MJXp-mo" id="MJXp-Span-219" style="margin-left: 0em; margin-right: 0em;">)</span></span></span><span id="MathJax-Element-20-Frame" class="mjx-chtml MathJax_CHTML MJXc-processing" tabindex="0"></span><script type="math/tex" id="MathJax-Element-20">f_i(s,a)</script>. In your code, you should implement the weight vector as a dictionary mapping features (which the feature extractors will return) to weight values. You will update your weight vectors similarly to how you updated Q-values:</p>
+
+<span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math MJXp-display" id="MJXp-Span-220"><span class="MJXp-mtable" id="MJXp-Span-221"><span><span class="MJXp-mtr" id="MJXp-Span-222" style="vertical-align: baseline;"><span class="MJXp-mtd" id="MJXp-Span-223" style="text-align: center;"><span class="MJXp-mrow" id="MJXp-Span-224"><span class="MJXp-msubsup" id="MJXp-Span-225"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-226" style="margin-right: 0.05em;">w</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-227" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-228">i</span></span></span><span class="MJXp-mo" id="MJXp-Span-229" style="margin-left: 0.333em; margin-right: 0.333em;">←</span><span class="MJXp-msubsup" id="MJXp-Span-230"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-231" style="margin-right: 0.05em;">w</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-232" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-233">i</span></span></span><span class="MJXp-mo" id="MJXp-Span-234" style="margin-left: 0.267em; margin-right: 0.267em;">+</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-235">α</span><span class="MJXp-mo" id="MJXp-Span-236" style="margin-left: 0.267em; margin-right: 0.267em;">⋅</span><span class="MJXp-mtext" id="MJXp-Span-237">difference</span><span class="MJXp-mo" id="MJXp-Span-238" style="margin-left: 0.267em; margin-right: 0.267em;">⋅</span><span class="MJXp-msubsup" id="MJXp-Span-239"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-240" style="margin-right: 0.05em;">f</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-241" style="vertical-align: -0.4em;"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-242">i</span></span></span><span class="MJXp-mo" id="MJXp-Span-243" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-244">s</span><span class="MJXp-mo" id="MJXp-Span-245" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-246">a</span><span class="MJXp-mo" id="MJXp-Span-247" style="margin-left: 0em; margin-right: 0em;">)</span></span></span></span><span class="MJXp-mtr" id="MJXp-Span-248" style="vertical-align: baseline;"><span class="MJXp-mtd" id="MJXp-Span-249" style="padding-top: 0.4em; text-align: center;"><span class="MJXp-mrow" id="MJXp-Span-250"><span class="MJXp-mtext" id="MJXp-Span-251">difference</span><span class="MJXp-mo" id="MJXp-Span-252" style="margin-left: 0.333em; margin-right: 0.333em;">=</span><span class="MJXp-mrow" id="MJXp-Span-253"><span class="MJXp-mo" id="MJXp-Span-254" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">(</span></span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-255">r</span><span class="MJXp-mo" id="MJXp-Span-256" style="margin-left: 0.267em; margin-right: 0.267em;">+</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-257">γ</span><span class="MJXp-msubsup" id="MJXp-Span-258"><span class="MJXp-mo" id="MJXp-Span-259" style="margin-left: 0.333em; margin-right: 0.05em;">max</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-260" style="vertical-align: -0.4em;"><span class="MJXp-msubsup" id="MJXp-Span-261"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-262" style="margin-right: 0.05em;">a</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-263" style="vertical-align: 0.5em;"><span class="MJXp-mi" id="MJXp-Span-264">′</span></span></span></span></span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-265">Q</span><span class="MJXp-mrow" id="MJXp-Span-266"><span class="MJXp-mo" id="MJXp-Span-267" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">(</span></span><span class="MJXp-msubsup" id="MJXp-Span-268"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-269" style="margin-right: 0.05em;">s</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-270" style="vertical-align: 0.5em;"><span class="MJXp-mi" id="MJXp-Span-271">′</span></span></span><span class="MJXp-mo" id="MJXp-Span-272" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-msubsup" id="MJXp-Span-273"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-274" style="margin-right: 0.05em;">a</span><span class="MJXp-mrow MJXp-script" id="MJXp-Span-275" style="vertical-align: 0.5em;"><span class="MJXp-mi" id="MJXp-Span-276">′</span></span></span><span class="MJXp-mo" id="MJXp-Span-277" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">)</span></span></span><span class="MJXp-mo" id="MJXp-Span-278" style="margin-left: 0em; margin-right: 0em; vertical-align: -0.289em;"><span class="MJXp-right MJXp-scale6" style="font-size: 2.156em; margin-left: -0.09em;">)</span></span></span><span class="MJXp-mo" id="MJXp-Span-279" style="margin-left: 0.267em; margin-right: 0.267em;">−</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-280">Q</span><span class="MJXp-mo" id="MJXp-Span-281" style="margin-left: 0em; margin-right: 0em;">(</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-282">s</span><span class="MJXp-mo" id="MJXp-Span-283" style="margin-left: 0em; margin-right: 0.222em;">,</span><span class="MJXp-mi MJXp-italic" id="MJXp-Span-284">a</span><span class="MJXp-mo" id="MJXp-Span-285" style="margin-left: 0em; margin-right: 0em;">)</span></span></span></span></span></span></span></span><span class="mjx-chtml MJXc-display MJXc-processing"><span id="MathJax-Element-21-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0"></span></span><script type="math/tex; mode=display" id="MathJax-Element-21">\begin{array}{c}{w_{i} \leftarrow w_{i}+\alpha \cdot \text {difference} \cdot f_{i}(s, a)} \\ {\text {difference}=\left(r+\gamma \max _{a^{\prime}} Q\left(s^{\prime}, a^{\prime}\right)\right)-Q(s, a)}\end{array}</script>
+
+<p>Note that the <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-286"><span class="MJXp-mtext" id="MJXp-Span-287">difference</span></span></span><span id="MathJax-Element-22-Frame" class="mjx-chtml MathJax_CHTML MJXc-processing" tabindex="0"></span><script type="math/tex" id="MathJax-Element-22">\text{difference}</script> term is the same as in normal Q-learning, and <span class="MathJax_Preview" style="color: inherit;"><span class="MJXp-math" id="MJXp-Span-288"><span class="MJXp-mi MJXp-italic" id="MJXp-Span-289">r</span></span></span><span id="MathJax-Element-23-Frame" class="mjx-chtml MathJax_CHTML MJXc-processing" tabindex="0"></span><script type="math/tex" id="MathJax-Element-23">r</script> is the experienced reward.</p>
+
+<p>By default, <code class="highlighter-rouge">ApproximateQAgent</code> uses the <code class="highlighter-rouge">IdentityExtractor</code>, which assigns a single feature to every <code class="highlighter-rouge">(state,action)</code> pair. With this feature extractor, your approximate Q-learning agent should work identically to <code class="highlighter-rouge">PacmanQAgent</code>. You can test this with the following command:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock28">python pacman.py <span class="nt">-p</span> ApproximateQAgent <span class="nt">-x</span> 2000 <span class="nt">-n</span> 2010 <span class="nt">-l</span> smallGrid
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock28"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><em>Important:</em><code class="highlighter-rouge">ApproximateQAgent</code> is a subclass of <code class="highlighter-rouge">QLearningAgent</code>, and it therefore shares several methods like <code class="highlighter-rouge">getAction</code>. Make sure that your methods in <code class="highlighter-rouge">QLearningAgent</code> call <code class="highlighter-rouge">getQValue</code> instead of accessing Q-values directly, so that when you override <code class="highlighter-rouge">getQValue</code> in your approximate agent, the new approximate q-values are used to compute actions.</p>
+
+<p>Once you’re confident that your approximate learner works correctly with the identity features, run your approximate Q-learning agent with our custom feature extractor, which can learn to win with ease:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock29">python pacman.py <span class="nt">-p</span> ApproximateQAgent <span class="nt">-a</span> <span class="nv">extractor</span><span class="o">=</span>SimpleExtractor <span class="nt">-x</span> 50 <span class="nt">-n</span> 60 <span class="nt">-l</span> mediumGrid
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock29"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>Even much larger layouts should be no problem for your <code class="highlighter-rouge">ApproximateQAgent</code> (<em>warning</em>: this may take a few minutes to train):</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock30">python pacman.py <span class="nt">-p</span> ApproximateQAgent <span class="nt">-a</span> <span class="nv">extractor</span><span class="o">=</span>SimpleExtractor <span class="nt">-x</span> 50 <span class="nt">-n</span> 60 <span class="nt">-l</span> mediumClassic
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock30"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p>If you have no errors, your approximate Q-learning agent should win almost every time with these simple features, even with only 50 training games.</p>
+
+<p><em>Grading:</em> We will run your approximate Q-learning agent and check that it learns the same Q-values and feature weights as our reference implementation when each is presented with the same set of examples. To grade your implementation, run the autograder:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code id="codeBlock31">python autograder.py <span class="nt">-q</span> q10
+</code></pre><a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock31"><i class="fal fa-copy"></i> Copy</a></div></div>
+
+<p><em>Congratulations! You have a learning Pacman agent!</em></p>
+
+<hr>
+
+<h2 id="submission">Submission</h2>
+
+<p>Submit <code class="highlighter-rouge">reinforcement.token</code>, generated by running <code class="highlighter-rouge">submission_autograder.py</code>, to <strong>Project 3</strong> on Gradescope.</p>
+
+<p><em>Note:</em> <strong>You only need to submit <code class="highlighter-rouge">reinforcement.token</code>, generated by running <code class="highlighter-rouge">submission_autograder.py</code>.</strong> It contains the evaluation results from your local autograder, and a copy of all your code. You do not need to submit any other files.</p>
+
+<p>Please specify any partner you may have worked with and verify that both you and your partner are associated with the submission after submitting.</p>
+
+      </div>
+    </div>
+    <footer class="py-4 container">
+  <div class="row text-center">
+    <div class="col-md-6 col-sm-12">
+      <h3 data-toc-skip=""><a href="javascript:void(0)">CS 188</a></h3>
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/schedule" class="nav-link">Weekly Schedule</a>
+        </li>
+        <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/schedule" class="nav-link">Office Hours</a>
+        </li>
+        <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/staff" class="nav-link">Staff</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+      <h3 data-toc-skip=""><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/policies">Policies</a></h3>
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/policies/#Assignments" class="nav-link">Assignments</a>
+        </li>
+        <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/policies/#Exams" class="nav-link">Exams</a>
+        </li>
+        <li class="nav-item"><a href="https://web.archive.org/web/20221128020834/https://inst.eecs.berkeley.edu/~cs188/sp20/policies/#Grading" class="nav-link">Grading</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="./rl_project_files/clipboard.min.js"></script>
+  <script src="./rl_project_files/codeselect.js"></script>
+</footer>
+
+  </div>
+
+
+
+
+
+
+<script src="./rl_project_files/ie10-viewport-bug-workaround.js"></script>
+
+
+
+
+</body><!-- <script>w3.includeHTML();</script> --><!-- IE10 viewport hack for Surface/desktop Windows 8 bug --></html>

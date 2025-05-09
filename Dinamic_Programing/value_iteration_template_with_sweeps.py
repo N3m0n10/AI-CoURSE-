@@ -11,6 +11,7 @@ state_set = list(range(1,100))  # 1, 2, ..., 99
 V = np.zeros( (len(state_set)+1, 1) )
 
 ph = 0.4    # probability of heads
+GAMMA = 0.5
 
 # returns next_state and its probability
 def next_states(s, a):
@@ -20,7 +21,7 @@ def next_states(s, a):
     ]
 
 def expected_value(s, a):
-    gamma = 0.8 # <YOUR CODE HERE>
+    gamma = GAMMA # <YOUR CODE HERE>
     evalue = 0
     for snext, prob in next_states(s, a):
         # reward is 1 if action leads to goal of 100 = s+a,
@@ -33,7 +34,6 @@ def expected_value(s, a):
             evalue += prob * gamma*V[snext]
         # <YOUR CODE HERE>
         # terminate if snext = 0 or 100 (dummy states for termination)
-        # <YOUR CODE HERE>
     return evalue
 
 def policy(s):
@@ -42,7 +42,7 @@ def policy(s):
     values_actions = [np.float64(expected_value(s,a)) for a in action_set]# <YOUR CODE HERE>
     return np.argmax(values_actions)  # 0,1,.... min(s,100-s)
 
-for i in range(48): ## sweeps
+for i in range(1000): ## sweeps
     Delta = 10
     k = 0
     theta = 1e-6
@@ -56,8 +56,9 @@ for i in range(48): ## sweeps
         k += 1
 
     #print(V)
-    if i <= 4 or i%16 == 0:
+    if i <= 3 or i%100 == 0:
         plt.plot(V, label= f"{i}")  ## V --> probabilidade de vitória
+        plt.title(f"Values gamma:{GAMMA}")
         plt.legend()
 
     final_policy = [policy(s) for s in state_set]
@@ -66,4 +67,5 @@ for i in range(48): ## sweeps
 plt.figure()
 plt.bar(state_set, final_policy, align='center', alpha=0.5)
 plt.plot(state_set, final_policy,'.')
+plt.title(f"Final Policy  gamma:{GAMMA}")
 plt.show()
