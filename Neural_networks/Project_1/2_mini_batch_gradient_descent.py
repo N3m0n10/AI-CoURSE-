@@ -128,7 +128,7 @@ def gradient(W, X, Y, shapes, lbd=0):
             D[i] += dW[i]
 
     for i in range(len(D)):
-        D[i][:, 1:] += lbd * W[i][:, 1:]  ## remember toremove the biasss
+        D[i][:, 1:] += lbd * W[i][:, 1:]  ## remember to remove the biass
 
     return D
 
@@ -174,7 +174,7 @@ X_batch , y_batch = X_train[:lil_batch] , y_train[:lil_batch]
 
 unroled_theta = np.concatenate([w.flatten() for w in theta])
 numerical_grad = gradient_validation(unroled_theta,X_batch,y_batch,shapes)
-grad = gradient(theta, X_batch, y_batch, shapes, lbd) 
+grad = gradient(theta, X_batch, y_batch, shapes, lbd=0)   ## regularization = 0 for comparing
 analytical_grad = np.concatenate([g.flatten() for g in grad])
 numerical_grad = np.concatenate([g.flatten() for g in numerical_grad])
 diff = numerical_grad - analytical_grad
@@ -182,7 +182,7 @@ print("Max Difference:", np.max(np.abs(diff)))
 print("Mean Difference:", np.mean(np.abs(diff)))
 
 
-if sum(np.abs(analytical_grad - numerical_grad))/len(unroled_theta) >= 1e-2:
+if sum(np.abs(analytical_grad - numerical_grad))/len(unroled_theta) >= 0.01:
             print("gradient failed!!!")
             raise ValueError("Restart script!")
 print("Gradient Succes")

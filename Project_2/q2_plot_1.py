@@ -1,5 +1,5 @@
 import numpy as np
-from tst_q2 import *
+from Project_2.q2_value_iter import *
 from matplotlib import pyplot as plt
 
 def plot_q_table(q_table, grid_shape=(4, 12)):
@@ -28,31 +28,25 @@ def plot_q_table(q_table, grid_shape=(4, 12)):
         best_action_idx = np.argmax(q_values)
         policy_matrix[row, col] = action_arrows[generic_actions[best_action_idx]]
     
-    # Create figure with two subplots
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 8))
-    
-    # Plot value heatmap
-    im1 = ax1.imshow(value_matrix)
-    ax1.set_title('State Values')
-    plt.colorbar(im1, ax=ax1)
+    # Create plot
+    plt.plot()
     
     # Plot policy arrows
-    im2 = ax2.imshow(value_matrix, cmap='RdYlBu')
-    ax2.set_title('Optimal Policy')
+    plt.imshow(value_matrix)   # ,interpolation="bilinear"
+    plt.title('Optimal Policy')
     
     # Add arrows for policy
     for i in range(grid_shape[0]):
         for j in range(grid_shape[1]):
             if (i == CLIFF_ROW and 0 < j < grid_shape[1]-1):
-                ax2.text(j, i, 'X', ha='center', va='center', color='white')
+                plt.text(j, i, 'X', ha='center', va='center', color='white')
             else:
-                ax2.text(j, i, policy_matrix[i, j], ha='center', va='center', color='white')
+                plt.text(j, i, f'\n\n {(value_matrix[i,j]):.2f}', ha='center', va='center', color='white')
+                plt.text(j, i, policy_matrix[i, j], ha='center', va='center', color='white')
     
-    # Mark start and goal
-    ax2.text(0, CLIFF_ROW, 'S', ha='center', va='center', color='green', fontweight='bold')
-    ax2.text(grid_shape[1]-1, CLIFF_ROW, 'G', ha='center', va='center', color='red', fontweight='bold')
-    
-    plt.tight_layout()
+    # Mark goal 
+    plt.text(grid_shape[1]-1, CLIFF_ROW, 'G', ha='center', va='center', color='red', fontweight='bold')
+
     plt.show()
 
 # Use the function

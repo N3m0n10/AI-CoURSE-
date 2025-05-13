@@ -20,7 +20,7 @@ def next_states(s, a):
     ]
 
 def expected_value(s, a):
-    gamma = 0.6 # <YOUR CODE HERE>
+    gamma = 1 # <YOUR CODE HERE>
     evalue = 0
     for snext, prob in next_states(s, a):
         # reward is 1 if action leads to goal of 100 = s+a,
@@ -38,7 +38,7 @@ def expected_value(s, a):
 
 Delta = 10
 k = 0
-theta = 0.0001  # <YOUR CODE HERE>
+theta = 1e-16  # <YOUR CODE HERE>
 while Delta > theta:
     Delta = 0
     for s in state_set:
@@ -64,5 +64,5 @@ final_policy = [policy(s) for s in state_set]
 plt.figure()
 plt.bar(state_set, final_policy, align='center', alpha=0.5)
 plt.plot(state_set, final_policy,'.')
-plt.title(f"Policy  theta: {theta}, gamma: 0.8")
+plt.title(f"Policy  theta: {theta}, gamma: 1")
 plt.show()

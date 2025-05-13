@@ -33,19 +33,16 @@ except FileNotFoundError:
 training_data = [line.strip().split(",") for line in training_data]
 #np.random.shuffle(training_data)
 input_data = np.array([[float(data[0]), float(data[1])] for data in training_data])
-print("input_data:", input_data)
-X_mean = input_data.mean(axis=0)
-X_std = input_data.std(axis=0)
-data = (input_data - X_mean) / (X_std + 1e-8)
-#X = data
+input_data_1 = np.array([[float(data[0])] for data in training_data])
+input_data_2 = np.array([[ float(data[1])] for data in training_data])
+mm1 = [min(input_data_1), max(input_data_1)]
+mm2 = [min(input_data_2), max(input_data_2)]
+rang_1 , rang_2 = mm1[1] - mm1[0] , mm2[1] - mm2[0]
+reg_data = [[a[0]/rang_1,a[1]/rang_2] for a in input_data]
 X = input_data
+#X = reg_data
 Y = np.array([float(data[2]) for data in training_data], dtype=np.float32).reshape(-1, 1)
 
-#teste
-#X = np.array([[0.1, 0.2], [0.3, 0.4], [0.5, 0.6], [0.7, 0.8] ,[0.9, 1.0]])
-#Y = np.array([0 if sum(X[i]) < 1 else 1 for i in range(len(X))]).reshape(-1, 1)
-
-input_file.close()
 M = len(X)
 
 #provisory  ##bias added  
@@ -63,8 +60,8 @@ n_layers = len(W) + 1
 # gradient validation 
 theta = np.concatenate([w.flatten() for w in W])
 initial_theta = np.hstack(theta)  
-print("theta:", theta)
-analytical_grad = gradient_for_op_minimize(theta, X, Y,shapes)
+#print("theta:", theta)
+analytical_grad = gradient_for_op_minimize(theta, X, Y,shapes,lbd = 0)
 #analytical_grad = gradient_descent_for_grad_check(X, Y, W, lbd=lbd)
 numerical_grad = gradient_validation(theta, X, Y,shapes)
 ## do flaten and hstack for gradient
@@ -120,6 +117,7 @@ if save.lower() == "y":
         old = f.read()  # Read existing content
         f.seek(0)  # Go back to start
         f.truncate()  # Clear the file
+        final_loss = result.fun
         weights = f"Final weights: {reshaped_W}\n"
         text = (
             "##############################"

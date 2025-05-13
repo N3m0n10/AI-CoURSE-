@@ -77,13 +77,13 @@ class ValueIterationAgent(ValueEstimationAgent):
                     next_values[state] = 0
                     continue  ## estado terminal !
 
-                actions = self.mdp.getPossibleActions(state)
-                if not actions:
+                action = self.computeActionFromValues(state)  
+                if not action:
                     continue
-                
-                values = [self.computeQValueFromValues(state, action) for action in actions]
+                # aplica a eq de Bellman
+                values = self.computeQValueFromValues(state, action)
                 if values:
-                    next_values[state] = max(values)
+                    next_values[state] = values
         
             self.values = next_values # atualiza valores
             "*** YOUR CODE HERE ***"
@@ -105,23 +105,15 @@ class ValueIterationAgent(ValueEstimationAgent):
         """
         "*** YOUR CODE HERE ***"
         
-        qValue = 0
-        for nextState, prob in self.mdp.getTransitionStatesAndProbs(state, action):
+        q_Value = 0
+        for nextState, prob in self.mdp.getTransitionStatesAndProbs(state, action):  # estochastic
             reward = self.mdp.getReward(state, action, nextState)
-            qValue += prob * (reward + self.discount * self.values[nextState])
-        return qValue
+            q_Value += prob * (reward + self.discount * self.values[nextState])
+        return q_Value
 
     def computeActionFromValues(self, state):
         # computes the best action according to the value function given by self.values
-        """
-          The policy is the best action in the given state
-          according to the values currently stored in self.values.
 
-          You may break ties any way you see fit.  Note that if
-          there are no legal actions, which is the case at the
-          terminal state, you should return None.
-        """
-        "*** YOUR CODE HERE ***"
         if self.mdp.isTerminal(state): ## chegou no final
             return None
         
@@ -132,14 +124,12 @@ class ValueIterationAgent(ValueEstimationAgent):
 
         best_action = None
         best_value = float('-inf')
-        
-        
             
         ## comparar q-values para as ações
         for action in actions:
-            q_value = self.computeQValueFromValues(state, action)
-            if q_value > best_value:
-                best_value = q_value
+            value = self.computeQValueFromValues(state, action)
+            if value > best_value:
+                best_value = value
                 best_action = action
         
         return best_action            

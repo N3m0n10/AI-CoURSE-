@@ -12,7 +12,7 @@ CLIFF_ROW = 3  # The cliff is on the bottom row
 # Learning parameters
 ALPHA = 0.3
 EPSILON = 0.000001
-GAMMA = 0.9
+GAMMA = 0.9  
 
 generic_actions = ["left","right", "up", "down"] 
 
@@ -40,7 +40,7 @@ def get_reward(state: Tuple) -> float:
     else:
         return -1
 
-def initialize_values(actions: List[str], pos: Tuple) -> List[float]:
+def initialize_values(actions: List[str]) -> List[float]:
     """Initialize Q-values for each state-action pair"""
     state_weights = []
     for _ in actions:
@@ -74,16 +74,16 @@ def possible_acts(state: Tuple) -> List[str]:
         actions.append("down")
     return actions
 
-def create_q_table(states,grid_dim):
+def create_q_table(states):
     q_table = {}
     for state_id, pos in states.items():
-        q_table[state_id] = initialize_values(generic_actions, pos)
+        q_table[state_id] = initialize_values(generic_actions)
     return q_table
 
 def q_learning(episodes=1000):
     # Initialize environment
     S = create_grid()
-    q_table = create_q_table(S, (GRID_ROWS, GRID_COLS))
+    q_table = create_q_table(S)
     converging = 0
     
     for episode in range(episodes):
@@ -93,8 +93,15 @@ def q_learning(episodes=1000):
         
         while True:
             # Epsilon-greedy action selection
+            current_state_id = list(S.keys())[list(S.values()).index(state)]
+            possible_moves = possible_acts(state)
+            # Marking impossible moves
+            for action in generic_actions:
+                if action not in possible_moves:
+                    q_table[current_state_id][generic_actions.index(action)] = float('-inf')
+
             if np.random.random() < EPSILON:
-                action = np.random.choice(possible_acts(state))
+                action = np.random.choice(possible_moves)
             else:
                 state_id = list(S.keys())[list(S.values()).index(state)]
                 action_values = q_table[state_id]
@@ -110,7 +117,6 @@ def q_learning(episodes=1000):
                 next_state = START_STATE
             
             # Q-learning update
-            current_state_id = list(S.keys())[list(S.values()).index(state)]
             next_state_id = list(S.keys())[list(S.values()).index(next_state)]
             
             current_q = q_table[current_state_id][generic_actions.index(action)]

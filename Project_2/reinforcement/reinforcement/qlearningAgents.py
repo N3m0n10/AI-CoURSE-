@@ -73,12 +73,7 @@ class QLearningAgent(ReinforcementAgent):
         return max(Q_values)
 
     def computeActionFromQValues(self, state):
-        """
-          Compute the best action to take in a state.  Note that if there
-          are no legal actions, which is the case at the terminal state,
-          you should return None.
-        """
-        "*** YOUR CODE HERE ***"
+  
         actions = self.getLegalActions(state)
 
         if not actions:
@@ -93,24 +88,13 @@ class QLearningAgent(ReinforcementAgent):
         return random.choice(best_action) ## em caso de empate (break ties) ex: todos zero
 
     def getAction(self, state):
-        """
-          Compute the action to take in the current state.  With
-          probability self.epsilon, we should take a random action and
-          take the best policy action otherwise.  Note that if there are
-          no legal actions, which is the case at the terminal state, you
-          should choose None as the action.
-
-          HINT: You might want to use util.flipCoin(prob)
-          HINT: To pick randomly from a list, use random.choice(list)
-        """
         # Pick Action
         legalActions = self.getLegalActions(state)
-        action = None
         "*** YOUR CODE HERE ***"
         if not legalActions:
             return None
         
-        if util.flipCoin(self.epsilon):
+        if util.flipCoin(self.epsilon):  # explore!!
           return random.choice(legalActions)
 
         return self.computeActionFromQValues(state)  ## choose best action      
@@ -125,9 +109,8 @@ class QLearningAgent(ReinforcementAgent):
           NOTE: You should never call this function,
           it will be called on your behalf
         """
-        "*** YOUR CODE HERE ***"
         val = self.getQValue(state,action)
-        max_next_q = self.computeValueFromQValues(nextState) # best next
+        max_next_q = self.computeValueFromQValues(nextState) # best next OR random
         td_target = reward + self.discount * max_next_q  # target value
         td_error = td_target - val  # td error
         self.qValues[(state,action)] += self.alpha * td_error # updt

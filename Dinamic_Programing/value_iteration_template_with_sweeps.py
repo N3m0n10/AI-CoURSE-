@@ -11,7 +11,7 @@ state_set = list(range(1,100))  # 1, 2, ..., 99
 V = np.zeros( (len(state_set)+1, 1) )
 
 ph = 0.4    # probability of heads
-GAMMA = 0.5
+GAMMA = 1
 
 # returns next_state and its probability
 def next_states(s, a):
@@ -42,7 +42,7 @@ def policy(s):
     values_actions = [np.float64(expected_value(s,a)) for a in action_set]# <YOUR CODE HERE>
     return np.argmax(values_actions)  # 0,1,.... min(s,100-s)
 
-for i in range(1000): ## sweeps
+for i in range(8): ## sweeps
     Delta = 10
     k = 0
     theta = 1e-6
@@ -56,7 +56,7 @@ for i in range(1000): ## sweeps
         k += 1
 
     #print(V)
-    if i <= 3 or i%100 == 0:
+    if i <= 3 or i%16 == 0:
         plt.plot(V, label= f"{i}")  ## V --> probabilidade de vitória
         plt.title(f"Values gamma:{GAMMA}")
         plt.legend()

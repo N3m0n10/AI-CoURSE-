@@ -32,7 +32,6 @@ indices = np.arange(X.shape[0])
 np.random.shuffle(indices)
 X = X[indices]
 Y= Y[indices]
-#indices = None
 
 ####################################
 ###### data sets conditioning ######
@@ -52,9 +51,9 @@ M_check = len(check_set_X)
 def xavier_init(n_out, n_in):
     return np.random.randn(n_out, n_in) * np.sqrt(1.0 / n_in)
 
-shapes = [[(50,3),(1,51)]
+shapes = [#[(50,3),(1,51)]
           #[(10, 3), (7, 11), (1, 8)],
-          #[(2, 3), (2, 3), (1, 3)],
+          [(2, 3), (2, 3), (1, 3)],
           #[(15, 3), (15, 16), (1, 16)],
           #[(10, 3), (10, 11), (10, 11), (1, 11)],
           #[(15, 3), (25, 16), (15, 26), (1, 16)],
@@ -92,7 +91,7 @@ for lbd in regularizer:
             
             theta = np.concatenate([w.flatten() for w in W])
             initial_theta = np.hstack(theta)  
-            analytical_grad = gradient_descent_for_grad_check(train_set_X, train_set_Y, W, lbd=lbd)
+            analytical_grad = gradient_descent_for_grad_check(train_set_X, train_set_Y, W)
             numerical_grad = gradient_validation(theta, train_set_X, train_set_Y,shape)
             analytical_grad = np.concatenate([g.flatten() for g in analytical_grad])
             
@@ -139,6 +138,8 @@ for lbd in regularizer:
 ################validation################
 acc_check = []
 acc = 0
+if not results:
+    raise ValueError("No results")
 for rs in results:
     acc_check.append(rs[1][1])
 
@@ -160,7 +161,7 @@ for result in results:
         f.seek(0)  # Go back to start
         f.truncate()  # Clear the file
         text = ("#####################################\n"
-        f"indeces:{indices}\n"
+        f"indexes:{indices}\n"
         f"{result[0]} \n" 
         #f"accuary: {final_acc} \n"+\
         f"loss: {result[1][0][1][-1]}\n"

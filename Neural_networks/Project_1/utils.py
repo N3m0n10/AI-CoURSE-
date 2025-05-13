@@ -65,7 +65,7 @@ def softmax(z, derivative = False):
 
 def forward_prop(X, W, l, activation_func=sigmoid):  ## TODO make this and multiclass a single func
     Z = []
-    A = [X.reshape(-1)]  
+    A = [X]  
     AWB = [np.insert(X, 0, 1)]  
 
     for i in range(l - 1):
@@ -124,8 +124,8 @@ def J(W, X, Y, shapes, lbd=0, error_func=bin_logistic_error, activate_func = sig
 
     return cost
 
-def j(theta,X,T,l): ## error func for gradient check
-    activation = forward_prop(X, theta, l)[-1]  # those eill be class atrbt so no need to add to args
+def j(theta,X,T,l): ## error func for gradient check  #NOTE not used
+    activation = forward_prop(X, theta, l)[-1]  # those Will be class atrbt so no need to add to args
     cost = J(activation, T) #no regularization
     return cost
 
@@ -172,7 +172,7 @@ def gradient_descent(X, Y, w: list, learning_rate=0.01, epochs=500, lbd=0):
 
     return W ,loss_list
 
-def gradient_descent_for_grad_check(X, Y, w: list,lbd=0):
+def gradient_descent_for_grad_check(X, Y, w: list):
     M = len(X)
     n_layers = len(w) + 1
     W = [wi.copy() for wi in w]
@@ -189,10 +189,7 @@ def gradient_descent_for_grad_check(X, Y, w: list,lbd=0):
     grad_list = []
     for i in range(len(W)):
         grad = dW_total[i] / M
-
-        grad[:, 1:] += lbd * W[i][:, 1:]  # regularize only non-bias
-        grad_list.append(grad)
-            
+        grad_list.append(grad)   
 
     return grad_list
 
@@ -233,7 +230,7 @@ def backward_prop( Y, A, AWB, W, l, activation_derivative=sigmoid):
     a_output = A[-1]                  # (n_output,)
     a_prev = AWB[-2]                  # (n_hidden + 1,)
     error = a_output - Y              # (n_output,)
-    delta = error.reshape(-1, 1) * activation_derivative(a_output, derivative=True)    # (n_output, 1)
+    delta = error.reshape(-1, 1)        
     grad = np.dot(delta, a_prev.reshape(1, -1))  # (n_output, n_hidden + 1)
     deltas.insert(0, delta)
     gradients.insert(0, grad)
@@ -251,7 +248,7 @@ def backward_prop( Y, A, AWB, W, l, activation_derivative=sigmoid):
         deltas.insert(0, delta)
 
         a_prev = AWB[layer - 1]
-        grad = np.dot(delta, a_prev.reshape(1, -1))  ## The error propagate here
+        grad = np.dot(delta, a_prev.reshape(1, -1))  
         gradients.insert(0, grad)
 
     return gradients
@@ -259,18 +256,19 @@ def backward_prop( Y, A, AWB, W, l, activation_derivative=sigmoid):
 def backward_prop_multiclass(Y, A, AWB, W, l, activation_derivative=sigmoid):
     gradients = []
     deltas = []
+    batch_size = len(Y)
 
     # Output layer
     a_output = A[-1]                  # (n_output,)
     a_prev = AWB[-1]                  # (n_hidden + 1,)
     error = a_output - Y              # (n_output,)
 
-    softmax_grad = softmax(a_output, derivative=True) # (1, n_classes, n_classes)
-    delta = np.dot(error, softmax_grad[0])            # (n_classes,)
-    grad = np.outer(delta, a_prev)                    # (n_classes, n_hidden + 1)
+    
+    delta = np.array(error)            # (n_classes,)
+    grad = np.outer(delta, a_prev)     # (n_classes, n_hidden + 1)
     
     deltas.insert(0, delta.reshape(-1, 1))
-    gradients.insert(0, grad)
+    gradients.insert(0, grad/ batch_size)
 
 
     # Hidden layers
@@ -287,7 +285,7 @@ def backward_prop_multiclass(Y, A, AWB, W, l, activation_derivative=sigmoid):
 
         a_prev = AWB[layer - 1] 
         grad = np.dot(delta, a_prev.reshape(1, -1))
-        gradients.insert(0, grad)
+        gradients.insert(0, grad/ batch_size)
 
     return gradients
 
