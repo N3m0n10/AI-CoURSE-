@@ -9,7 +9,6 @@
 * Neural Networks
 * Convolutional NN 
 * Reinforcement Learning
-* And more... (not all topics are yet implemented)
 
 ## Generative AI:
 * Deep Learning
