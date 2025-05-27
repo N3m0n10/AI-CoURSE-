@@ -1,11 +1,19 @@
-# *Codes developed for the machine learning course* !
+# *Codes developed for the machine learning and Generative AI course* !
 ###### UFSC - Control and Automation Engeneering
 
 #### Featuring:
 
+## Machine Learning:
 * Genetic algorithm
 * Selection Algorithms
 * Neural Networks
 * Convolutional NN 
 * Reinforcement Learning
 * And more... (not all topics are yet implemented)
+
+## Generative AI:
+* Deep Learning
+* Drop-out
+* Batch Normalization
+* VGG
+* Transformers
