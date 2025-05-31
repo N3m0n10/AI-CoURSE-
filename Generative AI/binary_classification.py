@@ -3,7 +3,10 @@ import os # OS used for sampling error, in case you moved this or samples file
 import numpy as np
 import torch
 
-data_path = "Neural_networks\Project_1\classification2.txt"
+if os.name == "nt": # NOTE: Windows uses backslashs
+    data_path = "Neural_networks\Project_1\classification2.txt"
+else: 
+    data_path = "Neural_networks/Project_1/classification2.txt"
 
 
 try:
