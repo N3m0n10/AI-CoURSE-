@@ -128,4 +128,3 @@ NN = NeuralNetwork(hidden_size=50, num_epochs=2000 , data=[X,Y])
 NN.training()
 
 input("Plot results? [y/n]") == "y" and NN.plots()  # Plot when the eq is True 
-    
