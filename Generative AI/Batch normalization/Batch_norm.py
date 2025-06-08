@@ -47,7 +47,7 @@ class Dropout_BN_CNN(nn.Module):
         #self.bn_fc1 = nn.BatchNorm1d(128)
         #self.bn_fc2 = nn.BatchNorm1d(10)
 
-        ## Batch norm for fully connected
+        ## Batch norm for fully connected  #Not usual
         self.bn_fc1 = nn.LazyBatchNorm1d()
         self.bn_fc2 = nn.LazyBatchNorm1d()
         

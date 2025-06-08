@@ -15,8 +15,8 @@ class Residual(nn.Module): #@save
             stride=strides)
         else:
             self.conv3 = None
-            self.bn1 = nn.LazyBatchNorm2d()
-            self.bn2 = nn.LazyBatchNorm2d()
+        self.bn1 = nn.LazyBatchNorm2d()
+        self.bn2 = nn.LazyBatchNorm2d()
 
     def forward(self, X):
 
