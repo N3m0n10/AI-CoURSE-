@@ -1,3 +1,4 @@
+""" Made by GEMINI + smallfix"""
 import pygame
 import sys
 

@@ -1,0 +1,3 @@
+magic_square:
+    TODO: to monitor states create a function that read a txt file or create if needed. 
+        All non seen states will be added there. States are full square (sums is a result of it, might add win flag)
