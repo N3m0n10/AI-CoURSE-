@@ -16,3 +16,6 @@
 * Batch Normalization
 * VGG
 * Transformers
+
+## AI 'classic'
+* Search mechanins
