@@ -19,3 +19,4 @@
 
 ## AI 'classic'
 * Search mechanins
+* CSA
