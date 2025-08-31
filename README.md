@@ -19,4 +19,4 @@
 
 ## AI 'classic'
 * Search mechanins
-* CSA
+* Constraint Satisfaction Problems
