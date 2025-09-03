@@ -1,0 +1,11 @@
+BACKTRACKING:
+CSP --> problems divided in:
+        * variables
+        * domain
+        * restrictions
+
+Solving CSP as a search problem:
+    * state --> starting ex: blank {}
+            --> goal --> all vars enumerated {A: 5, ..., Z: 101}
+    * transitions --> applying value to a variable
+    * algorithim --> seen previosly
