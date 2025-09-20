@@ -12,3 +12,6 @@ pip install python-constraint
 ```
 
 You can also use the conda env at main section [TODO]
+
+You can check the docs:
+[python-constraint Documentation](https://labix.org/doc/constraint/)
