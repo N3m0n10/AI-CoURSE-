@@ -1,10 +1,9 @@
-(define (domain extra_3)
+(define (domain d_optic)
 
-(:requirements :strips :fluents :typing :equality :conditional-effects :negative-preconditions :duration-inequalities :action-costs :durative-actions :quantified-preconditions ) ;:time :continuous-effects
+;remove requirements that are not needed
+(:requirements :strips :fluents :typing :equality :duration-inequalities :action-costs :durative-actions :quantified-preconditions)
 
-(:types drink barist waiter
-    location - object
-    table balcony - location
+(:types drink barist waiter table balcony 
 )
 
 (:predicates 
@@ -23,58 +22,33 @@
     ;waiter status
     (holding-drink ?w - waiter)
     (holding-tray ?w - waiter)
-    (waiter-at ?l - location)
-    (waiter-busy ?w - waiter)
-    
+    (waiter-at-t ?l - table)
+    (waiter-at-b ?l - balcony) 
+    (not-holding-tray ?w - waiter)
+    (not-holding-drink ?w - waiter)
+    (waiter-free ?w - waiter)
+
     ;table status
     (needs-drink ?t - table ?d - drink)
     (needs-cleaning ?t - table)
-    (table-clean ?t - table)
-    (dirty-trigger ?t - table)
+    (is-clean ?t - table)
 )
 
 (:functions
     ;(drinks-in-hand)
-    (distance ?from - location ?to - location)
+    (distance-t-b ?from - table ?to - balcony)
+    (distance-b-t ?from - balcony ?to - table)
+    ;;supressed table-table distance since it's constant 
     (table-size ?t - table)
     (drinks-in-tray)
-    (client-served ?t - table)
-    (client-on-table ?t - table)
 )
-
-;(:event table-dirty
-;    :parameters (?t - table)
-;    :precondition (
-;        =(client-served ?t) (client-on-table ?t)
-;    )
-;    :effect (and
-;        (needs-cleaning ?t)
-;    )
-;)
 
 ;;;;;;;;acoes;;;;;;;;
-(:durative-action table-served-validator
-    :parameters (?t - table)
-    :duration (= ?duration 0.01)
-    :condition (
-        at start (and 
-        (=(client-served ?t)(client-on-table ?t))
-        (not (dirty-trigger ?t))
-        )
-    )
-    :effect (and 
-        (at end (and 
-        (needs-cleaning ?t)
-        (dirty-trigger ?t)
-        ))
-    )
-)
-
 
 ;;;;;;;;;;barista;;;;;;;;;;;;
 (:durative-action prepare_cold
     :parameters (?b - barist ?d - drink)
-    :duration (= ?duration 3)
+    :duration (= ?duration 3.0)
     :condition (and 
         (at start (and 
         (is-cold ?d)
@@ -96,7 +70,7 @@
 
 (:durative-action prepare_hot
     :parameters (?b - barist ?d - drink)
-    :duration (= ?duration 5)
+    :duration (= ?duration 5.0)
     :condition (and 
         (at start (and 
         (is-hot ?d)
@@ -124,63 +98,63 @@
     :duration (= ?duration 0.5) ;(* 0.5 (distance ?from ?to))
     :condition (and 
         (at start (and 
-        (waiter-at ?from)
-        (not (waiter-busy ?w))
+        (waiter-at-t ?from)
+        (waiter-free ?w)
+        (not-holding-tray ?w)
         ))
     )
     :effect (and 
-        (at start (and 
-        (waiter-busy ?w)
-        ))
+        (at start 
+        (not (waiter-free ?w))
+        )
         (at end (and 
-        (not (waiter-busy ?w))
-        (waiter-at ?to)
-        (not (waiter-at ?from))
+        (waiter-free ?w)
+        (waiter-at-t ?to)
+        (not (waiter-at-t ?from))
         ))
     )
 )
 
 (:durative-action waiter_goto_no_tray_balcony_table
     :parameters (?w - waiter ?from - balcony ?to - table)
-    :duration (= ?duration (* 0.5 (distance ?from ?to))) 
+    :duration (= ?duration (* 0.5 (distance-b-t ?from ?to))) 
     :condition (and 
         (at start (and 
-        (waiter-at ?from)
-        (not (waiter-busy ?w))
-        (not (holding-tray ?w))
+        (waiter-at-b ?from)
+        (waiter-free ?w)
+        (not-holding-tray ?w)
         ))
     )
     :effect (and 
         (at start (and 
-        (waiter-busy ?w)
+        (not (waiter-free ?w))
         ))
         (at end (and 
-        (not (waiter-busy ?w))
-        (waiter-at ?to)
-        (not (waiter-at ?from))
+        (waiter-free ?w)
+        (waiter-at-t ?to)
+        (not (waiter-at-b ?from))
         ))
     )
 )
 
 (:durative-action waiter_goto_no_tray_table_balcony
     :parameters (?w - waiter ?from - table ?to - balcony)
-    :duration (= ?duration (* 0.5 (distance ?from ?to)))
+    :duration (= ?duration (* 0.5 (distance-t-b ?from ?to)))
     :condition (and 
         (at start (and 
-        (waiter-at ?from)
-        (not (waiter-at ?to))
-        (not (waiter-busy ?w))
-        (not (holding-tray ?w))
+        (waiter-at-t ?from)
+        (waiter-free ?w)
+        (not-holding-tray ?w)
         ))
     )
     :effect (and 
         (at start (and 
-        (waiter-busy ?w)
+        (not (waiter-free ?w))
         ))
         (at end (and 
-        (not (waiter-busy ?w))
-        (waiter-at ?to)
-        (not (waiter-at ?from))
+        (waiter-free ?w)
+        (waiter-at-b ?to)
+        (not (waiter-at-t ?from))
         ))
     )
 )
@@ -190,66 +164,63 @@
     :duration (= ?duration 1) 
     :condition (and 
         (at start (and 
-        (waiter-at ?from)
-        (not (waiter-at ?to))
-        (not (waiter-busy ?w))
+        (waiter-at-t ?from)
+        (waiter-free ?w)
         (holding-tray ?w)
         ))
     )
     :effect (and 
         (at start (and 
-        (waiter-busy ?w)
+        (not (waiter-free ?w))
         ))
         (at end (and 
-        (not (waiter-busy ?w))
-        (waiter-at ?to)
-        (not (waiter-at ?from))
+        (waiter-free ?w)
+        (waiter-at-t ?to)
+        (not (waiter-at-t ?from))
         ))
     )
 )
 
 (:durative-action waiter_goto_tray_balcony_table
     :parameters (?w - waiter ?from - balcony ?to - table)
-    :duration (= ?duration (distance ?from ?to)) 
+    :duration (= ?duration (distance-b-t ?from ?to)) 
     :condition (and 
         (at start (and 
-        (waiter-at ?from)
-        (not (waiter-at ?to))
-        (not (waiter-busy ?w))
+        (waiter-at-b ?from)
+        (waiter-free ?w)
         (holding-tray ?w)
         ))
     )
     :effect (and 
         (at start (and 
-        (waiter-busy ?w)
+        (not(waiter-free ?w))
         ))
         (at end (and 
-        (not (waiter-busy ?w))
-        (waiter-at ?to)
-        (not (waiter-at ?from))
+        (waiter-free ?w)
+        (waiter-at-t ?to)
+        (not (waiter-at-b ?from))
         ))
     )
 )
 
 (:durative-action waiter_goto_tray_table_balcony
     :parameters (?w - waiter ?from - table ?to - balcony)
-    :duration (= ?duration (distance ?from ?to))
+    :duration (= ?duration (distance-t-b ?from ?to))
     :condition (and 
         (at start (and 
-        (waiter-at ?from)
-        (not (waiter-at ?to))
-        (not (waiter-busy ?w))
+        (waiter-at-t ?from)
+        (waiter-free ?w)
         (holding-tray ?w)
         ))
     )
     :effect (and 
         (at start (and 
-        (waiter-busy ?w)
+        (not(waiter-free ?w))
         ))
-        (at end (and 
-        (not (waiter-busy ?w))
-        (waiter-at ?to)
-        (not (waiter-at ?from))
+        (at end (and
+        (waiter-free ?w)
+        (waiter-at-b ?to)
+        (not (waiter-at-t ?from))
         ))
     )
 )
@@ -260,45 +231,53 @@
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        (not (drink-in-tray ?d))
-        (waiter-at ?l)
-        (not (waiter-busy ?w))
+        ;(=(drinks-in-hand)0)
+        ;(not (drink-in-tray ?d))
+        (waiter-at-b ?l)
+        (waiter-free ?w)
         (drink-prepared ?d)
-        (not(holding-drink ?w))
-        (not(holding-tray ?w))
+        (not-holding-drink ?w)
+        (not-holding-tray ?w)
         ;;;at balcony
         ))
     )
     :effect (and 
-        (at start (waiter-busy ?w))
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
         (not (drink-prepared ?d))
         (drink-in-hand ?d)
         (holding-drink ?w)
-        (not (waiter-busy ?w))
+        (not (not-holding-drink ?w))
+        (waiter-free ?w)
         ))
     )
 )
 
 (:durative-action serve_drink
     :parameters (?w - waiter ?d - drink ?t - table)
-    :duration (= ?duration 4)
+    :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        (waiter-at ?t)
+        (waiter-at-t ?t)
         (needs-drink ?t ?d)
-        (not (waiter-busy ?w))
+        (waiter-free ?w)
         (drink-in-hand ?d)
         (holding-drink ?w)  ;drink-in-hand implica em holding-drink mas vou deixar por enquanto
         ))
     )
     :effect (and 
+        (at start (and 
+        (not(waiter-free ?w))
+        ))
         (at end (and 
         (not (drink-in-hand ?d))
         (not (holding-drink ?w))
+        (not-holding-drink ?w)
         (drink-served ?d)
         (not (needs-drink ?t ?d))
-        (increase (client-served ?t) 1)
+        (waiter-free ?w)
         ))
     )
 )
@@ -308,69 +287,72 @@
     :duration (= ?duration (* 2(table-size ?t)))
     :condition (and 
         (at start (and 
-        (waiter-at ?t)
+        (waiter-at-t ?t)
         (needs-cleaning ?t)
-        (not(waiter-busy ?w))
-        (not(holding-drink ?w))
-        (not(holding-tray ?w))
+        (waiter-free ?w)
+        (not-holding-drink ?w)
+        (not-holding-tray ?w)
         ))
     )
     :effect (and 
-        (at start 
-        (waiter-busy ?w))
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
-        (not (waiter-busy ?w))
         (not(needs-cleaning ?t))
-        (table-clean ?t)
+        (is-clean ?t)
+        (waiter-free ?w)
         ))
     )
 )
 
 ;;;;;;;;;;;with tray;;;;;;;;;;;
-(:durative-action add_to_tray  ;; <-- fix  
+(:durative-action add_to_tray 
     :parameters (?w - waiter ?d - drink ?l - balcony) ;location
     :duration (= ?duration 0.1) 
     :condition (and 
         (at start (and 
         (<(drinks-in-tray)3)
-        (not (drink-in-tray ?d))
-        (waiter-at ?l)
-        (not (waiter-busy ?w))
+        ;; maybe create drink-at (balcony) or at object and differentiate location to obj
+        (waiter-at-b ?l)
+        (waiter-free ?w)
         (drink-prepared ?d)
-        (not(holding-drink ?w))
-        (not(holding-tray ?w))
+        (not-holding-drink ?w)
+        (not-holding-tray ?w)
         ))
     )
     :effect (and 
-        (at start 
-        (waiter-busy ?w))
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
         (not (drink-prepared ?d))
         (drink-in-tray ?d)
         (increase(drinks-in-tray)1)
-        (not(waiter-busy ?w))
+        (waiter-free ?w)
         ))
     )
 )
 
 
-(:durative-action hold_tray  ;; <-- fix  
+(:durative-action hold_tray  
     :parameters (?w - waiter ?l - balcony) ;location
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        (waiter-at ?l)
-        (not(waiter-busy ?w))
-        (not(holding-drink ?w))
-        (not(holding-tray ?w))
+        (waiter-at-b ?l)
+        (waiter-free ?w)
+        (not-holding-drink ?w)
+        (not-holding-tray ?w)
         ))
     )
     :effect (and 
-        (at start 
-        (waiter-busy ?w))
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
         (holding-tray ?w)
-        (not(waiter-busy ?w))
+        (waiter-free ?w)
         ))
     )
 )
@@ -380,41 +362,45 @@
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        (waiter-at ?l)
-        (not(waiter-busy ?w))
-        (not(holding-drink ?w))
+        (waiter-at-b ?l)
+        (waiter-free ?w)
         (holding-tray ?w)
         ))
     )
     :effect (and 
-        (at start 
-        (waiter-busy ?w))
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
         (not(holding-tray ?w))
-        (not(waiter-busy ?w))
+        (waiter-free ?w)
         ))
     )
 )
+
 
 (:durative-action serve-tray  
     :parameters (?w - waiter ?t - table ?d - drink) ;location
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        (waiter-at ?t)
-        (not(waiter-busy ?w))
-        (not(holding-drink ?w))
+        (waiter-at-t ?t)
+        (waiter-free ?w)
+        (not-holding-drink ?w)
         (holding-tray ?w)
         (drink-in-tray ?d)
         (needs-drink ?t ?d)
         ))
     )
     :effect (and 
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
         (not(needs-drink ?t ?d))
         (not(drink-in-tray ?d))
         (decrease (drinks-in-tray) 1)
-        (increase (client-served ?t) 1)
+        (waiter-free ?w)
         ))
     )
 )
@@ -424,9 +410,9 @@
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        (waiter-at ?t)
-        (not(waiter-busy ?w))
-        (not(holding-drink ?w))
+        (waiter-at-t ?t)
+        (waiter-free ?w)
+        (not-holding-drink ?w)
         (holding-tray ?w)
         (drink-in-tray ?d1)
         (drink-in-tray ?d2)
@@ -435,13 +421,16 @@
         ))
     )
     :effect (and 
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
         (not(needs-drink ?t ?d1))
         (not(needs-drink ?t ?d2))
         (not(drink-in-tray ?d1))
         (not(drink-in-tray ?d2))
         (decrease (drinks-in-tray) 2)
-        (increase (client-served ?t) 2)
+        (waiter-free ?w)
         ))
     )
 )
@@ -451,9 +440,9 @@
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        (waiter-at ?t)
-        (not(waiter-busy ?w))
-        (not(holding-drink ?w))
+        (waiter-at-t ?t)
+        (waiter-free ?w)
+        (not-holding-drink ?w)
         (holding-tray ?w)
         (drink-in-tray ?d1)
         (drink-in-tray ?d2)
@@ -464,6 +453,9 @@
         ))
     )
     :effect (and 
+        (at start (and
+        (not (waiter-free ?w))
+        ))
         (at end (and 
         (not(needs-drink ?t ?d1))
         (not(needs-drink ?t ?d2))
@@ -472,9 +464,8 @@
         (not(drink-in-tray ?d2))
         (not(drink-in-tray ?d3))
         (decrease (drinks-in-tray) 3)
-        (increase (client-served ?t) 3)
+        (waiter-free ?w)
         ))
     )
 )
-
 )

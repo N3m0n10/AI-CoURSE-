@@ -58,9 +58,8 @@
     :condition (and 
         (at start (and 
         (is-hot ?d)
-        (drink-prepared ?d)
+        (being-prepared ?d) 
         ))
-        (over all (not-drink-served ?d))
     )
     :effect (and 
         (at start (and 
@@ -258,7 +257,7 @@
 )
 
 ;;;;;;;;no tray;;;;;;;;;;
-(:durative-action hold_drink  ;; <-- fix  
+(:durative-action hold_drink  
     :parameters (?w - waiter ?d - drink ?l - balcony) ;location
     :duration (= ?duration 0.1)
     :condition (and 
@@ -270,7 +269,7 @@
         (drink-prepared ?d)
         (not-holding-drink ?w)
         (not-holding-tray ?w)
-        (not-drink-rejected ?d)
+        (not-drink-rejected ?d)  ;;;
         ;;;at balcony
         ))
     )
@@ -288,20 +287,49 @@
     )
 )
 
-(:durative-action serve_drink
+;(:durative-action serve_drink
+;    :parameters (?w - waiter ?d - drink ?t - table)
+;    :duration (= ?duration 0.1)
+;    :condition (and 
+;        (at start (and 
+;        (waiter-at-t ?t)
+;        (needs-drink ?t ?d)
+;        (waiter-free ?w)
+;        (drink-in-hand ?d)
+;        ;(not-drink-rejected ?d)  ;;;
+;        (holding-drink ?w)  ;drink-in-hand implica em holding-drink mas vou deixar por enquanto
+;        ))
+;    )
+;    :effect (and 
+;        (at start (and 
+;        (not(waiter-free ?w))
+;        (not (not-drink-served ?d))
+;        ))
+;        (at end (and 
+;        (not (drink-in-hand ?d))
+;        (not (holding-drink ?w))
+;        (not-holding-drink ?w)
+;        (drink-served ?d)
+;        (not (needs-drink ?t ?d))
+;        (waiter-free ?w)
+;        ))
+;    )
+;)
+
+(:durative-action serve_cold
     :parameters (?w - waiter ?d - drink ?t - table)
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
+        (is-cold ?d)
         (waiter-at-t ?t)
         (needs-drink ?t ?d)
         (waiter-free ?w)
         (drink-in-hand ?d)
-        (not-drink-rejected ?d)
         (holding-drink ?w)  ;drink-in-hand implica em holding-drink mas vou deixar por enquanto
         ))
     )
-    :effect (and 
+   :effect (and 
         (at start (and 
         (not(waiter-free ?w))
         ))
@@ -312,10 +340,40 @@
         (drink-served ?d)
         (not (needs-drink ?t ?d))
         (waiter-free ?w)
-        (not (not-drink-served ?d))
         ))
     )
 )
+
+(:durative-action serve_hot
+    :parameters (?w - waiter ?d - drink ?t - table)
+    :duration (= ?duration 0.1)
+    :condition (and 
+        (at start (and 
+        (waiter-at-t ?t)
+        (is-hot ?d)
+        (needs-drink ?t ?d)
+        (waiter-free ?w)
+        (drink-in-hand ?d)
+        (not-drink-rejected ?d)  ;;;
+        (holding-drink ?w)  ;drink-in-hand implica em holding-drink mas vou deixar por enquanto
+        ))
+   )
+    :effect (and 
+        (at start (and 
+        (not(waiter-free ?w))
+        (not (not-drink-served ?d))
+        ))
+       (at end (and 
+        (not (drink-in-hand ?d))
+        (not (holding-drink ?w))
+        (not-holding-drink ?w)
+        (drink-served ?d)
+        (not (needs-drink ?t ?d))
+        (waiter-free ?w)
+        ))
+    )
+)
+
 
 (:durative-action clean_table
     :parameters (?w - waiter ?t - table)
@@ -416,7 +474,7 @@
 
 (:durative-action serve-tray  
     :parameters (?w - waiter ?t - table ?d - drink) ;location
-    :duration (= ?duration 4.0)
+    :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
         (waiter-at-t ?t)
@@ -443,7 +501,7 @@
 
 (:durative-action serve-tray_2   
     :parameters (?w - waiter ?t - table ?d1 - drink ?d2 - drink) ;location
-    :duration (= ?duration 4.0)
+    :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
         (waiter-at-t ?t)
@@ -475,7 +533,7 @@
 
 (:durative-action serve-tray_3 
     :parameters (?w - waiter ?t - table ?d1 - drink ?d2 - drink ?d3 - drink) ;location
-    :duration (= ?duration 4.0)
+    :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
         (waiter-at-t ?t)

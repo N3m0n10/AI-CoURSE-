@@ -1,6 +1,4 @@
-;Header and description
-
-(define (domain teste_2)
+(define (domain BAR)
 
 ;remove requirements that are not needed
 (:requirements :strips :fluents :typing :equality :negative-preconditions :duration-inequalities :action-costs :durative-actions :quantified-preconditions)
@@ -38,7 +36,6 @@
 )
 
 (:functions
-    ;(drinks-in-hand)
     (distance ?from - location ?to - location)
     (table-size ?t - table)
     (drinks-in-tray)
@@ -233,13 +230,11 @@
 )
 
 ;;;;;;;;no tray;;;;;;;;;;
-(:durative-action hold_drink  ;; <-- fix  
+(:durative-action hold_drink  
     :parameters (?w - waiter ?d - drink ?l - balcony) ;location
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        ;(=(drinks-in-hand)0)
-        ;(not (drink-in-tray ?d))
         (waiter-at ?l)
         (not (waiter-busy ?w))
         (drink-prepared ?d)
@@ -268,7 +263,7 @@
         (needs-drink ?t ?d)
         (not (waiter-busy ?w))
         (drink-in-hand ?d)
-        (holding-drink ?w)  ;drink-in-hand implica em holding-drink mas vou deixar por enquanto
+        (holding-drink ?w)  
         ))
     )
     :effect (and 
@@ -377,7 +372,7 @@
 
 (:durative-action serve-tray  
     :parameters (?w - waiter ?t - table ?d - drink) ;location
-    :duration (= ?duration 4)
+    :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
         (waiter-at ?t)
@@ -402,7 +397,7 @@
 
 (:durative-action serve-tray_2   
     :parameters (?w - waiter ?t - table ?d1 - drink ?d2 - drink) ;location
-    :duration (= ?duration 4)
+    :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
         (waiter-at ?t)
@@ -431,7 +426,7 @@
 
 (:durative-action serve-tray_3 
     :parameters (?w - waiter ?t - table ?d1 - drink ?d2 - drink ?d3 - drink) ;location
-    :duration (= ?duration 4)
+    :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
         (waiter-at ?t)

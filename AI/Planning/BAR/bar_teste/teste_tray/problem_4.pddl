@@ -1,4 +1,4 @@
-(define (problem p4) (:domain teste_2)
+(define (problem p4) (:domain BAR)
 (:objects 
     b - barist
     d1 d2 d3 d4 d5 d6 d7 d8 - drink

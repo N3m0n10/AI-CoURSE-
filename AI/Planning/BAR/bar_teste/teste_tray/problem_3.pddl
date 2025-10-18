@@ -1,4 +1,4 @@
-(define (problem p3) (:domain teste_2)
+(define (problem p3) (:domain BAR)
 (:objects 
     b - barist
     d1 d2 d3 d4 - drink
@@ -15,6 +15,7 @@
     (waiter-at balcao) 
     (needs-drink t4 d1) (needs-drink t4 d2) (needs-drink t1 d3) (needs-drink t1 d4)
     (needs-cleaning t3) 
+    (=(drinks-in-tray)0)
     (=(table-size t1)1) (=(table-size t2)1) (=(table-size t3)2) (=(table-size t4)1)
     (=(distance balcao t1)2) (=(distance t1 balcao)2)
     (=(distance balcao t2)2) (=(distance t2 balcao)2)

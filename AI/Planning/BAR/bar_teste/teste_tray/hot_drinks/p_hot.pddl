@@ -44,7 +44,9 @@
     (drink-served d8)
     (is-clean t2)
     (cool-activated d5)
-    
+    (cool-activated d6)
+    (cool-activated d7)
+    (cool-activated d8)
     )
 )
 )
