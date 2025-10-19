@@ -8,12 +8,12 @@ reader = PDDLReader()
 
 # Parse a complete PDDL problem from domain and problem files
 problem = reader.parse_problem(
-    #'Planning/BAR/bar_teste/teste_tray/hot_drinks/d_hot.pddl', 
-    #'Planning/BAR/bar_teste/teste_tray/hot_drinks/p_hot.pddl'
+    'Planning/BAR/bar_teste/teste_tray/hot_drinks/d_hot.pddl', 
+    'Planning/BAR/bar_teste/teste_tray/hot_drinks/p_hot.pddl'
     #'Planning/BAR/bar_teste/teste_tray/domain.pddl',
     #'Planning/BAR/bar_teste/teste_tray/problem_4.pddl'
-    'Planning/BAR/bar_teste/teste_tray/versão base compatível com OPTIC/domain_optic.pddl',
-    'Planning/BAR/bar_teste/teste_tray/versão base compatível com OPTIC/problem_optic.pddl'
+    #'Planning/BAR/bar_teste/teste_tray/versão base compatível com OPTIC/domain_optic.pddl',
+    #'Planning/BAR/bar_teste/teste_tray/versão base compatível com OPTIC/problem_optic.pddl'
 )
 
 # call planner

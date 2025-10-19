@@ -3,8 +3,7 @@
 ;remove requirements that are not needed
 (:requirements :strips :fluents :typing :equality :duration-inequalities :action-costs :durative-actions :quantified-preconditions)
 
-(:types drink barist waiter table balcony 
-)
+(:types drink barist waiter table balcony)
 
 (:predicates 
     (barist-available ?b - barist) 
@@ -35,10 +34,8 @@
 )
 
 (:functions
-    ;(drinks-in-hand)
     (distance-t-b ?from - table ?to - balcony)
     (distance-b-t ?from - balcony ?to - table)
-    ;;supressed table-table distance since it's constant 
     (table-size ?t - table)
     (drinks-in-tray)
 )
@@ -95,7 +92,7 @@
 ;;;;;;;;;;;;;move;;;;;;;;;;;;;
 (:durative-action waiter_goto_no_tray_table_table  
     :parameters (?w - waiter ?from - table ?to - table)
-    :duration (= ?duration 0.5) ;(* 0.5 (distance ?from ?to))
+    :duration (= ?duration 0.5) 
     :condition (and 
         (at start (and 
         (waiter-at-t ?from)
@@ -226,19 +223,16 @@
 )
 
 ;;;;;;;;no tray;;;;;;;;;;
-(:durative-action hold_drink  ;; <-- fix  
-    :parameters (?w - waiter ?d - drink ?l - balcony) ;location
+(:durative-action hold_drink  
+    :parameters (?w - waiter ?d - drink ?l - balcony) 
     :duration (= ?duration 0.1)
     :condition (and 
         (at start (and 
-        ;(=(drinks-in-hand)0)
-        ;(not (drink-in-tray ?d))
         (waiter-at-b ?l)
         (waiter-free ?w)
         (drink-prepared ?d)
         (not-holding-drink ?w)
         (not-holding-tray ?w)
-        ;;;at balcony
         ))
     )
     :effect (and 
@@ -264,7 +258,7 @@
         (needs-drink ?t ?d)
         (waiter-free ?w)
         (drink-in-hand ?d)
-        (holding-drink ?w)  ;drink-in-hand implica em holding-drink mas vou deixar por enquanto
+        (holding-drink ?w)  
         ))
     )
     :effect (and 
@@ -313,7 +307,6 @@
     :condition (and 
         (at start (and 
         (<(drinks-in-tray)3)
-        ;; maybe create drink-at (balcony) or at object and differentiate location to obj
         (waiter-at-b ?l)
         (waiter-free ?w)
         (drink-prepared ?d)
@@ -333,7 +326,6 @@
         ))
     )
 )
-
 
 (:durative-action hold_tray  
     :parameters (?w - waiter ?l - balcony) ;location

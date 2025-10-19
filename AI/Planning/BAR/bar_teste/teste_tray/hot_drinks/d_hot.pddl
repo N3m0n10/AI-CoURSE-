@@ -21,7 +21,6 @@
     (drink-in-hand ?d - drink) 
     (drink-in-tray ?d - drink)
     (drink-served ?d - drink)
-    (not-drink-served ?d - drink)
     (is-cooling ?d - drink)
     (cool-activated ?d - drink)
     (being-prepared ?d - drink)
@@ -361,7 +360,6 @@
     :effect (and 
         (at start (and 
         (not(waiter-free ?w))
-        (not (not-drink-served ?d))
         ))
        (at end (and 
         (not (drink-in-hand ?d))
@@ -494,7 +492,6 @@
         (not(drink-in-tray ?d))
         (decrease (drinks-in-tray) 1)
         (waiter-free ?w)
-        (not (not-drink-served ?d))
         ))
     )
 )
@@ -525,8 +522,6 @@
         (not(drink-in-tray ?d2))
         (decrease (drinks-in-tray) 2)
         (waiter-free ?w)
-        (not (not-drink-served ?d1))
-        (not (not-drink-served ?d2))
         ))
     )
 )
@@ -561,9 +556,6 @@
         (not(drink-in-tray ?d3))
         (decrease (drinks-in-tray) 3)
         (waiter-free ?w)
-        (not (not-drink-served ?d1))
-        (not (not-drink-served ?d2))
-        (not (not-drink-served ?d3))
         ))
     )
 )

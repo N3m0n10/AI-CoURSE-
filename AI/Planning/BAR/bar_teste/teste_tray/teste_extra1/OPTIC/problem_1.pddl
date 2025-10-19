@@ -29,7 +29,7 @@
     (=(distance balcao t2)2) (=(distance t2 balcao)2)
     (=(distance balcao t3)3) (=(distance t3 balcao)3)
     (=(distance balcao t4)3) (=(distance t4 balcao)3)
-    (dirty-trigger t2) (dirty-trigger t3) (dirty-trigger t4)
+    (dirty-trigger t2)
 )
 
 (:goal (and

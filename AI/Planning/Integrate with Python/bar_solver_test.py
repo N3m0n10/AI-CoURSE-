@@ -17,6 +17,7 @@ start_time = time.time()
 planners_to_try = [
     ('lpg', {}),
     ('tamer', {'heuristic': 'hff', 'weight': 1.5}),
+    ('enshp')
 ]
 
 for planner_name, params in planners_to_try:
