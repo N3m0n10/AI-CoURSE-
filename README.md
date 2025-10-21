@@ -20,3 +20,5 @@
 ## AI 'classic'
 * Search mechanins
 * Constraint Satisfaction Problems
+* Automatic Planning
+* Monte Carlo tree search
