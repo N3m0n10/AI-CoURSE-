@@ -12,7 +12,7 @@
 
 ## Generative AI:
 * Deep Learning
-* Drop-out
+* Drop-out [➡️](Generative-AI/Dropout)
 * Batch Normalization
 * VGG
 * Transformers
