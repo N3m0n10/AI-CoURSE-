@@ -17,8 +17,8 @@
 * VGG
 * Transformers
 
-## [AI 'classic'](AI)
-* Search mechanins
-* Constraint Satisfaction Problems
-* Automatic Planning
+## AI 'classic'
+* Search mechanins [➡️](/AI/Search)
+* Constraint Satisfaction Problems [➡️](/AI/CSP)
+* Automatic Planning [➡️](/AI/Planning)
 * Monte Carlo tree search
