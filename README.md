@@ -3,16 +3,16 @@
 
 #### Featuring:
 
-## Machine Learning:
+## Machine Learning:  [❌]  (RAW/TBD)
 * Genetic algorithm
 * Selection Algorithms
 * Neural Networks
 * Convolutional NN 
 * Reinforcement Learning
 
-## Generative AI:
+## Generative AI:  [❌]  (RAW/TBD)
 * Deep Learning
-* Drop-out [➡️](Generative-AI/Dropout)
+* Drop-out 
 * Batch Normalization
 * VGG
 * Transformers
