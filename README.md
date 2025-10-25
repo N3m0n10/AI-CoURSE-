@@ -17,7 +17,7 @@
 * VGG
 * Transformers
 
-## [AI 'classic'] (AI)
+## [AI 'classic'](AI)
 * Search mechanins
 * Constraint Satisfaction Problems
 * Automatic Planning
