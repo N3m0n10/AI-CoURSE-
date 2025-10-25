@@ -3,20 +3,22 @@
 
 #### Featuring:
 
-## Machine Learning:
+## Machine Learning:  [❌]  (RAW/TBD)
 * Genetic algorithm
 * Selection Algorithms
 * Neural Networks
 * Convolutional NN 
 * Reinforcement Learning
 
-## Generative AI:
+## Generative AI:  [❌]  (RAW/TBD)
 * Deep Learning
-* Drop-out
+* Drop-out 
 * Batch Normalization
 * VGG
 * Transformers
 
 ## AI 'classic'
-* Search mechanins
-* Constraint Satisfaction Problems
+* Search mechanins [➡️](/AI/Search)
+* Constraint Satisfaction Problems [➡️](/AI/CSP)
+* Automatic Planning [➡️](/AI/Planning)
+* Monte Carlo tree search
