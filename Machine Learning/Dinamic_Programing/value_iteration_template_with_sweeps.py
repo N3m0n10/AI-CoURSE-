@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 state_set = list(range(1,100))  # 1, 2, ..., 99
 
-V = np.zeros( (len(state_set)+1, 1) )
+# Use a 1-D array for values so V[s] is a scalar float (no array-scalar conversions)
+V = np.zeros(len(state_set) + 1)
 
 ph = 0.4    # probability of heads
 GAMMA = 1
@@ -37,9 +38,10 @@ def expected_value(s, a):
     return evalue
 
 def policy(s):
-    action_set = range(0, min(s, 100-s)+1)
+    # stake must be at least 1 up to min(s, 100-s)
+    action_set = range(1, min(s, 100-s) + 1)
     # One step lookahead to find the best action for this state
-    values_actions = [np.float64(expected_value(s,a)) for a in action_set]# <YOUR CODE HERE>
+    values_actions = [float(expected_value(s,a)) for a in action_set]
     return np.argmax(values_actions)  # 0,1,.... min(s,100-s)
 
 for i in range(8): ## sweeps
@@ -50,7 +52,8 @@ for i in range(8): ## sweeps
         Delta = 0
         for s in state_set:
             v = V[s]
-            action_set = range(0, min(s, 100-s)+1)   # o quanto pode ser apostado # <YOUR CODE HERE>
+            # actions are stakes from 1..min(s, 100-s)
+            action_set = range(1, min(s, 100-s) + 1)
             V[s] = max(expected_value(s, a) for a in action_set) # maior valor esperado
             Delta = max(Delta, abs(V[s] - v))
         k += 1

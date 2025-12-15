@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 state_set = list(range(1,100))  # 1, 2, ..., 99
 
-V = np.zeros( (len(state_set)+1, 1) )
+V = np.zeros( (len(state_set)+1))
 
 ph = 0.4    # probability of heads
 
@@ -38,12 +38,12 @@ def expected_value(s, a):
 
 Delta = 10
 k = 0
-theta = 1e-16  # <YOUR CODE HERE>
+theta = 1e-8  # <YOUR CODE HERE>
 while Delta > theta:
     Delta = 0
     for s in state_set:
         v = V[s]
-        action_set = range(0, min(s, 100-s)+1)   # o quanto pode ser apostado # <YOUR CODE HERE>
+        action_set = range(1, min(s, 100-s)+1)   # o quanto pode ser apostado # <YOUR CODE HERE>
         V[s] = max(expected_value(s, a) for a in action_set) # maior valor esperado
         Delta = max(Delta, abs(V[s] - v))
     k += 1
@@ -53,7 +53,7 @@ plt.plot(V)  ## V --> probabilidade de vitória
 plt.title(f"Values   theta: {theta}, gamma: 0.6")
 
 def policy(s):
-    action_set = range(0, min(s, 100-s)+1)
+    action_set = range(1, min(s, 100-s)+1)
     # One step lookahead to find the best action for this state
     values_actions = [float(expected_value(s,a)) for a in action_set]# <YOUR CODE HERE>
     return np.argmax(values_actions)  # 0,1,.... min(s,100-s)
